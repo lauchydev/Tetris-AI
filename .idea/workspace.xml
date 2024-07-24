@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c90f58d4-211e-4a9d-b8f9-706890130697" name="Changes" comment="Created the Main Screen">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2805ICT Assignment 1 Milestone 1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MainScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Tetris.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tetris.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tetris.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +28,26 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "AWeb8"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/AWeb8/2805ICT-Assignment-1",
+    "accountId": "459ed7d1-532d-4393-9c10-5d4566f82405"
+  }
+}]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 6
 }]]></component>
@@ -65,6 +78,15 @@
       <option name="presentableId" value="Default" />
       <updated>1721783900632</updated>
     </task>
+    <task id="LOCAL-00001" summary="Created the Main Screen">
+      <option name="closed" value="true" />
+      <created>1721786854905</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1721786854905</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

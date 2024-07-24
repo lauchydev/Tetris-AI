@@ -12,7 +12,7 @@ public class Tetris extends Frame {
         mainScreen = new MainScreen(this);
         add(mainScreen);
         setTitle("Tetris");
-        setSize(800, 500);
+        setSize(900, 600);
         setResizable(false);
         setVisible(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
