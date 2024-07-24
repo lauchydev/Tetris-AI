@@ -6,8 +6,13 @@ public class MainScreen extends Panel {
 
     public MainScreen(Tetris tetris) {
         setLayout(null);
+        
 
-        add(new Label("Menu"));
+        Label menuLabel = new Label("Main Menu", Label.CENTER);
+        menuLabel.setBounds(400, 80, 100, 30);
+        Font labelFont = new Font("Arial", Font.BOLD, 20);
+        menuLabel.setFont(labelFont);
+        add(menuLabel);
 
         CreateButtons();
 
@@ -18,7 +23,7 @@ public class MainScreen extends Panel {
 
 
         Button playButton = new Button("Play");
-        playButton.setBounds(400, 100, 100, 30);
+        playButton.setBounds(350, 200, 200, 30);
 
 
         playButton.addActionListener(new ActionListener() {
@@ -29,7 +34,7 @@ public class MainScreen extends Panel {
         });
 
         Button configButton = new Button("Configuration");
-        configButton.setBounds(400, 200, 100, 30);
+        configButton.setBounds(350, 275, 200, 30);
 
         configButton.addActionListener(new ActionListener() {
             @Override
@@ -39,7 +44,7 @@ public class MainScreen extends Panel {
         });
 
         Button highScoresButton = new Button("High Scores");
-        highScoresButton.setBounds(400, 300, 100, 30);
+        highScoresButton.setBounds(350, 350, 200, 30);
 
         highScoresButton.addActionListener(new ActionListener() {
             @Override
@@ -49,7 +54,7 @@ public class MainScreen extends Panel {
         });
 
         Button exitButton = new Button("Exit");
-        exitButton.setBounds(400, 400, 100, 30);
+        exitButton.setBounds(350, 425, 200, 30);
 
 
         exitButton.addActionListener(new ActionListener() {
@@ -65,4 +70,6 @@ public class MainScreen extends Panel {
         add(exitButton);
 
     }
+
+
 }
