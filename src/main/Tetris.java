@@ -1,9 +1,8 @@
 package main;
 
-import java.awt.*;
+import javax.swing.*;
 
-public class Tetris extends Frame {
-    private MainScreen mainScreen;
+public class Tetris extends JFrame {
 
 
     public Tetris() {
@@ -11,17 +10,13 @@ public class Tetris extends Frame {
     }
 
     private void initUI() {
-        mainScreen = new MainScreen(this);
+        MainScreen mainScreen = new MainScreen(this);
         add(mainScreen);
         setTitle("Tetris");
         setSize(900, 600);
         setResizable(false);
         setVisible(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                System.exit(0);
-            }
-        });
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
 

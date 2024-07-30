@@ -1,16 +1,16 @@
 package main;
 
+import javax.swing.*;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 
-public class MainScreen extends Panel {
+
+public class MainScreen extends JPanel {
 
     public MainScreen(Tetris tetris) {
         setLayout(null);
-
-
-        Label menuLabel = new Label("Main Menu", Label.CENTER);
+        JLabel menuLabel = new JLabel("Main Menu", JLabel.CENTER);
         menuLabel.setBounds(400, 80, 105, 30);
         Font labelFont = new Font("Arial", Font.BOLD, 20);
         menuLabel.setFont(labelFont);
@@ -25,11 +25,9 @@ public class MainScreen extends Panel {
 
         Font buttonFont = new Font("Arial", Font.BOLD, 12);
 
-        Button playButton = new Button("Play");
+        JButton playButton = new JButton("Play");
         playButton.setFont(buttonFont);
         playButton.setBounds(350, 200, 200, 30);
-
-
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,10 +35,10 @@ public class MainScreen extends Panel {
             }
         });
 
-        Button configButton = new Button("Configuration");
+
+        JButton configButton = new JButton("Configuration");
         configButton.setFont(buttonFont);
         configButton.setBounds(350, 275, 200, 30);
-
         configButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,10 +46,10 @@ public class MainScreen extends Panel {
             }
         });
 
-        Button highScoresButton = new Button("High Scores");
+
+        JButton highScoresButton = new JButton("High Scores");
         highScoresButton.setFont(buttonFont);
         highScoresButton.setBounds(350, 350, 200, 30);
-
         highScoresButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,11 +57,9 @@ public class MainScreen extends Panel {
             }
         });
 
-        Button exitButton = new Button("Exit");
+        JButton exitButton = new JButton("Exit");
         exitButton.setFont(buttonFont);
         exitButton.setBounds(350, 425, 200, 30);
-
-
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,6 +73,5 @@ public class MainScreen extends Panel {
         add(exitButton);
 
     }
-
 
 }
