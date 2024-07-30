@@ -4,6 +4,10 @@ out/
 !**/src/test/**/out/
 /.idea/*
 
+# user-specific stuff
+.idea/workspace.xml
+.idea/tasks.xml
+
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -28,3 +32,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+#Project
+
