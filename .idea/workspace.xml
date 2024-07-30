@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c90f58d4-211e-4a9d-b8f9-706890130697" name="Changes" comment="Added Main Menu Label">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="c90f58d4-211e-4a9d-b8f9-706890130697" name="Changes" comment="Converted AWT Frames, Panels, Buttons, and Labels to JFrames, JPanels, JButtons, and JLabels.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tetris.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main/Tetris.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2805ICT Assignment 1 Milestone 1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/2805ICT Assignment 1 Milestone 1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/MainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Tetris.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Tetris.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +39,11 @@
         <option name="argument" value="--tags" />
         <option name="title" value="All" />
       </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -65,7 +75,8 @@
     "Application.Tetris.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "convert-to-swing-window-manager",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "onboarding.tips.debug.path": "C:/Users/aiden/IdeaProjects/2805ICT Assignment 1 Milestone 1/src/Main.java",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
@@ -122,6 +133,7 @@
     <MESSAGE value="Created the Main Screen" />
     <MESSAGE value="Added Buttons to Main Menu" />
     <MESSAGE value="Added Main Menu Label" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Main Menu Label" />
+    <MESSAGE value="Converted AWT Frames, Panels, Buttons, and Labels to JFrames, JPanels, JButtons, and JLabels." />
+    <option name="LAST_COMMIT_MESSAGE" value="Converted AWT Frames, Panels, Buttons, and Labels to JFrames, JPanels, JButtons, and JLabels." />
   </component>
 </project>
