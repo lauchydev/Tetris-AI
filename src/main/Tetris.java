@@ -6,17 +6,18 @@ public class Tetris extends JFrame {
 
 
     public Tetris() {
-        initUI();
+        MainScreen mainScreen = new MainScreen();
+        this.add(mainScreen);
+
+        initWindow();
     }
 
-    private void initUI() {
-        MainScreen mainScreen = new MainScreen(this);
-        add(mainScreen);
-        setTitle("Tetris");
-        setSize(900, 600);
-        setResizable(false);
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private void initWindow() {
+        this.setTitle("Tetris");
+        this.setSize(900, 600);
+        this.setResizable(false);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
 

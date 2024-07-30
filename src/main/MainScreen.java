@@ -8,13 +8,15 @@ import java.awt.event.ActionListener;
 
 public class MainScreen extends JPanel {
 
-    public MainScreen(Tetris tetris) {
-        setLayout(null);
+    public MainScreen() {
+        this.setLayout(null);
         JLabel menuLabel = new JLabel("Main Menu", JLabel.CENTER);
-        menuLabel.setBounds(400, 80, 105, 30);
         Font labelFont = new Font("Arial", Font.BOLD, 20);
+
+        menuLabel.setBounds(400, 80, 105, 30);
         menuLabel.setFont(labelFont);
-        add(menuLabel);
+
+        this.add(menuLabel);
 
         CreateButtons();
 
@@ -22,7 +24,6 @@ public class MainScreen extends JPanel {
     }
 
     public void CreateButtons() {
-
         Font buttonFont = new Font("Arial", Font.BOLD, 12);
 
         JButton playButton = new JButton("Play");
@@ -67,10 +68,11 @@ public class MainScreen extends JPanel {
             }
         });
 
-        add(playButton);
-        add(configButton);
-        add(highScoresButton);
-        add(exitButton);
+        
+        this.add(playButton);
+        this.add(configButton);
+        this.add(highScoresButton);
+        this.add(exitButton);
 
     }
 
