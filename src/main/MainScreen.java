@@ -5,10 +5,16 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class MainScreen extends JPanel {
 
-    public MainScreen() {
+    /**
+     The {@link parentFrame} is used to modify which screen is showing using methods the Tetris class (e.g {@link Tetris#showHighScoresScreen()}).
+     */
+    private Tetris parentFrame;
+
+
+    public MainScreen(Tetris parentFrame) {
+        this.parentFrame = parentFrame;
         this.setLayout(null);
         JLabel menuLabel = new JLabel("Main Menu", JLabel.CENTER);
         Font labelFont = new Font("Arial", Font.BOLD, 20);
@@ -19,8 +25,6 @@ public class MainScreen extends JPanel {
         this.add(menuLabel);
 
         CreateButtons();
-
-
     }
 
     public void CreateButtons() {
@@ -32,10 +36,9 @@ public class MainScreen extends JPanel {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                // Show play screen (to be implemented)
             }
         });
-
 
         JButton configButton = new JButton("Configuration");
         configButton.setFont(buttonFont);
@@ -47,14 +50,13 @@ public class MainScreen extends JPanel {
             }
         });
 
-
         JButton highScoresButton = new JButton("High Scores");
         highScoresButton.setFont(buttonFont);
         highScoresButton.setBounds(350, 350, 200, 30);
         highScoresButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Show high scores screen (to be implemented)
+                parentFrame.showHighScoresScreen();
             }
         });
 
@@ -68,12 +70,9 @@ public class MainScreen extends JPanel {
             }
         });
 
-        
         this.add(playButton);
         this.add(configButton);
         this.add(highScoresButton);
         this.add(exitButton);
-
     }
-
 }
