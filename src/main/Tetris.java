@@ -1,27 +1,23 @@
 package main;
 
-import java.awt.*;
+import javax.swing.*;
 
-public class Tetris extends Frame {
-    private MainScreen mainScreen;
+public class Tetris extends JFrame {
 
 
     public Tetris() {
-        initUI();
+        MainScreen mainScreen = new MainScreen();
+        this.add(mainScreen);
+
+        initWindow();
     }
 
-    private void initUI() {
-        mainScreen = new MainScreen(this);
-        add(mainScreen);
-        setTitle("Tetris");
-        setSize(900, 600);
-        setResizable(false);
-        setVisible(true);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                System.exit(0);
-            }
-        });
+    private void initWindow() {
+        this.setTitle("Tetris");
+        this.setSize(900, 600);
+        this.setResizable(false);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
 
