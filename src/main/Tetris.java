@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileWriter;
 
 public class Tetris extends JFrame {
 
@@ -15,6 +16,7 @@ public class Tetris extends JFrame {
     public static int frameHeight = 600;
 
     public Tetris() {
+        createScoresAndConfig();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
@@ -24,10 +26,12 @@ public class Tetris extends JFrame {
         cardPanel.add(mainScreen, "MainScreen");
         cardPanel.add(highScoreScreen, "HighScoreScreen");
 
+
+
         this.add(cardPanel);
 
         initWindow();
-        createScoresAndConfig();
+
     }
 
     private void initWindow() {
@@ -40,7 +44,9 @@ public class Tetris extends JFrame {
 
     public void createScoresAndConfig(){
         try{
-            new File("data").mkdirs();
+
+            File directory = new File("data");
+            directory.mkdirs();
 
             File scores = new File ("data/scores.txt");
             scores.createNewFile();
