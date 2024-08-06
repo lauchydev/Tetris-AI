@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Tetris extends JFrame {
 
@@ -25,6 +27,7 @@ public class Tetris extends JFrame {
         this.add(cardPanel);
 
         initWindow();
+        createScoresAndConfig();
     }
 
     private void initWindow() {
@@ -33,6 +36,22 @@ public class Tetris extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void createScoresAndConfig(){
+        try{
+            new File("data").mkdirs();
+
+            File scores = new File ("data/scores.txt");
+            scores.createNewFile();
+
+            File config = new File("data/config.txt");
+            config.createNewFile();
+
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void showMainScreen() {

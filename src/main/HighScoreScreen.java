@@ -3,6 +3,7 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class HighScoreScreen extends JPanel {
 
     private Tetris parentFrame;
@@ -19,7 +20,7 @@ public class HighScoreScreen extends JPanel {
         int labelWidth = metrics.stringWidth("High Scores");
 
 
-        /**
+        /*
          *  Using a public frameWidth variable from the {@link Tetris.frameWidth} to center the label
          */
         int panelWidth = Tetris.frameWidth;
@@ -29,15 +30,23 @@ public class HighScoreScreen extends JPanel {
 
         this.add(highScoreLabel);
 
-        CreateButtons();
+        displayScores();
+        createButtons();
     }
 
-    public void CreateButtons() {
+    public void displayScores(){
+        JPanel scorePanel = new JPanel();
+        scorePanel.setBounds((Tetris.frameWidth/2)-300, 140, 600, 270);
+        scorePanel.setBackground(Color.BLUE);
+        this.add(scorePanel);
+    }
+
+    public void createButtons() {
         Font buttonFont = new Font("Arial", Font.BOLD, 12);
 
         JButton backButton = new JButton("Back");
         backButton.setFont(buttonFont);
-        backButton.setBounds(350, 200, 200, 30);
+        backButton.setBounds(350, Tetris.frameHeight-175, 200, 30);
         backButton.addActionListener(e -> {
             parentFrame.showMainScreen();
         });
