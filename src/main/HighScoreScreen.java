@@ -2,6 +2,9 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.File;
 
 
 public class HighScoreScreen extends JPanel {
@@ -36,25 +39,44 @@ public class HighScoreScreen extends JPanel {
 
     public void displayScores(){
         JLabel [] scoresLabel = new JLabel[10];
+        String [] scoresText = new String[10];
         Font scoresFont = new Font("Arial",Font.PLAIN, 16);
 
+        //Reading Score Data from the file
+        try{
+            File fileObject = new File("data/scores.txt");
+            Scanner fileReader = new Scanner(fileObject);
+
+            for(int i = 0; i < 10; i++){
+                if(fileReader.hasNextLine()){
+                    scoresText[i] = fileReader.nextLine();
+                }else{
+                    scoresText[i] = "Empty : 0";
+                }
+            }
+        } catch(FileNotFoundException e){
+            parentFrame.createScoresAndConfig();
+        }
+
+
+        //Displaying the data on the screen
         for(int i = 0; i < 5; i++){
-            scoresLabel[i] = new JLabel("Testing");
+            scoresLabel[i] = new JLabel(scoresText[i]);
             scoresLabel[i].setFont(scoresFont);
             FontMetrics scoresFontMetrics = scoresLabel[i].getFontMetrics(scoresFont);
             int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
             scoresLabel[i].setBounds(((Tetris.frameWidth-scoreLabelWidth)/2)-100, (i*60)+130, 100, 40);
 
         }
-
         for(int i = 0; i < 5; i++){
-            scoresLabel[i+5] = new JLabel("Testing");
+            scoresLabel[i+5] = new JLabel(scoresText[i+5]);
             scoresLabel[i+5].setFont(scoresFont);
-            FontMetrics scoresFontMetrics = scoresLabel[i].getFontMetrics(scoresFont);
+            FontMetrics scoresFontMetrics = scoresLabel[i+5].getFontMetrics(scoresFont);
             int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
             scoresLabel[i+5].setBounds(((Tetris.frameWidth-scoreLabelWidth)/2)+100, (i*60)+130, 100, 40);
         }
 
+        //Adding the JPanel data to the JFrame
         for(int i = 0; i < 10; i++){
             this.add(scoresLabel[i]);
         }
