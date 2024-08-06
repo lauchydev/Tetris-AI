@@ -14,7 +14,7 @@ public class HighScoreScreen extends JPanel {
     public HighScoreScreen(Tetris parentFrame) {
         this.parentFrame = parentFrame;
         this.setLayout(null);
-        JLabel highScoreLabel = new JLabel("High Scores", JLabel.CENTER);
+        JLabel highScoreLabel = new JLabel("High Scores");
         Font labelFont = new Font("Arial", Font.BOLD, 20);
         highScoreLabel.setFont(labelFont);
 
@@ -29,7 +29,7 @@ public class HighScoreScreen extends JPanel {
         int panelWidth = Tetris.frameWidth;
         int xPosition = (panelWidth - labelWidth) / 2;
 
-        highScoreLabel.setBounds(xPosition, 80, labelWidth, 30);
+        highScoreLabel.setBounds(xPosition, 80, 200, 30);
 
         this.add(highScoreLabel);
 
@@ -65,11 +65,11 @@ public class HighScoreScreen extends JPanel {
             scoresLabel[i].setFont(scoresFont);
             FontMetrics scoresFontMetrics = scoresLabel[i].getFontMetrics(scoresFont);
             int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
-            scoresLabel[i].setBounds(((Tetris.frameWidth-scoreLabelWidth)/2)-100, (i*60)+130, 100, 40);
+            scoresLabel[i].setBounds(((Tetris.frameWidth -scoreLabelWidth)/2)-150, (i*60)+130, 100, 40);
 
         }
         for(int i = 0; i < 5; i++){
-            scoresLabel[i+5] = new JLabel(scoresText[i+5]);
+            scoresLabel[i+5] = new JLabel(scoresText[i+5], JLabel.RIGHT);
             scoresLabel[i+5].setFont(scoresFont);
             FontMetrics scoresFontMetrics = scoresLabel[i+5].getFontMetrics(scoresFont);
             int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
