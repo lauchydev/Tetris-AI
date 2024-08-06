@@ -35,10 +35,30 @@ public class HighScoreScreen extends JPanel {
     }
 
     public void displayScores(){
-        JPanel scorePanel = new JPanel();
-        scorePanel.setBounds((Tetris.frameWidth/2)-300, 140, 600, 270);
-        scorePanel.setBackground(Color.BLUE);
-        this.add(scorePanel);
+        JLabel [] scoresLabel = new JLabel[10];
+        Font scoresFont = new Font("Arial",Font.PLAIN, 16);
+
+        for(int i = 0; i < 5; i++){
+            scoresLabel[i] = new JLabel("Testing");
+            scoresLabel[i].setFont(scoresFont);
+            FontMetrics scoresFontMetrics = scoresLabel[i].getFontMetrics(scoresFont);
+            int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
+            scoresLabel[i].setBounds(((Tetris.frameWidth-scoreLabelWidth)/2)-100, (i*60)+130, 100, 40);
+
+        }
+
+        for(int i = 0; i < 5; i++){
+            scoresLabel[i+5] = new JLabel("Testing");
+            scoresLabel[i+5].setFont(scoresFont);
+            FontMetrics scoresFontMetrics = scoresLabel[i].getFontMetrics(scoresFont);
+            int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
+            scoresLabel[i+5].setBounds(((Tetris.frameWidth-scoreLabelWidth)/2)+100, (i*60)+130, 100, 40);
+        }
+
+        for(int i = 0; i < 10; i++){
+            this.add(scoresLabel[i]);
+        }
+
     }
 
     public void createButtons() {
