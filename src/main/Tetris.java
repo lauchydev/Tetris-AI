@@ -1,10 +1,11 @@
 package main;
 
+import main.configuration.ConfigurationScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.FileWriter;
 
 public class Tetris extends JFrame {
 

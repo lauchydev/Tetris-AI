@@ -1,11 +1,11 @@
-package main;
+package main.configuration;
+
+import main.Tetris;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class ConfigurationScreen extends JPanel {
 
@@ -80,6 +80,29 @@ public class ConfigurationScreen extends JPanel {
         this.add(backButton);
     }
 
+    public void addSlider(String name, int min, int max, int initValue)
+    {
+        JLabel label = new JLabel(name);
+        JLabel value = new JLabel(Integer.toString(initValue));
+
+        JSlider slider = new JSlider(min, max, initValue);
+        slider.setMajorTickSpacing(10);
+        slider.setMinorTickSpacing(1);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                value.setText(Integer.toString(slider.getValue()));
+            }
+        });
+
+        this.add(label);
+        this.add(value);
+        this.add(slider);
+    }
+
 
 
     public void modifySlider(JSlider slider, String name, String id)
@@ -88,6 +111,8 @@ public class ConfigurationScreen extends JPanel {
         JLabel value = new JLabel(Integer.toString(slider.getValue()));
         int y = 100;
         int spacer = 60;
+
+        // Setting individual poition on the screen
         switch (id)
         {
             case "fieldWidthSlider":
@@ -111,10 +136,13 @@ public class ConfigurationScreen extends JPanel {
                 break;
         }
 
+        // Global settings for all sliders
+
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
+        // Dynamic label that displays value of slider when changed
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
