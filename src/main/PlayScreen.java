@@ -22,6 +22,20 @@ public class PlayScreen extends JPanel {
     }
 
     private void setupKeybindings() {
+        this.bindKeyToAction("RotateClockwise", KeyStroke.getKeyStroke("UP"), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                board.rotateClockwise();
+                repaint();
+            }
+        });
+        this.bindKeyToAction("RotateCounterclockwise", KeyStroke.getKeyStroke("Z"), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                board.rotateCounterclockwise();
+                repaint();
+            }
+        });
         this.bindKeyToAction("ShiftLeft", KeyStroke.getKeyStroke("LEFT"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
