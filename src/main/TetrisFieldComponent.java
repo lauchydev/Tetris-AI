@@ -27,8 +27,10 @@ public class TetrisFieldComponent extends JComponent {
                 this.paintCell(g2d, x, y, this.board.getFieldCell(x, y) ? Color.LIGHT_GRAY : Color.BLACK);
             }
         }
-        for (var cell: board.getActivePieceCells()) {
-            this.paintCell(g2d, cell.x(), cell.y(), Color.CYAN);
+        if (board.getActivePiece() != null) {
+            for (var cell : board.getActivePiece().getCells()) {
+                this.paintCell(g2d, cell.x(), cell.y(), Color.CYAN);
+            }
         }
 
     }
