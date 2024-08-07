@@ -14,7 +14,7 @@ public record ActivePiece(Piece kind, Rotation rotation, int x, int y) {
 
     public boolean collides(TetrisBoard board) {
         for (var cell: this.getCells()) {
-            if (board.getFieldCell(cell.x(), cell.y())) {
+            if (board.getFieldCell(cell.x(), cell.y()) != null) {
                 return true;
             }
         }
