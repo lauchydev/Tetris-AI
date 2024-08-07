@@ -12,15 +12,36 @@ public record ActivePiece(Piece kind, Rotation rotation, int x, int y) {
         return cells;
     }
 
-    public ActivePiece shifted(int dx, int dy) {
-        return new ActivePiece(this.kind, this.rotation, this.x + dx, this.y + dy);
+    public boolean collides(TetrisBoard board) {
+        for (var cell: this.getCells()) {
+            if (board.getFieldCell(cell.x(), cell.y())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public ActivePiece clockwise() {
-        return new ActivePiece(this.kind, rotation.clockwise(), this.x, this.y);
+    public ActivePiece shifted(TetrisBoard board, int dx, int dy) {
+        var shifted = new ActivePiece(this.kind, this.rotation, this.x + dx, this.y + dy);
+        return !shifted.collides(board) ? shifted : null;
     }
 
-    public ActivePiece counterclockwise() {
-        return new ActivePiece(this.kind, rotation.counterclockwise(), this.x, this.y);
+    public ActivePiece clockwise(TetrisBoard board) {
+        return this.rotatedTo(board, this.rotation.clockwise());
+    }
+
+    public ActivePiece counterclockwise(TetrisBoard board) {
+        return this.rotatedTo(board, this.rotation.counterclockwise());
+    }
+
+    private ActivePiece rotatedTo(TetrisBoard board, Rotation to) {
+        for (var offsets : this.kind.offsetTable().table()) {
+            var offset = offsets.getKick(this.rotation, to);
+            var rotated = new ActivePiece(this.kind, to, this.x + offset.x(), this.y + offset.y());
+            if (!rotated.collides(board)) {
+                return rotated;
+            }
+        }
+        return null;
     }
 }
