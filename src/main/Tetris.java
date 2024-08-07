@@ -1,10 +1,11 @@
 package main;
 
+import main.configuration.ConfigurationScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.FileWriter;
 
 public class Tetris extends JFrame {
 
@@ -22,11 +23,11 @@ public class Tetris extends JFrame {
 
         MainScreen mainScreen = new MainScreen(this);
         HighScoreScreen highScoreScreen = new HighScoreScreen(this);
+        ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
 
         cardPanel.add(mainScreen, "MainScreen");
         cardPanel.add(highScoreScreen, "HighScoreScreen");
-
-
+        cardPanel.add(configurationScreen, "ConfigurationScreen");
 
         this.add(cardPanel);
 
@@ -68,9 +69,7 @@ public class Tetris extends JFrame {
         // To be implemented
     }
 
-    public void showConfigurationScreen() {
-        // To be implemented
-    }
+    public void showConfigurationScreen() { cardLayout.show(cardPanel, "ConfigurationScreen"); }
 
     public void showHighScoresScreen() {
         cardLayout.show(cardPanel, "HighScoreScreen");

@@ -46,7 +46,7 @@ public class MainScreen extends JPanel {
         configButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Show configuration screen (to be implemented)
+                parentFrame.showConfigurationScreen();
             }
         });
 
