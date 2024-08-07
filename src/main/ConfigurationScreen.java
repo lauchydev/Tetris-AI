@@ -34,24 +34,24 @@ public class ConfigurationScreen extends JPanel {
         this.add(configurationLabel);
 
         // Sliders
-        JSlider FieldWidth = new JSlider(JSlider.HORIZONTAL, 5, 15, 10);
-        JSlider FieldHeight = new JSlider(JSlider.HORIZONTAL, 15, 30, 20);
-        JSlider GameLevel = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
+        JSlider fieldWidthSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, 10);
+        JSlider fieldHeightSlider = new JSlider(JSlider.HORIZONTAL, 15, 30, 20);
+        JSlider gameLevelSlider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
 
-        modifySlider(FieldWidth, "Field Width (No. of cells):", "FieldWidth");
-        modifySlider(FieldHeight, "Field Height (No. of cells):", "FieldHeight");
-        modifySlider(GameLevel, "Game Level:", "GameLevel");
+        modifySlider(fieldWidthSlider, "Field Width (No. of cells):", "fieldWidthSlider");
+        modifySlider(fieldHeightSlider, "Field Height (No. of cells):", "fieldHeightSlider");
+        modifySlider(gameLevelSlider, "Game Level:", "gameLevelSlider");
 
         // Check Boxes
-        JCheckBox Music = new JCheckBox();
-        JCheckBox SoundEffect = new JCheckBox();
-        JCheckBox AIPlay = new JCheckBox();
-        JCheckBox ExtendMode = new JCheckBox();
+        JCheckBox musicCheckbox = new JCheckBox();
+        JCheckBox soundEffectCheckBox = new JCheckBox();
+        JCheckBox aiPlayCheckBox = new JCheckBox();
+        JCheckBox extendModeCheckBox = new JCheckBox();
 
-        modifyToggle(Music, "Music (On|Off):", "Music");
-        modifyToggle(SoundEffect, "Sound Effect (On|Off):", "SoundEffect");
-        modifyToggle(AIPlay, "AI Play (On|Off):", "AIPlay");
-        modifyToggle(ExtendMode, "Extend Mode (On|Off):", "ExtendMode");
+        modifyToggle(musicCheckbox, "musicCheckbox (On|Off):", "musicCheckbox");
+        modifyToggle(soundEffectCheckBox, "Sound Effect (On|Off):", "soundEffectCheckBox");
+        modifyToggle(aiPlayCheckBox, "AI Play (On|Off):", "aiPlayCheckBox");
+        modifyToggle(extendModeCheckBox, "Extend Mode (On|Off):", "extendModeCheckBox");
 
         // TODO: Add actions to each of the above toggles/sliders
 
@@ -90,20 +90,20 @@ public class ConfigurationScreen extends JPanel {
         int spacer = 60;
         switch (id)
         {
-            case "FieldWidth":
+            case "fieldWidthSlider":
                 slider.setBounds(250, y, 300, 50);
                 value.setBounds(550, y, 20, 50);
                 label.setBounds(50, y, 200, 50);
                 break;
 
-            case "FieldHeight":
+            case "fieldHeightSlider":
                 y += spacer;
                 slider.setBounds(250, y, 300, 50);
                 value.setBounds(550, y, 20, 50);
                 label.setBounds(50, y, 200, 50);
                 break;
 
-            case "GameLevel":
+            case "gameLevelSlider":
                 y += spacer * 2;
                 slider.setBounds(250, y, 300, 50);
                 value.setBounds(550, y, 20, 50);
@@ -141,28 +141,28 @@ public class ConfigurationScreen extends JPanel {
         int spacer = 60;
         switch (id)
         {
-            case "Music":
+            case "musicCheckbox":
                 y += spacer * 3;
                 button.setBounds(250, y, 200, 50);
                 value.setBounds(550, y, 20, 50);
                 label.setBounds(50, y, 200, 50);
                 break;
 
-            case "SoundEffect":
+            case "soundEffectCheckBox":
                 y += spacer * 4;
                 button.setBounds(250, y, 200, 50);
                 value.setBounds(550, y, 20, 50);
                 label.setBounds(50, y, 200, 50);
                 break;
 
-            case "AIPlay":
+            case "aiPlayCheckBox":
                 y += spacer * 5;
                 button.setBounds(250, y, 200, 50);
                 value.setBounds(550, y, 20, 50);
                 label.setBounds(50, y, 200, 50);
                 break;
 
-            case "ExtendMode":
+            case "extendModeCheckBox":
                 y += spacer * 6;
                 button.setBounds(250, y, 200, 50);
                 value.setBounds(550, y, 20, 50);
