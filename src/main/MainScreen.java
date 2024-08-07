@@ -36,7 +36,7 @@ public class MainScreen extends JPanel {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Show play screen (to be implemented)
+                parentFrame.showPlayScreen();
             }
         });
 

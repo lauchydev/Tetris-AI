@@ -22,10 +22,12 @@ public class Tetris extends JFrame {
         cardPanel = new JPanel(cardLayout);
 
         MainScreen mainScreen = new MainScreen(this);
+        PlayScreen playScreen = new PlayScreen(this);
         HighScoreScreen highScoreScreen = new HighScoreScreen(this);
         ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
 
         cardPanel.add(mainScreen, "MainScreen");
+        cardPanel.add(playScreen, "PlayScreen");
         cardPanel.add(highScoreScreen, "HighScoreScreen");
         cardPanel.add(configurationScreen, "ConfigurationScreen");
 
@@ -66,7 +68,7 @@ public class Tetris extends JFrame {
     }
 
     public void showPlayScreen() {
-        // To be implemented
+        cardLayout.show(cardPanel, "PlayScreen");
     }
 
     public void showConfigurationScreen() { cardLayout.show(cardPanel, "ConfigurationScreen"); }
