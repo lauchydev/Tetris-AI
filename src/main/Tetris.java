@@ -1,23 +1,30 @@
 package main;
 
+import main.configuration.Configuration;
+import main.highscores.HighScores;
 import main.configuration.ConfigurationScreen;
+import main.highscores.HighScoreScreen;
+import main.ui.MainScreen;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 public class Tetris extends JFrame {
 
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
+    private final CardLayout cardLayout;
+    private final JPanel cardPanel;
 
     // Public variables to change the frame size
     public static int frameWidth = 900;
     public static int frameHeight = 600;
 
+    public Configuration config = new Configuration();
+    public HighScores highScores = new HighScores("data/scores.txt");
+
     public Tetris() {
-        createScoresAndConfig();
+        File directory = new File("data");
+        directory.mkdirs();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
@@ -41,26 +48,9 @@ public class Tetris extends JFrame {
         this.setTitle("Tetris");
         this.setSize(frameWidth, frameHeight);
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-
-    public void createScoresAndConfig(){
-        try{
-
-            File directory = new File("data");
-            directory.mkdirs();
-
-            File scores = new File ("data/scores.txt");
-            scores.createNewFile();
-
-            File config = new File("data/config.txt");
-            config.createNewFile();
-
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     public void showMainScreen() {
