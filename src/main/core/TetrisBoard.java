@@ -12,7 +12,7 @@ public class TetrisBoard {
         this.width = width;
         this.height = height;
         this.rows = new ArrayList<>();
-        this.activePiece = new ActivePiece(Piece.I, Rotation.North, 4, 19);
+        this.activePiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
 
         for (int y = 0; y < height; y++) {
             var row = new ArrayList<Boolean>();
@@ -95,7 +95,7 @@ public class TetrisBoard {
             this.rows.add(row);
         }
 
-        var nextPiece = new ActivePiece(Piece.I, Rotation.North, 4, 19);
+        var nextPiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
         this.activePiece = !nextPiece.collides(this) ? nextPiece : null;
 
         return new PlacementResult(linesCleared);
@@ -129,5 +129,18 @@ public class TetrisBoard {
 
         this.activePiece = shifted;
         return true;
+    }
+
+    private static Piece randomPiece() {
+        return switch ((int)(Math.random() * 7.0)) {
+            case 0 -> Piece.I;
+            case 1 -> Piece.J;
+            case 2 -> Piece.L;
+            case 3 -> Piece.O;
+            case 4 -> Piece.S;
+            case 5 -> Piece.T;
+            case 6 -> Piece.Z;
+            default -> throw new IllegalStateException();
+        };
     }
 }
