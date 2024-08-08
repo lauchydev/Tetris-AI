@@ -56,6 +56,10 @@ public class Tetris extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    public void showSplashScreen() {
+        cardLayout.show(cardPanel, "SplashScreen");
+    }
+
     public void showMainScreen() {
         cardLayout.show(cardPanel, "MainScreen");
     }
