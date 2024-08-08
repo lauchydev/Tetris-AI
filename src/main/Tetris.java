@@ -28,11 +28,13 @@ public class Tetris extends JFrame {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
+        SplashScreen splashScreen = new SplashScreen(this);
         MainScreen mainScreen = new MainScreen(this);
         PlayScreen playScreen = new PlayScreen(this);
         HighScoreScreen highScoreScreen = new HighScoreScreen(this);
         ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
 
+        cardPanel.add(splashScreen, "SplashScreen");
         cardPanel.add(mainScreen, "MainScreen");
         cardPanel.add(playScreen, "PlayScreen");
         cardPanel.add(highScoreScreen, "HighScoreScreen");
@@ -41,6 +43,7 @@ public class Tetris extends JFrame {
         this.add(cardPanel);
 
         initWindow();
+        showSplashScreen();
 
     }
 
@@ -51,6 +54,10 @@ public class Tetris extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void showSplashScreen() {
+        cardLayout.show(cardPanel, "SplashScreen");
     }
 
     public void showMainScreen() {
