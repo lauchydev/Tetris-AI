@@ -73,9 +73,9 @@ public class TetrisBoard {
         }
 
         var rotated = clockwise
-                ? this.activePiece.clockwise()
-                : this.activePiece.counterclockwise();
-        if (this.pieceCollides(rotated)) {
+                ? this.activePiece.clockwise(this)
+                : this.activePiece.counterclockwise(this);
+        if (rotated == null) {
             return false;
         }
 
@@ -88,21 +88,12 @@ public class TetrisBoard {
             return false;
         }
 
-        var shifted = this.activePiece.shifted(dx, dy);
-        if (this.pieceCollides(shifted)) {
+        var shifted = this.activePiece.shifted(this, dx, dy);
+        if (shifted == null) {
             return false;
         }
 
         this.activePiece = shifted;
         return true;
-    }
-
-    private boolean pieceCollides(ActivePiece piece) {
-        for (var cell: piece.getCells()) {
-            if (this.getFieldCell(cell.x(), cell.y())) {
-                return true;
-            }
-        }
-        return false;
     }
 }
