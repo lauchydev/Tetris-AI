@@ -57,6 +57,13 @@ public class PlayScreen extends JPanel {
                 repaint();
             }
         });
+        this.bindKeyToAction("HardDrop", KeyStroke.getKeyStroke("SPACE"), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                board.hardDrop();
+                repaint();
+            }
+        });
     }
 
     private void bindKeyToAction(String name, KeyStroke keyStroke, Action action) {

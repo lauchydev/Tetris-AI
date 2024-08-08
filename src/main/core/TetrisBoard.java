@@ -12,7 +12,7 @@ public class TetrisBoard {
         this.width = width;
         this.height = height;
         this.rows = new ArrayList<>();
-        this.activePiece = new ActivePiece(Piece.I, Rotation.North, 4, 19);
+        this.activePiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
 
         for (int y = 0; y < height; y++) {
             var row = new ArrayList<Boolean>();
@@ -47,6 +47,10 @@ public class TetrisBoard {
         return this.activePiece;
     }
 
+    public boolean isGameOver() {
+        return this.activePiece == null;
+    }
+
     public boolean rotateClockwise() {
         return this.rotateActivePiece(true);
     }
@@ -65,6 +69,36 @@ public class TetrisBoard {
 
     public boolean softDrop() {
         return this.shiftActivePiece(0, -1);
+    }
+
+    public PlacementResult hardDrop() {
+        if (this.activePiece == null) {
+            return null;
+        }
+
+        // softDrop has a side effect
+        //noinspection StatementWithEmptyBody
+        while (this.softDrop()) {}
+        for (var cell : this.activePiece.getCells()) {
+            if (cell.y() < this.height) {
+                this.rows.get(cell.y()).set(cell.x(), true);
+            }
+        }
+
+        this.rows.removeIf(row -> row.stream().allMatch(cell -> cell));
+        int linesCleared = this.height - this.rows.size();
+        while (this.rows.size() < this.height) {
+            var row = new ArrayList<Boolean>();
+            for (int x = 0; x < width; x++) {
+                row.add(false);
+            }
+            this.rows.add(row);
+        }
+
+        var nextPiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
+        this.activePiece = !nextPiece.collides(this) ? nextPiece : null;
+
+        return new PlacementResult(linesCleared);
     }
 
     private boolean rotateActivePiece(boolean clockwise) {
@@ -95,5 +129,18 @@ public class TetrisBoard {
 
         this.activePiece = shifted;
         return true;
+    }
+
+    private static Piece randomPiece() {
+        return switch ((int)(Math.random() * 7.0)) {
+            case 0 -> Piece.I;
+            case 1 -> Piece.J;
+            case 2 -> Piece.L;
+            case 3 -> Piece.O;
+            case 4 -> Piece.S;
+            case 5 -> Piece.T;
+            case 6 -> Piece.Z;
+            default -> throw new IllegalStateException();
+        };
     }
 }
