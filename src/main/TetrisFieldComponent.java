@@ -8,10 +8,10 @@ import java.awt.*;
 public class TetrisFieldComponent extends JComponent {
     TetrisBoard board;
 
-    public TetrisFieldComponent(TetrisBoard board) {
+    public TetrisFieldComponent(TetrisBoard board, int playScreenWidth, int playScreenHeight) {
         this.board = board;
 
-        setPreferredSize(new Dimension(100, 200));
+        setPreferredSize(new Dimension(playScreenWidth, playScreenHeight));
         setBackground(Color.WHITE);
     }
 

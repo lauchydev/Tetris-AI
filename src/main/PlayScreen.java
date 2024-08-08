@@ -10,14 +10,17 @@ public class PlayScreen extends JPanel {
     TetrisBoard board;
 
     public PlayScreen(Tetris parentFrame) {
+        int playScreenWidth = 200;
+        int playScreenHeight = 400;
+
         this.parentFrame = parentFrame;
         this.board = new TetrisBoard(10, 20);
 
         this.setLayout(null);
         this.setupKeybindings();
 
-        var tetrisField = new TetrisFieldComponent(this.board);
-        tetrisField.setBounds(0, 0, 100, 200);
+        var tetrisField = new TetrisFieldComponent(this.board, playScreenWidth, playScreenHeight);
+        tetrisField.setBounds((Tetris.frameWidth/2)- (playScreenWidth/2), 100, playScreenWidth, playScreenHeight);
         this.add(tetrisField);
     }
 
