@@ -8,10 +8,10 @@ import java.awt.event.*;
 public class PlayScreen extends JPanel {
     private final Tetris parentFrame;
     TetrisBoard board;
+    public int playScreenWidth = 200;
+    public int playScreenHeight = 400;
 
     public PlayScreen(Tetris parentFrame) {
-        int playScreenWidth = 200;
-        int playScreenHeight = 400;
 
         this.parentFrame = parentFrame;
         this.board = new TetrisBoard(10, 20);
@@ -19,8 +19,8 @@ public class PlayScreen extends JPanel {
         this.setLayout(null);
         this.setupKeybindings();
 
-        var tetrisField = new TetrisFieldComponent(this.board, playScreenWidth, playScreenHeight);
-        tetrisField.setBounds((Tetris.frameWidth/2)- (playScreenWidth/2), 100, playScreenWidth, playScreenHeight);
+        var tetrisField = new TetrisFieldComponent(this.board, this.playScreenWidth, this.playScreenHeight);
+        tetrisField.setBounds((Tetris.frameWidth/2)- (this.playScreenWidth/2), 100, this.playScreenWidth, this.playScreenHeight);
         this.add(tetrisField);
     }
 

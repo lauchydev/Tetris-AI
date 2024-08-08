@@ -11,8 +11,8 @@ public class TetrisFieldComponent extends JComponent {
     public TetrisFieldComponent(TetrisBoard board, int playScreenWidth, int playScreenHeight) {
         this.board = board;
 
-        setPreferredSize(new Dimension(playScreenWidth, playScreenHeight));
-        setBackground(Color.WHITE);
+        this.setPreferredSize(new Dimension(playScreenWidth, playScreenHeight));
+        this.setBackground(Color.WHITE);
     }
 
     @Override
