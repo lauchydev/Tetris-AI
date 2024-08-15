@@ -1,19 +1,20 @@
 package main;
 
 import main.core.TetrisBoard;
+import main.ui.BasicScreen;
 
 import javax.swing.*;
 import java.awt.event.*;
 
-public class PlayScreen extends JPanel {
-    private final Tetris parentFrame;
+public class PlayScreen extends BasicScreen {
+
     TetrisBoard board;
     public int playScreenWidth = 200;
     public int playScreenHeight = 400;
 
     public PlayScreen(Tetris parentFrame) {
+        super(parentFrame, "Tetris");
 
-        this.parentFrame = parentFrame;
         this.board = new TetrisBoard(10, 20);
 
         this.setLayout(null);
