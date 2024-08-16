@@ -39,7 +39,7 @@ public class ConfigurationScreen extends BasicScreen {
         checkbox.setSelected(isSelected);
         valueLabel.setText(isSelected ? "On" : "Off");
 
-        checkbox.setBounds(250, y, 200, 50);
+        checkbox.setBounds(250, y, 50, 50);
         valueLabel.setBounds(550, y, 20, 50);
         titleLabel.setBounds(50, y, 200, 50);
         this.add(checkbox);
