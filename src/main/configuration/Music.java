@@ -4,10 +4,17 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
-import java.io.InputStream;
 
 public class Music {
     private static Clip clip;
+
+    public static void toggleMusic(boolean play) {
+        if (play) {
+            Music.play("src/sound/theme.wav");
+        } else {
+            Music.stop();
+        }
+    }
 
     public static void play(String musicLocation) {
         try {

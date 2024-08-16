@@ -1,6 +1,7 @@
 package main;
 
 import main.configuration.Configuration;
+import main.configuration.Music;
 import main.highscores.HighScores;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
@@ -45,7 +46,14 @@ public class Tetris extends JFrame {
         this.add(cardPanel);
 
         initWindow();
+
+        // Start music if needed
+        if (this.config.getMusicOn()) {
+            Music.toggleMusic(true);
+        }
     }
+
+
 
     private void initWindow() {
         this.setTitle("Tetris");

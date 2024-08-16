@@ -4,12 +4,8 @@ import main.Tetris;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class ConfigurationScreen extends BasicScreen {
-
-    private int pos = 0;
 
     public ConfigurationScreen(Tetris parentFrame) {
         super(parentFrame, "Configuration");
@@ -24,20 +20,9 @@ public class ConfigurationScreen extends BasicScreen {
         this.createCheckbox("Sound Effect (On|Off):", 1);
         this.createCheckbox("AI Play (On|Off):", 2);
         this.createCheckbox("Extend Mode (On|Off):", 3);
-
-        // Start music if the checkbox is selected
-        if (parentFrame.config.getMusicOn()) {
-            toggleMusic(true);
-        }
     }
 
-    public static void toggleMusic(boolean play) {
-        if (play) {
-            Music.play("src/sound/theme.wav");
-        } else {
-            Music.stop();
-        }
-    }
+
 
     // Modify the createCheckbox method in the ConfigurationScreen class
     private void createCheckbox(String title, int pos) {
@@ -64,8 +49,8 @@ public class ConfigurationScreen extends BasicScreen {
             boolean selected = checkbox.isSelected();
             valueLabel.setText(selected ? "On" : "Off");
             if (title.equals("Music (On|Off):")) {
-                toggleMusic(selected);
-                parentFrame.config.setMusicOn(selected);
+                Music.toggleMusic(selected);
+                this.parentFrame.config.setMusicOn(selected);
             }
         });
     }
@@ -81,12 +66,7 @@ public class ConfigurationScreen extends BasicScreen {
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                valueLabel.setText(Integer.toString(slider.getValue()));
-            }
-        });
+        slider.addChangeListener((e) -> valueLabel.setText(Integer.toString(slider.getValue())));
         this.add(titleLabel);
         this.add(valueLabel);
         this.add(slider);
