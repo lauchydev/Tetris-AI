@@ -23,7 +23,7 @@ public class Game {
 
         this.gameLoopTimer = new Timer(Math.round(this.level * 200 / this.speedMultiplier), (ActionEvent e) -> {
             if (running) {
-                this.board.softDrop();
+                if (!this.board.softDrop()) { this.board.hardDrop(); }
                 comp.repaint();
             }
         });
