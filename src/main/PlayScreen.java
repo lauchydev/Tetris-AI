@@ -76,7 +76,7 @@ public class PlayScreen extends BasicScreen {
         this.bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(1.5f);
+                game.setSpeedMultiplier(5.0f);
                 repaint();
             }
         });
@@ -84,8 +84,7 @@ public class PlayScreen extends BasicScreen {
         this.bindKeyToAction("HardDrop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                board.hardDrop();
-                game.setSpeedMultiplier(2.0f);
+                game.setSpeedMultiplier(10.0f);
                 repaint();
             }
         });

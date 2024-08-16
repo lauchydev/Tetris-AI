@@ -23,7 +23,17 @@ public class Game {
 
         this.gameLoopTimer = new Timer(Math.round(this.level * 200 / this.speedMultiplier), (ActionEvent e) -> {
             if (running) {
-                if (!this.board.softDrop()) { this.board.hardDrop(); }
+                if (!this.board.softDrop()) {
+
+                    if (this.board.getActivePiece() == null) {
+                        this.stop();
+                        // TODO: Handle end of game, high scores enter name etc
+                    } else {
+                        var result = this.board.hardDrop();
+                        // TODO: do some scoring...
+                        System.out.println("Cleared lines, do scoring...");
+                    }
+                }
                 comp.repaint();
             }
         });
@@ -39,11 +49,13 @@ public class Game {
         this.reset();
         this.running = true;
         this.gameLoopTimer.start();
+        System.out.println("Game Started");
     }
 
     public void stop() {
         this.running = false;
         this.gameLoopTimer.stop();
+        System.out.println("Game Stopped");
     }
 
     public void pause() { }
