@@ -1,6 +1,9 @@
 package main.ui;
 
 import main.Tetris;
+import main.configuration.Configuration;
+import main.configuration.ConfigurationScreen;
+import main.configuration.Music;
 
 import javax.swing.*;
 import java.awt.Font;

@@ -25,25 +25,49 @@ public class ConfigurationScreen extends BasicScreen {
         this.createCheckbox("AI Play (On|Off):", 2);
         this.createCheckbox("Extend Mode (On|Off):", 3);
 
-        // TODO: Add actions to each of the above toggles/sliders
-
+        // Start music if the checkbox is selected
+        if (parentFrame.config.getMusicOn()) {
+            toggleMusic(true);
+        }
     }
 
+    public static void toggleMusic(boolean play) {
+        if (play) {
+            Music.play("src/sound/theme.wav");
+        } else {
+            Music.stop();
+        }
+    }
+
+    // Modify the createCheckbox method in the ConfigurationScreen class
     private void createCheckbox(String title, int pos) {
         JCheckBox checkbox = new JCheckBox();
         int y = 100 + 60 * (3 + pos);
         JLabel titleLabel = new JLabel(title);
         JLabel valueLabel = new JLabel("Off");
 
-        checkbox.addItemListener(e -> {
-            valueLabel.setText((checkbox.isSelected()) ? "On" : "Off");
-        });
+        // Set the initial state of the checkbox based on the configuration
+        boolean isSelected = false;
+        if (title.equals("Music (On|Off):")) {
+            isSelected = parentFrame.config.getMusicOn();
+        }
+        checkbox.setSelected(isSelected);
+        valueLabel.setText(isSelected ? "On" : "Off");
+
         checkbox.setBounds(250, y, 200, 50);
         valueLabel.setBounds(550, y, 20, 50);
         titleLabel.setBounds(50, y, 200, 50);
         this.add(checkbox);
         this.add(valueLabel);
         this.add(titleLabel);
+        checkbox.addItemListener(e -> {
+            boolean selected = checkbox.isSelected();
+            valueLabel.setText(selected ? "On" : "Off");
+            if (title.equals("Music (On|Off):")) {
+                toggleMusic(selected);
+                parentFrame.config.setMusicOn(selected);
+            }
+        });
     }
 
     private void createSlider(String title, int min, int max, int value, int pos) {

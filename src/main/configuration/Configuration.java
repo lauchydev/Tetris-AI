@@ -12,7 +12,7 @@ public class Configuration {
     public int getFieldHeight() { return this.getInt("fieldHeight", 20); }
     public int getGameLevel() { return this.getInt("gameLevel", 1); }
 
-    public boolean getMusicOn() { return this.getBoolean("music", false); }
+    public boolean getMusicOn() { return this.getBoolean("music", true); }
     public boolean getSoundOn() { return this.getBoolean("sound", false); }
     public boolean getAIPlayOn() { return this.getBoolean("aiPlay", false); }
     public boolean getExtendModeOn() { return this.getBoolean("extendMode", false); }
