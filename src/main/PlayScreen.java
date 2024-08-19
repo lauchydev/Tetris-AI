@@ -20,12 +20,11 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     public int playScreenHeight = 400;
     private final Game game;
     private final JLabel pausedLabel;
-    private JLayeredPane layeredPane;
 
     public PlayScreen(Tetris parentFrame) {
         super(parentFrame, "Tetris");
 
-        this.layeredPane = this.createLayeredPane();
+        JLayeredPane layeredPane = this.createLayeredPane();
         this.board = new TetrisBoard(10, 20);
 
         this.setLayout(new BorderLayout());
@@ -33,12 +32,11 @@ public class PlayScreen extends BasicScreen implements GameObserver {
 
         var tetrisField = new TetrisFieldComponent(this.board, this.playScreenWidth, this.playScreenHeight);
         tetrisField.setBounds((Tetris.frameWidth/2)- (this.playScreenWidth/2), 100, this.playScreenWidth, this.playScreenHeight);
-        this.layeredPane.add(tetrisField, JLayeredPane.DEFAULT_LAYER);
-
-        this.add(this.layeredPane, BorderLayout.CENTER);
+        layeredPane.add(tetrisField, JLayeredPane.DEFAULT_LAYER);
+        this.add(layeredPane, BorderLayout.CENTER);
 
         this.pausedLabel = this.createPauseLabel();
-        this.layeredPane.add(this.pausedLabel, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(this.pausedLabel, JLayeredPane.PALETTE_LAYER);
 
         this.game = new Game(this.parentFrame.config, tetrisField, board, this);
         this.game.start();
@@ -62,15 +60,37 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         FontMetrics metrics = pausedLabel.getFontMetrics(font);
         int textWidth = metrics.stringWidth(text);
         int textHeight = metrics.getHeight();
-        pausedLabel.setBounds((Tetris.frameWidth - textWidth) / 2, 200, textWidth, textHeight);
+        pausedLabel.setBounds((Tetris.frameWidth - textWidth) / 2, 150, textWidth, textHeight);
         pausedLabel.setVisible(false);
         return pausedLabel;
     }
 
     @Override
     protected void onBackButtonClicked() {
+        if (this.game.inProgress()) {
+            boolean startedPaused = this.game.isPaused();
+            if (!startedPaused) {
+                this.game.setPaused(true);
+            }
+
+            if (!this.confirmExitDialog()) {
+                if (!startedPaused) { this.game.setPaused(false); }
+                this.transferFocus();
+                return;
+            }
+        }
+
         this.game.stop();
         super.onBackButtonClicked();
+    }
+
+    private boolean confirmExitDialog() {
+        var result = JOptionPane.showConfirmDialog(null, "Are you sure you want to stop the game?", "Confirm End Game",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+            return true;
+        }
+        return false;
     }
 
     private void setupKeybindings() {
@@ -142,5 +162,11 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     @Override
     public void onGamePauseChanged(boolean paused) {
         this.pausedLabel.setVisible(paused);
+    }
+
+    @Override
+    public void onGameEnded() {
+        // TODO: handle highscores name enter
+        //
     }
 }

@@ -30,7 +30,6 @@ public class Game {
 
                     if (this.board.getActivePiece() == null) {
                         this.stop();
-                        // TODO: Handle end of game, high scores enter name etc
                     } else {
                         var result = this.board.hardDrop();
                         // TODO: do some scoring...
@@ -48,6 +47,10 @@ public class Game {
         this.speedMultiplier = 1.0f;
     }
 
+    public boolean inProgress() { return this.running; }
+
+    public boolean isPaused() { return this.paused; }
+
     public void start() {
         this.reset();
         this.running = true;
@@ -58,6 +61,7 @@ public class Game {
     public void stop() {
         this.running = false;
         this.gameLoopTimer.stop();
+        this.gobs.onGameEnded();
         System.out.println("Game Stopped");
     }
 
