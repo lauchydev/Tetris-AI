@@ -12,17 +12,20 @@ public class Game {
     private int score;
     private int level;
     private boolean running = false;
+    private boolean paused = false;
     private float speedMultiplier;
     private final Timer gameLoopTimer;
     private final TetrisBoard board;
+    private final GameObserver gobs;
 
-    public Game(Configuration config, TetrisFieldComponent comp, TetrisBoard board) {
+    public Game(Configuration config, TetrisFieldComponent comp, TetrisBoard board, GameObserver gobs) {
         this.config = config;
         this.board = board;
+        this.gobs = gobs;
         this.reset();
 
         this.gameLoopTimer = new Timer(Math.round(this.level * 200 / this.speedMultiplier), (ActionEvent e) -> {
-            if (running) {
+            if (running && !paused) {
                 if (!this.board.softDrop()) {
 
                     if (this.board.getActivePiece() == null) {
@@ -58,8 +61,14 @@ public class Game {
         System.out.println("Game Stopped");
     }
 
-    public void pause() { }
-    public void unpause() { }
+    public void togglePause() {
+        this.setPaused(!this.paused);
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        this.gobs.onGamePauseChanged(this.paused);
+    }
 
     public void setSpeedMultiplier(float multiplier) {
         this.speedMultiplier = multiplier;
