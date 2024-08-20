@@ -6,7 +6,6 @@ import main.core.game.GameObserver;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -68,14 +67,11 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     @Override
     protected void onBackButtonClicked() {
         if (this.game.inProgress()) {
-            boolean startedPaused = this.game.isPaused();
-            if (!startedPaused) {
-                this.game.setPaused(true);
-            }
+            boolean initialPauseState = this.game.isPaused();
+            this.game.setPaused(true);
 
             if (!this.confirmExitDialog()) {
-                if (!startedPaused) { this.game.setPaused(false); }
-                this.transferFocus();
+                this.game.setPaused(initialPauseState);
                 return;
             }
         }
@@ -87,10 +83,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     private boolean confirmExitDialog() {
         var result = JOptionPane.showConfirmDialog(null, "Are you sure you want to stop the game?", "Confirm End Game",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (result == JOptionPane.YES_OPTION) {
-            return true;
-        }
-        return false;
+        return result == JOptionPane.YES_OPTION;
     }
 
     private void setupKeybindings() {

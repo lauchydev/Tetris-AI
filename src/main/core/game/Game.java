@@ -70,8 +70,9 @@ public class Game {
     }
 
     public void setPaused(boolean paused) {
+        boolean pausedChanged = this.paused != paused;
         this.paused = paused;
-        this.gobs.onGamePauseChanged(this.paused);
+        if (pausedChanged) { this.gobs.onGamePauseChanged(this.paused); }
     }
 
     public void setSpeedMultiplier(float multiplier) {
