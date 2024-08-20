@@ -2,38 +2,95 @@ package main;
 
 import main.core.TetrisBoard;
 import main.core.game.Game;
+import main.core.game.GameObserver;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.*;
 
-public class PlayScreen extends BasicScreen {
+public class PlayScreen extends BasicScreen implements GameObserver {
 
+    private static final String FONT_NAME = "Arial";
+    private static final int FONT_FLAGS = Font.BOLD;
+    private static final int HEADER_FONT_SIZE = 20;
     TetrisBoard board;
     public int playScreenWidth = 200;
     public int playScreenHeight = 400;
     private final Game game;
+    private final JLabel pausedLabel;
 
     public PlayScreen(Tetris parentFrame) {
         super(parentFrame, "Tetris");
 
+        JLayeredPane layeredPane = this.createLayeredPane();
         this.board = new TetrisBoard(10, 20);
 
-        this.setLayout(null);
+        this.setLayout(new BorderLayout());
         this.setupKeybindings();
 
         var tetrisField = new TetrisFieldComponent(this.board, this.playScreenWidth, this.playScreenHeight);
         tetrisField.setBounds((Tetris.frameWidth/2)- (this.playScreenWidth/2), 100, this.playScreenWidth, this.playScreenHeight);
-        this.add(tetrisField);
+        layeredPane.add(tetrisField, JLayeredPane.DEFAULT_LAYER);
+        this.add(layeredPane, BorderLayout.CENTER);
 
-        this.game = new Game(this.parentFrame.config, tetrisField, board);
+        this.pausedLabel = this.createPauseLabel();
+        layeredPane.add(this.pausedLabel, JLayeredPane.PALETTE_LAYER);
+
+        this.game = new Game(this.parentFrame.config, tetrisField, board, this);
         this.game.start();
+    }
+
+    private JLayeredPane createLayeredPane() {
+        var layeredPane = new JLayeredPane();
+        layeredPane.setLayout(null);
+        layeredPane.setPreferredSize(this.getSize());
+        layeredPane.setVisible(true);
+        layeredPane.setBackground(Color.blue);
+        return layeredPane;
+    }
+
+    private JLabel createPauseLabel() {
+        String text = "Game is paused. Press P to resume.";
+        var pausedLabel = new JLabel(text);
+        pausedLabel.setForeground(Color.RED);
+        Font font =  new Font(FONT_NAME, FONT_FLAGS, HEADER_FONT_SIZE);
+        pausedLabel.setFont(font);
+        FontMetrics metrics = pausedLabel.getFontMetrics(font);
+        int textWidth = metrics.stringWidth(text);
+        int textHeight = metrics.getHeight();
+        pausedLabel.setBounds((Tetris.frameWidth - textWidth) / 2, 150, textWidth, textHeight);
+        pausedLabel.setVisible(false);
+        return pausedLabel;
     }
 
     @Override
     protected void onBackButtonClicked() {
+        if (this.game.inProgress()) {
+            boolean startedPaused = this.game.isPaused();
+            if (!startedPaused) {
+                this.game.setPaused(true);
+            }
+
+            if (!this.confirmExitDialog()) {
+                if (!startedPaused) { this.game.setPaused(false); }
+                this.transferFocus();
+                return;
+            }
+        }
+
         this.game.stop();
         super.onBackButtonClicked();
+    }
+
+    private boolean confirmExitDialog() {
+        var result = JOptionPane.showConfirmDialog(null, "Are you sure you want to stop the game?", "Confirm End Game",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+            return true;
+        }
+        return false;
     }
 
     private void setupKeybindings() {
@@ -89,10 +146,27 @@ public class PlayScreen extends BasicScreen {
             }
         });
         this.bindKeyToAction("HardDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), normalSpeedAction);
+        this.bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                game.togglePause();
+            }
+        });
     }
 
     private void bindKeyToAction(String name, KeyStroke keyStroke, Action action) {
         this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
         this.getActionMap().put(name, action);
+    }
+
+    @Override
+    public void onGamePauseChanged(boolean paused) {
+        this.pausedLabel.setVisible(paused);
+    }
+
+    @Override
+    public void onGameEnded() {
+        // TODO: handle highscores name enter
+        //
     }
 }

@@ -12,22 +12,24 @@ public class Game {
     private int score;
     private int level;
     private boolean running = false;
+    private boolean paused = false;
     private float speedMultiplier;
     private final Timer gameLoopTimer;
     private final TetrisBoard board;
+    private final GameObserver gobs;
 
-    public Game(Configuration config, TetrisFieldComponent comp, TetrisBoard board) {
+    public Game(Configuration config, TetrisFieldComponent comp, TetrisBoard board, GameObserver gobs) {
         this.config = config;
         this.board = board;
+        this.gobs = gobs;
         this.reset();
 
         this.gameLoopTimer = new Timer(Math.round(this.level * 200 / this.speedMultiplier), (ActionEvent e) -> {
-            if (running) {
+            if (running && !paused) {
                 if (!this.board.softDrop()) {
 
                     if (this.board.getActivePiece() == null) {
                         this.stop();
-                        // TODO: Handle end of game, high scores enter name etc
                     } else {
                         var result = this.board.hardDrop();
                         // TODO: do some scoring...
@@ -45,6 +47,10 @@ public class Game {
         this.speedMultiplier = 1.0f;
     }
 
+    public boolean inProgress() { return this.running; }
+
+    public boolean isPaused() { return this.paused; }
+
     public void start() {
         this.reset();
         this.running = true;
@@ -55,11 +61,18 @@ public class Game {
     public void stop() {
         this.running = false;
         this.gameLoopTimer.stop();
+        this.gobs.onGameEnded();
         System.out.println("Game Stopped");
     }
 
-    public void pause() { }
-    public void unpause() { }
+    public void togglePause() {
+        this.setPaused(!this.paused);
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+        this.gobs.onGamePauseChanged(this.paused);
+    }
 
     public void setSpeedMultiplier(float multiplier) {
         this.speedMultiplier = multiplier;
