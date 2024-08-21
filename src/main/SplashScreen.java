@@ -2,56 +2,39 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class SplashScreen extends JPanel {
-    private Tetris parentFrame;
-    private Image splashImage;
+public class SplashScreen extends JWindow {
+    private final int duration;
 
-    public SplashScreen(Tetris parentFrame) {
-        this.parentFrame = parentFrame;
-
-        splashImage = new ImageIcon(getClass().getResource("/Images/Splash_Screen.jpg")).getImage();
-        this.setPreferredSize(new Dimension(Tetris.frameWidth, Tetris.frameHeight));
-
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                parentFrame.showMainScreen();
-            }
-        }, 3000);
+    public SplashScreen(int duration) {
+        this.duration = duration;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // Calculate the aspect ratio of the image and the panel
-        int panelWidth = getWidth();
-        int panelHeight = getHeight();
-        int imageWidth = splashImage.getWidth(this);
-        int imageHeight = splashImage.getHeight(this);
-
-        double panelAspectRatio = (double) panelWidth / panelHeight;
-        double imageAspectRatio = (double) imageWidth / imageHeight;
-
-        int drawWidth, drawHeight;
-        if (imageAspectRatio > panelAspectRatio) {
-            // Scale image to fit width
-            drawWidth = panelWidth;
-            drawHeight = (int) (panelWidth / imageAspectRatio);
-        } else {
-            // Scale image to fit height
-            drawHeight = panelHeight;
-            drawWidth = (int) (panelHeight * imageAspectRatio);
+    public void showSplashAndWait() {
+        JPanel content = (JPanel) getContentPane();
+        // Set the window's bounds, centering the window
+        int width = 512;
+        int height = 512;
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screen.width - width) / 2;
+        int y = (screen.height - height) / 2;
+        setBounds(x, y, width, height);
+        // Build the splash screen
+        ImageIcon imageIcon = new ImageIcon("src/Images/Splash_Screen.jpg");
+        Image image = imageIcon.getImage();
+        Image newimg = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(newimg);
+        JLabel label = new JLabel(imageIcon);
+        content.add(label, BorderLayout.CENTER);
+        // Display it
+        setVisible(true);
+        // Wait a little while, maybe showing a progress bar
+        try {
+            Thread.sleep(duration);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // Calculate the x and y positions to center the image
-        int x = (panelWidth - drawWidth) / 2;
-        int y = (panelHeight - drawHeight) / 2;
-
-        // Draw the scaled image
-        g.drawImage(splashImage, x, y, drawWidth, drawHeight, this);
+        setVisible(false);
     }
+
 }

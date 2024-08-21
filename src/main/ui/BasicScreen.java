@@ -12,6 +12,7 @@ public class BasicScreen extends JPanel {
     private static final int HEADER_FONT_SIZE = 20;
     private static final int BACK_FONT_SIZE = 20;
     private static final String BACK_BUTTON_TEXT = "Back";
+    protected final JButton backButton;
 
     protected final Tetris parentFrame;
 
@@ -19,20 +20,21 @@ public class BasicScreen extends JPanel {
         this.parentFrame = parentFrame;
         this.setLayout(null);
         this.createHeader(title);
-        this.createBackButton();
+        this.backButton = this.createBackButton();
+        this.add(this.backButton);
     }
 
     protected void onBackButtonClicked() {
         this.parentFrame.showMainScreen();
     }
 
-    private void createBackButton() {
+    private JButton createBackButton() {
         Font buttonFont = new Font(FONT_NAME, FONT_FLAGS, BACK_FONT_SIZE);
         JButton backButton = new JButton(BACK_BUTTON_TEXT);
         backButton.setFont(buttonFont);
         backButton.setBounds(350, Tetris.frameHeight - 100, 200, 30);
         backButton.addActionListener(e -> this.onBackButtonClicked());
-        this.add(backButton);
+        return backButton;
     }
 
     private void createHeader(String title) {

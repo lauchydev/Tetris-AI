@@ -1,11 +1,12 @@
 package main.core;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TetrisBoard {
     int width;
     int height;
-    ArrayList<ArrayList<Boolean>> rows;
+    ArrayList<ArrayList<CellKind>> rows;
     ActivePiece activePiece;
 
     public TetrisBoard(int width, int height) {
@@ -15,9 +16,9 @@ public class TetrisBoard {
         this.activePiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
 
         for (int y = 0; y < height; y++) {
-            var row = new ArrayList<Boolean>();
+            var row = new ArrayList<CellKind>();
             for (int x = 0; x < width; x++) {
-                row.add(false);
+                row.add(null);
             }
             this.rows.add(row);
         }
@@ -31,13 +32,13 @@ public class TetrisBoard {
         return this.height;
     }
 
-    public boolean getFieldCell(int x, int y) {
+    public CellKind getFieldCell(int x, int y) {
         if (x < 0 || x >= this.width || y < 0) {
-            return true;
+            return CellKind.FILLED;
         }
 
         if (y >= this.height) {
-            return false;
+            return null;
         }
 
         return this.rows.get(y).get(x);
@@ -81,16 +82,16 @@ public class TetrisBoard {
         while (this.softDrop()) {}
         for (var cell : this.activePiece.getCells()) {
             if (cell.y() < this.height) {
-                this.rows.get(cell.y()).set(cell.x(), true);
+                this.rows.get(cell.y()).set(cell.x(), this.activePiece.kind().color());
             }
         }
 
-        this.rows.removeIf(row -> row.stream().allMatch(cell -> cell));
+        this.rows.removeIf(row -> row.stream().allMatch(Objects::nonNull));
         int linesCleared = this.height - this.rows.size();
         while (this.rows.size() < this.height) {
-            var row = new ArrayList<Boolean>();
+            var row = new ArrayList<CellKind>();
             for (int x = 0; x < width; x++) {
-                row.add(false);
+                row.add(null);
             }
             this.rows.add(row);
         }
