@@ -22,6 +22,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
 
     public PlayScreen(Tetris parentFrame) {
         super(parentFrame, "Tetris");
+        this.backButton.setFocusable(false);
 
         JLayeredPane layeredPane = this.createLayeredPane();
         this.board = new TetrisBoard(10, 20);
