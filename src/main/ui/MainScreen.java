@@ -37,7 +37,7 @@ public class MainScreen extends JPanel {
         this.createButton("Play",          350, 200, 200, 30, e -> parentFrame.showPlayScreen());
         this.createButton("Configuration", 350, 275, 200, 30, e -> parentFrame.showConfigurationScreen());
         this.createButton("High Scores",   350, 350, 200, 30, e -> parentFrame.showHighScoresScreen());
-        this.createButton("Exit",          350, 425, 200, 30, e -> System.exit(0));
+        this.createButton("Exit",          350, 425, 200, 30, e -> showExitConfirmation());
     }
 
     private void createButton(String text, int x, int y, int width, int height, ActionListener action) {
@@ -47,5 +47,19 @@ public class MainScreen extends JPanel {
         button.setBounds(x, y, width, height);
         button.addActionListener(action);
         this.add(button);
+    }
+
+    private void showExitConfirmation() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (response == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 }
