@@ -2,6 +2,7 @@ package main.highscores;
 
 import main.Tetris;
 import main.ui.BasicScreen;
+import main.ui.MainScreenListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +10,11 @@ import java.awt.*;
 
 public class HighScoreScreen extends BasicScreen {
 
-    public HighScoreScreen(Tetris parentFrame) {
-        super(parentFrame, "");
+    private final HighScores highScores;
 
+    public HighScoreScreen(MainScreenListener listener, HighScores highScores) {
+        super(listener, "");
+        this.highScores = highScores;
         this.setBackground(new Color(20, 20, 20));
 
         JLabel titleLabel = new JLabel("High Scores");
@@ -27,7 +30,7 @@ public class HighScoreScreen extends BasicScreen {
      * Display the scores
      */
     public void displayScores() {
-        String [] scoresText = this.parentFrame.highScores.getScores();
+        String [] scoresText = this.highScores.getScores();
         Font scoresFont = new Font("Arial",Font.PLAIN, 16);
 
         //Displaying the data on the screen

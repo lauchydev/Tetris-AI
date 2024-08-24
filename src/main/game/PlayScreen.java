@@ -1,8 +1,10 @@
 package main.game;
 
 import main.Tetris;
+import main.configuration.Configuration;
 import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
+import main.ui.MainScreenListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +21,8 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     private final Game game;
     private final JLabel pausedLabel;
 
-    public PlayScreen(Tetris parentFrame) {
-        super(parentFrame, "");
+    public PlayScreen(MainScreenListener listener, Configuration config) {
+        super(listener, "");
         this.setBackground(new Color(20, 20, 20));
 
         JLabel titleLabel = new JLabel("Tetris");
@@ -46,7 +48,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         this.pausedLabel = this.createPauseLabel();
         layeredPane.add(this.pausedLabel, JLayeredPane.PALETTE_LAYER);
 
-        this.game = new Game(this.parentFrame.config, tetrisField, board, this);
+        this.game = new Game(config, tetrisField, board, this);
         this.game.start();
     }
 
@@ -74,7 +76,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     @Override
-    protected void onBackButtonClicked() {
+    protected void onBackButtonClicked(ActionEvent e) {
         if (this.game.inProgress()) {
             boolean initialPauseState = this.game.isPaused();
             this.game.setPaused(true);
@@ -86,7 +88,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         }
 
         this.game.stop();
-        super.onBackButtonClicked();
+        super.onBackButtonClicked(e);
     }
 
     private boolean confirmExitDialog() {

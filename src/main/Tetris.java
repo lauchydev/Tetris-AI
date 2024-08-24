@@ -8,12 +8,13 @@ import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
 import main.ui.SplashScreen;
+import main.ui.MainScreenListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-public class Tetris extends JFrame {
+public class Tetris extends JFrame implements MainScreenListener {
 
     private final CardLayout cardLayout;
     private final JPanel cardPanel;
@@ -22,8 +23,8 @@ public class Tetris extends JFrame {
     public static int frameWidth = 900;
     public static int frameHeight = 600;
 
-    public Configuration config = new Configuration();
-    public HighScores highScores = new HighScores("data/scores.txt");
+    private final Configuration config = new Configuration();
+    private final HighScores highScores = new HighScores("data/scores.txt");
 
     private PlayScreen playScreen;
 
@@ -32,19 +33,17 @@ public class Tetris extends JFrame {
         File directory = new File("data");
         //noinspection ResultOfMethodCallIgnored
         directory.mkdirs();
-        this.showSplashScreen();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
         MainScreen mainScreen = new MainScreen(this);
-        HighScoreScreen highScoreScreen = new HighScoreScreen(this);
-        ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
+        HighScoreScreen highScoreScreen = new HighScoreScreen(this, this.highScores);
+        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, this.config);
 
         cardPanel.add(mainScreen, "MainScreen");
         cardPanel.add(highScoreScreen, "HighScoreScreen");
         cardPanel.add(configurationScreen, "ConfigurationScreen");
-
         this.add(cardPanel);
 
         initWindow();
@@ -66,19 +65,16 @@ public class Tetris extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public void showSplashScreen() {
-        main.ui.SplashScreen splash = new SplashScreen(3000);
-        splash.showSplashAndWait();
-    }
-
+    @Override
     public void showMainScreen() {
         this.stopGame();
         cardLayout.show(cardPanel, "MainScreen");
     }
 
+    @Override
     public void showPlayScreen() {
         this.stopGame();
-        this.playScreen = new PlayScreen(this);
+        this.playScreen = new PlayScreen(this, this.config);
         cardPanel.add(playScreen, "PlayScreen");
         cardLayout.show(cardPanel, "PlayScreen");
     }
@@ -90,13 +86,18 @@ public class Tetris extends JFrame {
         }
     }
 
+    @Override
     public void showConfigurationScreen() { cardLayout.show(cardPanel, "ConfigurationScreen"); }
 
+    @Override
     public void showHighScoresScreen() {
         cardLayout.show(cardPanel, "HighScoreScreen");
     }
 
     public static void main(String[] args) {
-        new Tetris();
+        SplashScreen splash = new SplashScreen(3000);
+        splash.showSplashAndWait();
+        Tetris tetris = new Tetris();
+        tetris.showMainScreen();
     }
 }

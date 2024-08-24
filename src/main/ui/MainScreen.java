@@ -1,7 +1,5 @@
 package main.ui;
 
-import main.Tetris;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -15,11 +13,10 @@ public class MainScreen extends JPanel {
     private static final String BUTTON_FONT = "Arial";
     private static final int BUTTON_FONT_FLAGS = Font.BOLD;
     private static final int BUTTON_FONT_SIZE = 12;
+    private final MainScreenListener listener;
 
-    private final Tetris parentFrame;
-
-    public MainScreen(Tetris parentFrame) {
-        this.parentFrame = parentFrame;
+    public MainScreen(MainScreenListener listener) {
+        this.listener = listener;
         this.setLayout(null);
         this.setBackground(new Color(20, 20, 20));
         this.createHeader();
@@ -36,9 +33,9 @@ public class MainScreen extends JPanel {
     }
 
     public void createButtons() {
-        this.createButton("Play",          350, 200, 200, 30, e -> parentFrame.showPlayScreen());
-        this.createButton("Configuration", 350, 275, 200, 30, e -> parentFrame.showConfigurationScreen());
-        this.createButton("High Scores",   350, 350, 200, 30, e -> parentFrame.showHighScoresScreen());
+        this.createButton("Play",          350, 200, 200, 30, e -> this.listener.showPlayScreen());
+        this.createButton("Configuration", 350, 275, 200, 30, e -> this.listener.showConfigurationScreen());
+        this.createButton("High Scores",   350, 350, 200, 30, e -> this.listener.showHighScoresScreen());
         this.createButton("Exit",          350, 425, 200, 30, e -> showExitConfirmation());
     }
 

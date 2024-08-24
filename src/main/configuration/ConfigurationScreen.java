@@ -1,15 +1,18 @@
     package main.configuration;
 
-    import main.Tetris;
     import main.ui.BasicScreen;
+    import main.ui.MainScreenListener;
 
     import javax.swing.*;
     import java.awt.*;
 
     public class ConfigurationScreen extends BasicScreen {
 
-        public ConfigurationScreen(Tetris parentFrame) {
-            super(parentFrame, "");
+        private final Configuration config;
+
+        public ConfigurationScreen(MainScreenListener listener, Configuration config) {
+            super(listener, "");
+            this.config = config;
             this.setBackground(new Color(20, 20, 20));
 
             JLabel titleLabel = new JLabel("Configuration");
@@ -43,7 +46,7 @@
             // Set the initial state of the checkbox based on the configuration
             boolean isSelected = false;
             if (title.equals("Music (On|Off):")) {
-                isSelected = parentFrame.config.getMusicOn();
+                isSelected = this.config.getMusicOn();
             }
             checkbox.setSelected(isSelected);
             valueLabel.setText(isSelected ? "On" : "Off");
@@ -64,7 +67,7 @@
                 valueLabel.setText(selected ? "On" : "Off");
                 if (title.equals("Music (On|Off):")) {
                     Music.toggleMusic(selected);
-                    this.parentFrame.config.setMusicOn(selected);
+                    this.config.setMusicOn(selected);
                 }
             });
         }

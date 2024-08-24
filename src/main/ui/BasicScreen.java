@@ -4,6 +4,7 @@ import main.Tetris;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class BasicScreen extends JPanel {
 
@@ -13,19 +14,18 @@ public class BasicScreen extends JPanel {
     private static final int BACK_FONT_SIZE = 20;
     private static final String BACK_BUTTON_TEXT = "Back";
     protected final JButton backButton;
+    private final MainScreenListener listener;
 
-    protected final Tetris parentFrame;
-
-    public BasicScreen(Tetris parentFrame, String title) {
-        this.parentFrame = parentFrame;
+    public BasicScreen(MainScreenListener listener, String title) {
+        this.listener = listener;
         this.setLayout(null);
         this.createHeader(title);
         this.backButton = this.createBackButton();
         this.add(this.backButton);
     }
 
-    protected void onBackButtonClicked() {
-        this.parentFrame.showMainScreen();
+    protected void onBackButtonClicked(ActionEvent e) {
+        this.listener.showMainScreen();
     }
 
     private JButton createBackButton() {
@@ -34,7 +34,7 @@ public class BasicScreen extends JPanel {
         backButton.setFont(buttonFont);
         backButton.setBounds(350, Tetris.frameHeight - 100, 200, 30);
         backButton.setBackground(new Color(144, 238, 144));
-        backButton.addActionListener(e -> this.onBackButtonClicked());
+        backButton.addActionListener(e -> this.onBackButtonClicked(e));
         return backButton;
     }
 
