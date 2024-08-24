@@ -3,7 +3,7 @@ package main.ui;
 import main.Tetris;
 
 import javax.swing.*;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class MainScreen extends JPanel {
@@ -11,7 +11,7 @@ public class MainScreen extends JPanel {
     private static final String HEADER_TITLE = "Main Menu";
     private static final String HEADER_FONT = "Arial";
     private static final int HEADER_FONT_FLAGS = Font.BOLD;
-    private static final int HEADER_FONT_SIZE = 20;
+    private static final int HEADER_FONT_SIZE = 25;
     private static final String BUTTON_FONT = "Arial";
     private static final int BUTTON_FONT_FLAGS = Font.BOLD;
     private static final int BUTTON_FONT_SIZE = 12;
@@ -21,6 +21,7 @@ public class MainScreen extends JPanel {
     public MainScreen(Tetris parentFrame) {
         this.parentFrame = parentFrame;
         this.setLayout(null);
+        this.setBackground(new Color(20, 20, 20));
         this.createHeader();
         this.createButtons();
     }
@@ -28,8 +29,9 @@ public class MainScreen extends JPanel {
     private void createHeader() {
         JLabel menuLabel = new JLabel(HEADER_TITLE, JLabel.CENTER);
         Font labelFont = new Font(HEADER_FONT, HEADER_FONT_FLAGS, HEADER_FONT_SIZE);
-        menuLabel.setBounds(400, 80, 105, 30);
+        menuLabel.setBounds(373, 80, 150, 30);
         menuLabel.setFont(labelFont);
+        menuLabel.setForeground(Color.WHITE);
         this.add(menuLabel);
     }
 
@@ -45,6 +47,7 @@ public class MainScreen extends JPanel {
         JButton button = new JButton(text);
         button.setFont(buttonFont);
         button.setBounds(x, y, width, height);
+        button.setBackground(new Color(144, 238, 144));
         button.addActionListener(action);
         this.add(button);
     }
