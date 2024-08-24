@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 
 public class Game {
     private final Configuration config;
-    private int score;
     private int level;
     private boolean running = false;
     private boolean paused = false;
@@ -42,7 +41,6 @@ public class Game {
 
     private void reset() {
         this.level = this.config.getGameLevel();
-        this.score = 0;
         this.speedMultiplier = 1.0f;
     }
 

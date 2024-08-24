@@ -12,18 +12,18 @@ public record ActivePiece(Piece kind, Rotation rotation, int x, int y) {
         return cells;
     }
 
-    public boolean collides(TetrisBoard board) {
+    public boolean airborne(TetrisBoard board) {
         for (var cell: this.getCells()) {
             if (board.getFieldCell(cell.x(), cell.y()) != null) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public ActivePiece shifted(TetrisBoard board, int dx, int dy) {
         var shifted = new ActivePiece(this.kind, this.rotation, this.x + dx, this.y + dy);
-        return !shifted.collides(board) ? shifted : null;
+        return shifted.airborne(board) ? shifted : null;
     }
 
     public ActivePiece clockwise(TetrisBoard board) {
@@ -38,7 +38,7 @@ public record ActivePiece(Piece kind, Rotation rotation, int x, int y) {
         for (var offsets : this.kind.offsetTable().table()) {
             var offset = offsets.getKick(this.rotation, to);
             var rotated = new ActivePiece(this.kind, to, this.x + offset.x(), this.y + offset.y());
-            if (!rotated.collides(board)) {
+            if (rotated.airborne(board)) {
                 return rotated;
             }
         }
