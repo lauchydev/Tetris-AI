@@ -21,7 +21,16 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     private final JLabel pausedLabel;
 
     public PlayScreen(Tetris parentFrame) {
-        super(parentFrame, "Tetris");
+        super(parentFrame, "");
+        this.setBackground(new Color(20, 20, 20));
+
+        JLabel titleLabel = new JLabel("Tetris");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBounds(415, 20, 300, 80);
+        this.add(titleLabel);
+
+
         this.backButton.setFocusable(false);
 
         JLayeredPane layeredPane = this.createLayeredPane();
