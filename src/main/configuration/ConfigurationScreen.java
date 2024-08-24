@@ -4,11 +4,20 @@
     import main.ui.BasicScreen;
 
     import javax.swing.*;
+    import java.awt.*;
 
     public class ConfigurationScreen extends BasicScreen {
 
         public ConfigurationScreen(Tetris parentFrame) {
-            super(parentFrame, "Configuration");
+            super(parentFrame, "");
+            this.setBackground(new Color(20, 20, 20));
+
+            JLabel titleLabel = new JLabel("Configuration");
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            titleLabel.setForeground(Color.WHITE);
+            titleLabel.setBounds(390, 20, 300, 80);
+            this.add(titleLabel);
+
 
             // Sliders
             this.createSlider("Field Width (No. of cells):", 5, 15, 10, 0);
@@ -39,6 +48,11 @@
             checkbox.setSelected(isSelected);
             valueLabel.setText(isSelected ? "On" : "Off");
 
+            checkbox.setBackground(new Color(20, 20, 20));
+            checkbox.setForeground(Color.WHITE);
+            titleLabel.setForeground(Color.WHITE);
+            valueLabel.setForeground(Color.WHITE);
+
             checkbox.setBounds(400, y, 50, 50);
             valueLabel.setBounds(450, y, 20, 50);
             titleLabel.setBounds(150, y, 200, 50);
@@ -67,6 +81,13 @@
             slider.setMajorTickSpacing(1);
             slider.setPaintTicks(true);
             slider.setPaintLabels(true);
+
+            slider.setBackground(new Color(20, 20, 20));
+            slider.setForeground(Color.WHITE);
+            slider.setOpaque(true);
+            titleLabel.setForeground(Color.WHITE);
+            valueLabel.setForeground(Color.WHITE);
+
             slider.addChangeListener((e) -> valueLabel.setText(Integer.toString(slider.getValue())));
             this.add(titleLabel);
             this.add(valueLabel);
