@@ -10,7 +10,16 @@ import java.awt.*;
 public class HighScoreScreen extends BasicScreen {
 
     public HighScoreScreen(Tetris parentFrame) {
-        super(parentFrame, "High Scores");
+        super(parentFrame, "");
+
+        this.setBackground(new Color(20, 20, 20));
+
+        JLabel titleLabel = new JLabel("High Scores");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBounds(390, 20, 300, 80);
+        this.add(titleLabel);
+
         displayScores();
     }
 
@@ -39,6 +48,7 @@ public class HighScoreScreen extends BasicScreen {
     private void createLabel(Font scoresFont, String text, int xOffset, int yOffset) {
         JLabel scoresLabel = new JLabel(text);
         scoresLabel.setFont(scoresFont);
+        scoresLabel.setForeground(Color.WHITE);
         FontMetrics scoresFontMetrics = scoresLabel.getFontMetrics(scoresFont);
         int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
         scoresLabel.setBounds(((Tetris.frameWidth -scoreLabelWidth)/2)+xOffset, yOffset, 100, 40);

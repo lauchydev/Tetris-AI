@@ -33,6 +33,7 @@ public class BasicScreen extends JPanel {
         JButton backButton = new JButton(BACK_BUTTON_TEXT);
         backButton.setFont(buttonFont);
         backButton.setBounds(350, Tetris.frameHeight - 100, 200, 30);
+        backButton.setBackground(new Color(144, 238, 144));
         backButton.addActionListener(e -> this.onBackButtonClicked());
         return backButton;
     }
