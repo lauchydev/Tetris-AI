@@ -1,4 +1,4 @@
-package main.core;
+package main.game.core;
 
 public record KickOffsets(Cell north, Cell east, Cell south, Cell west) {
     public Cell getOffset(Rotation rotation) {

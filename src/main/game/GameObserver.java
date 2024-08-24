@@ -1,4 +1,4 @@
-package main.core.game;
+package main.game;
 
 public interface GameObserver {
     void onGamePauseChanged(boolean paused);

@@ -1,4 +1,4 @@
-package main.core;
+package main.game.core;
 
 public record Cell(int x, int y) {
     public Cell shifted(int dx, int dy) {

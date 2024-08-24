@@ -1,4 +1,4 @@
-package main.core;
+package main.game.core;
 
 public enum Rotation {
     North, East, South, West;

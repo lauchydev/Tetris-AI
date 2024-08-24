@@ -1,7 +1,7 @@
-package main;
+package main.game;
 
-import main.core.CellKind;
-import main.core.TetrisBoard;
+import main.game.core.CellKind;
+import main.game.core.TetrisBoard;
 
 import javax.swing.*;
 import java.awt.*;

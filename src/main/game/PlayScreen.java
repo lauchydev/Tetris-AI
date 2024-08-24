@@ -1,8 +1,7 @@
-package main;
+package main.game;
 
-import main.core.TetrisBoard;
-import main.core.game.Game;
-import main.core.game.GameObserver;
+import main.Tetris;
+import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
 
 import javax.swing.*;

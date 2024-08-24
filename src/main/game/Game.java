@@ -1,8 +1,7 @@
-package main.core.game;
+package main.game;
 
-import main.TetrisFieldComponent;
 import main.configuration.Configuration;
-import main.core.TetrisBoard;
+import main.game.core.TetrisBoard;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

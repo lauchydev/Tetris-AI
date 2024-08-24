@@ -2,10 +2,12 @@ package main;
 
 import main.configuration.Configuration;
 import main.configuration.Music;
+import main.game.PlayScreen;
 import main.highscores.HighScores;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
+import main.ui.SplashScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +67,7 @@ public class Tetris extends JFrame {
     }
 
     public void showSplashScreen() {
-        SplashScreen splash = new SplashScreen(3000);
+        main.ui.SplashScreen splash = new SplashScreen(3000);
         splash.showSplashAndWait();
     }
 
