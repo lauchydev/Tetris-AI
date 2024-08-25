@@ -1,6 +1,5 @@
 package main.highscores;
 
-import main.Tetris;
 import main.ui.BasicScreen;
 import main.ui.MainScreenListener;
 
@@ -13,16 +12,8 @@ public class HighScoreScreen extends BasicScreen {
     private final HighScores highScores;
 
     public HighScoreScreen(MainScreenListener listener, HighScores highScores) {
-        super(listener, "");
+        super(listener, "High Scores");
         this.highScores = highScores;
-        this.setBackground(new Color(20, 20, 20));
-
-        JLabel titleLabel = new JLabel("High Scores");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBounds(390, 20, 300, 80);
-        this.add(titleLabel);
-
         displayScores();
     }
 
@@ -30,15 +21,19 @@ public class HighScoreScreen extends BasicScreen {
      * Display the scores
      */
     public void displayScores() {
-        String [] scoresText = this.highScores.getScores();
+        String [] scoresText = highScores.getScores();
         Font scoresFont = new Font("Arial",Font.PLAIN, 16);
+        JPanel scoresPanel = new JPanel();
+        scoresPanel.setLayout(null);
 
         //Displaying the data on the screen
         for(int i = 0; i < 5; i++){
-            this.createLabel(scoresFont, scoresText[i], -150, i * 60 + 130);
-            this.createLabel(scoresFont, scoresText[i+5], 100, i * 60 + 130);
+            scoresPanel.add(createLabel(scoresFont, scoresText[i], -150, i * 60 + 30));
+            scoresPanel.add(createLabel(scoresFont, scoresText[i+5], 100, i * 60 + 30));
         }
-
+        add(scoresPanel, BorderLayout.CENTER);
+        scoresPanel.setVisible(true);
+        scoresPanel.setOpaque(false);
     }
 
     /**
@@ -47,15 +42,19 @@ public class HighScoreScreen extends BasicScreen {
      * @param text The text that goes in the label
      * @param xOffset x offset
      * @param yOffset y offset
+     * @return JLabel
      */
-    private void createLabel(Font scoresFont, String text, int xOffset, int yOffset) {
+    private JLabel createLabel(Font scoresFont, String text, int xOffset, int yOffset) {
         JLabel scoresLabel = new JLabel(text);
         scoresLabel.setFont(scoresFont);
         scoresLabel.setForeground(Color.WHITE);
         FontMetrics scoresFontMetrics = scoresLabel.getFontMetrics(scoresFont);
         int scoreLabelWidth = scoresFontMetrics.stringWidth("Testing");
-        scoresLabel.setBounds(((Tetris.frameWidth -scoreLabelWidth)/2)+xOffset, yOffset, 100, 40);
-        this.add(scoresLabel);
+        SwingUtilities.invokeLater(() -> {
+            Rectangle r = new Rectangle( ((getWidth() - scoreLabelWidth) / 2) + xOffset, yOffset, 100, 40);
+            scoresLabel.setBounds(r);
+        });
+        return scoresLabel;
     }
 
 }

@@ -19,9 +19,8 @@ public class Tetris extends JFrame implements MainScreenListener {
     private final CardLayout cardLayout;
     private final JPanel cardPanel;
 
-    // Public variables to change the frame size
-    public static int frameWidth = 900;
-    public static int frameHeight = 600;
+    private static final int FRAME_WIDTH = 900;
+    private static final int FRAME_HEIGHT = 600;
 
     private final Configuration config = new Configuration();
     private final HighScores highScores = new HighScores("data/scores.txt");
@@ -37,19 +36,11 @@ public class Tetris extends JFrame implements MainScreenListener {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
-        MainScreen mainScreen = new MainScreen(this);
-        HighScoreScreen highScoreScreen = new HighScoreScreen(this, this.highScores);
-        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, this.config);
-
-        cardPanel.add(mainScreen, "MainScreen");
-        cardPanel.add(highScoreScreen, "HighScoreScreen");
-        cardPanel.add(configurationScreen, "ConfigurationScreen");
-        this.add(cardPanel);
-
         initWindow();
+        add(cardPanel);
 
         // Start music if needed
-        if (this.config.getMusicOn()) {
+        if (config.getMusicOn()) {
             Music.toggleMusic(true);
         }
     }
@@ -57,47 +48,59 @@ public class Tetris extends JFrame implements MainScreenListener {
 
 
     private void initWindow() {
-        this.setTitle("Tetris");
-        this.setSize(frameWidth, frameHeight);
-        this.setResizable(false);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tetris");
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     @Override
     public void showMainScreen() {
-        this.stopGame();
+        stopGame();
+        MainScreen mainScreen = new MainScreen(this);
+        cardPanel.add(mainScreen, "MainScreen");
         cardLayout.show(cardPanel, "MainScreen");
     }
 
     @Override
     public void showPlayScreen() {
-        this.stopGame();
-        this.playScreen = new PlayScreen(this, this.config);
+        stopGame();
+        playScreen = new PlayScreen(this, config);
         cardPanel.add(playScreen, "PlayScreen");
         cardLayout.show(cardPanel, "PlayScreen");
     }
 
     private void stopGame() {
-        if (this.playScreen != null) {
-            cardPanel.remove(this.playScreen);
-            this.playScreen = null;
+        if (playScreen != null) {
+            cardPanel.remove(playScreen);
+            playScreen = null;
         }
     }
 
     @Override
-    public void showConfigurationScreen() { cardLayout.show(cardPanel, "ConfigurationScreen"); }
+    public void showConfigurationScreen() {
+        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, config);
+        cardPanel.add(configurationScreen, "ConfigurationScreen");
+        cardLayout.show(cardPanel, "ConfigurationScreen");
+    }
 
     @Override
     public void showHighScoresScreen() {
-        cardLayout.show(cardPanel, "HighScoreScreen");
+        SwingUtilities.invokeLater(() -> {
+            HighScoreScreen highScoreScreen = new HighScoreScreen(this, highScores);
+            cardPanel.add(highScoreScreen, "HighScoreScreen");
+            cardLayout.show(cardPanel, "HighScoreScreen");
+        });
     }
 
     public static void main(String[] args) {
         SplashScreen splash = new SplashScreen(3000);
         splash.showSplashAndWait();
-        Tetris tetris = new Tetris();
-        tetris.showMainScreen();
+        SwingUtilities.invokeLater(() -> {
+            Tetris tetris = new Tetris();
+            tetris.showMainScreen();
+        });
     }
 }

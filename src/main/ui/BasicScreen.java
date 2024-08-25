@@ -1,58 +1,51 @@
 package main.ui;
 
-import main.Tetris;
-
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class BasicScreen extends JPanel {
 
-    private static final String FONT_NAME = "Arial";
-    private static final int FONT_FLAGS = Font.BOLD;
-    private static final int HEADER_FONT_SIZE = 20;
-    private static final int BACK_FONT_SIZE = 20;
-    private static final String BACK_BUTTON_TEXT = "Back";
+    private static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 20);
+    private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
     protected final JButton backButton;
     private final MainScreenListener listener;
 
     public BasicScreen(MainScreenListener listener, String title) {
         this.listener = listener;
-        this.setLayout(null);
-        this.createHeader(title);
-        this.backButton = this.createBackButton();
-        this.add(this.backButton);
+        setLayout(new BorderLayout());
+        setBackground(new Color(20, 20, 20));
+        if (title != null) {
+            createHeader(title);
+        }
+        
+        backButton = createBackButton();
+        JPanel southPanel = new JPanel();
+        southPanel.setOpaque(false);
+        southPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        southPanel.add(backButton);
+        add(southPanel, BorderLayout.SOUTH);
     }
 
     protected void onBackButtonClicked(ActionEvent e) {
-        this.listener.showMainScreen();
+        listener.showMainScreen();
     }
 
     private JButton createBackButton() {
-        Font buttonFont = new Font(FONT_NAME, FONT_FLAGS, BACK_FONT_SIZE);
-        JButton backButton = new JButton(BACK_BUTTON_TEXT);
-        backButton.setFont(buttonFont);
-        backButton.setBounds(350, Tetris.frameHeight - 100, 200, 30);
+        JButton backButton = new JButton("Back");
+        backButton.setFont(BUTTON_FONT);
+        backButton.setPreferredSize(new Dimension(200, 30));
         backButton.setBackground(new Color(144, 238, 144));
-        backButton.addActionListener(e -> this.onBackButtonClicked(e));
+        backButton.addActionListener(this::onBackButtonClicked);
         return backButton;
     }
 
     private void createHeader(String title) {
-        JLabel headerLabel = new JLabel(title);
-        Font labelFont = new Font(FONT_NAME, FONT_FLAGS, HEADER_FONT_SIZE);
-        headerLabel.setFont(labelFont);
-
-        // Calculate the width of the label string
-        FontMetrics metrics = headerLabel.getFontMetrics(labelFont);
-        int labelWidth = metrics.stringWidth(title);
-
-        /*
-         *  Using a public frameWidth variable from the {@link Tetris.frameWidth} to center the label
-         */
-        int panelWidth = Tetris.frameWidth;
-        int xPosition = (panelWidth - labelWidth) / 2;
-        headerLabel.setBounds(xPosition, 50, 200, 30);
-        this.add(headerLabel);
+        JLabel headerLabel = new JLabel(title, JLabel.CENTER);
+        headerLabel.setFont(HEADER_FONT);
+        headerLabel.setForeground(Color.WHITE);
+        headerLabel.setBorder(new EmptyBorder(30, 0, 30, 0));
+        add(headerLabel, BorderLayout.NORTH);
     }
 }

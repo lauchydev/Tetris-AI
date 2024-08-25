@@ -78,7 +78,7 @@ public class Game {
     }
 
     private int timerDelay() {
-        return Math.round(this.level * 200 / this.speedMultiplier);
+        return Math.round(this.level * 400 / this.speedMultiplier);
     }
 
     private void updateTimerDelay() {
