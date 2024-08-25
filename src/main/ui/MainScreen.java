@@ -1,55 +1,56 @@
 package main.ui;
 
-import main.Tetris;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class MainScreen extends JPanel {
 
-    private static final String HEADER_TITLE = "Main Menu";
-    private static final String HEADER_FONT = "Arial";
-    private static final int HEADER_FONT_FLAGS = Font.BOLD;
-    private static final int HEADER_FONT_SIZE = 25;
-    private static final String BUTTON_FONT = "Arial";
-    private static final int BUTTON_FONT_FLAGS = Font.BOLD;
-    private static final int BUTTON_FONT_SIZE = 12;
+    private static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 25);
+    private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 12);
+    private static final Color BUTTON_BACKGROUND_COLOUR = new Color(144, 238, 144);
+    private static final Dimension BUTTON_DIMENSION = new Dimension(200, 30);
+    private final MainScreenListener listener;
 
-    private final Tetris parentFrame;
-
-    public MainScreen(Tetris parentFrame) {
-        this.parentFrame = parentFrame;
-        this.setLayout(null);
-        this.setBackground(new Color(20, 20, 20));
-        this.createHeader();
-        this.createButtons();
+    public MainScreen(MainScreenListener listener) {
+        this.listener = listener;
+        setLayout(new GridBagLayout());
+        setBackground(new Color(20, 20, 20));
+        createHeader();
+        createButtons();
     }
 
     private void createHeader() {
-        JLabel menuLabel = new JLabel(HEADER_TITLE, JLabel.CENTER);
-        Font labelFont = new Font(HEADER_FONT, HEADER_FONT_FLAGS, HEADER_FONT_SIZE);
-        menuLabel.setBounds(373, 80, 150, 30);
-        menuLabel.setFont(labelFont);
+        JLabel menuLabel = new JLabel("Main Menu", JLabel.CENTER);
+        menuLabel.setFont(HEADER_FONT);
         menuLabel.setForeground(Color.WHITE);
-        this.add(menuLabel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 0, 95, 0);
+        add(menuLabel, gbc);
     }
 
     public void createButtons() {
-        this.createButton("Play",          350, 200, 200, 30, e -> parentFrame.showPlayScreen());
-        this.createButton("Configuration", 350, 275, 200, 30, e -> parentFrame.showConfigurationScreen());
-        this.createButton("High Scores",   350, 350, 200, 30, e -> parentFrame.showHighScoresScreen());
-        this.createButton("Exit",          350, 425, 200, 30, e -> showExitConfirmation());
+        createButton("Play",          1, e -> listener.showPlayScreen());
+        createButton("Configuration", 2, e -> listener.showConfigurationScreen());
+        createButton("High Scores",   3, e -> listener.showHighScoresScreen());
+        createButton("Exit",          4, e -> showExitConfirmation());
     }
 
-    private void createButton(String text, int x, int y, int width, int height, ActionListener action) {
-        Font buttonFont = new Font(BUTTON_FONT, BUTTON_FONT_FLAGS, BUTTON_FONT_SIZE);
+    private void createButton(String text, int row, ActionListener action) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 0, 50, 0);
+        gbc.gridy = row;
         JButton button = new JButton(text);
-        button.setFont(buttonFont);
-        button.setBounds(x, y, width, height);
-        button.setBackground(new Color(144, 238, 144));
+        button.setFont(BUTTON_FONT);
+        button.setPreferredSize(BUTTON_DIMENSION);
+        button.setBackground(BUTTON_BACKGROUND_COLOUR);
         button.addActionListener(action);
-        this.add(button);
+        add(button, gbc);
     }
 
     private void showExitConfirmation() {

@@ -1,15 +1,13 @@
-package main.core.game;
+package main.game;
 
-import main.TetrisFieldComponent;
 import main.configuration.Configuration;
-import main.core.TetrisBoard;
+import main.game.core.TetrisBoard;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class Game {
     private final Configuration config;
-    private int score;
     private int level;
     private boolean running = false;
     private boolean paused = false;
@@ -43,7 +41,6 @@ public class Game {
 
     private void reset() {
         this.level = this.config.getGameLevel();
-        this.score = 0;
         this.speedMultiplier = 1.0f;
     }
 
@@ -81,7 +78,7 @@ public class Game {
     }
 
     private int timerDelay() {
-        return Math.round(this.level * 200 / this.speedMultiplier);
+        return Math.round(this.level * 400 / this.speedMultiplier);
     }
 
     private void updateTimerDelay() {

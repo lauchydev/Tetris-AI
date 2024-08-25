@@ -1,4 +1,4 @@
-package main.core;
+package main.game.core;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -97,7 +97,7 @@ public class TetrisBoard {
         }
 
         var nextPiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
-        this.activePiece = !nextPiece.collides(this) ? nextPiece : null;
+        this.activePiece = nextPiece.fits(this) ? nextPiece : null;
 
         return new PlacementResult(linesCleared);
     }
