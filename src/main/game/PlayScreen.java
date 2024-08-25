@@ -127,7 +127,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(5.0f);
+                game.setSpeedMultiplier(2.0f);
                 repaint();
             }
         });

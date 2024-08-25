@@ -22,7 +22,7 @@ public class Game {
         this.gobs = gobs;
         this.reset();
 
-        this.gameLoopTimer = new Timer(Math.round(this.level * 200 / this.speedMultiplier), (ActionEvent e) -> {
+        this.gameLoopTimer = new Timer(Math.round(calculateMultiplier()), (ActionEvent e) -> {
             if (running && !paused) {
                 if (!this.board.softDrop()) {
 
@@ -78,7 +78,11 @@ public class Game {
     }
 
     private int timerDelay() {
-        return Math.round(this.level * 400 / this.speedMultiplier);
+        return Math.round(calculateMultiplier());
+    }
+
+    private float calculateMultiplier() {
+        return this.level * 400 / this.speedMultiplier;
     }
 
     private void updateTimerDelay() {
