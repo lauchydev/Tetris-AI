@@ -88,14 +88,6 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     private void setupKeybindings() {
-
-        var normalSpeedAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(1.0f);
-            }
-        };
-
         bindKeyToAction("RotateClockwise", KeyStroke.getKeyStroke("UP"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -131,15 +123,20 @@ public class PlayScreen extends BasicScreen implements GameObserver {
                 repaint();
             }
         });
-        bindKeyToAction("SoftDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), normalSpeedAction);
-        bindKeyToAction("HardDrop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), new AbstractAction() {
+        bindKeyToAction("SoftDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(10.0f);
+                game.setSpeedMultiplier(1.0f);
                 repaint();
             }
         });
-        bindKeyToAction("HardDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, true), normalSpeedAction);
+        bindKeyToAction("HardDrop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                board.hardDrop();
+                repaint();
+            }
+        });
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
