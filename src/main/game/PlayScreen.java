@@ -8,6 +8,7 @@ import main.ui.MainScreenListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.function.Consumer;
 
 public class PlayScreen extends BasicScreen implements GameObserver {
 
@@ -88,53 +89,21 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     private void setupKeybindings() {
-        bindKeyToAction("RotateClockwise", KeyStroke.getKeyStroke("UP"), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                board.rotateClockwise();
-                repaint();
-            }
-        });
-        bindKeyToAction("RotateCounterclockwise", KeyStroke.getKeyStroke("Z"), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                board.rotateCounterclockwise();
-                repaint();
-            }
-        });
-        bindKeyToAction("ShiftLeft", KeyStroke.getKeyStroke("LEFT"), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                board.shiftLeft();
-                repaint();
-            }
-        });
-        bindKeyToAction("ShiftRight", KeyStroke.getKeyStroke("RIGHT"), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                board.shiftRight();
-                repaint();
-            }
-        });
+        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> board.rotateClockwise());
+        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> board.rotateCounterclockwise());
+        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> board.shiftLeft());
+        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> board.shiftRight());
+        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> board.hardDrop());
         bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 game.setSpeedMultiplier(2.0f);
-                repaint();
             }
         });
         bindKeyToAction("SoftDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 game.setSpeedMultiplier(1.0f);
-                repaint();
-            }
-        });
-        bindKeyToAction("HardDrop", KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                board.hardDrop();
-                repaint();
             }
         });
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
@@ -148,6 +117,18 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     private void bindKeyToAction(String name, KeyStroke keyStroke, Action action) {
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, name);
         getActionMap().put(name, action);
+    }
+
+    private void bindMovementInput(String name, int keyCode, Consumer<Boolean> listener) {
+        this.bindKeyToAction(name, KeyStroke.getKeyStroke(keyCode, 0, false), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!game.isPaused()) {
+                    listener.accept(true);
+                    repaint();
+                }
+            }
+        });
     }
 
     @Override
