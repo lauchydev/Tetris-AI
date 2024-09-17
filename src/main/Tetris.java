@@ -1,7 +1,6 @@
 package main;
 
 import main.configuration.Configuration;
-import main.configuration.Music;
 import main.game.PlayScreen;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
@@ -21,7 +20,7 @@ public class Tetris extends JFrame implements MainScreenListener {
     private static final int MIN_FRAME_WIDTH = 900;
     private static final int MIN_FRAME_HEIGHT = 600;
 
-    private final Configuration config = new Configuration();
+    private final Configuration config = Configuration.getInstance();
 
     private PlayScreen playScreen;
 
@@ -37,15 +36,10 @@ public class Tetris extends JFrame implements MainScreenListener {
         initWindow();
         add(cardPanel);
 
-        // Start music if needed
-        if (config.getMusicOn()) {
-            Music.toggleMusic(true);
-        }
-
         // Create and add different cards
         MainScreen mainScreen = new MainScreen(this);
         cardPanel.add(mainScreen, "MainScreen");
-        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, config);
+        ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
         cardPanel.add(configurationScreen, "ConfigurationScreen");
         HighScoreScreen highScoreScreen = new HighScoreScreen(this);
         cardPanel.add(highScoreScreen, "HighScoreScreen");
