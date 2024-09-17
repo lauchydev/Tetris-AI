@@ -3,7 +3,6 @@ package main;
 import main.configuration.Configuration;
 import main.configuration.Music;
 import main.game.PlayScreen;
-import main.highscores.HighScores;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
@@ -19,11 +18,10 @@ public class Tetris extends JFrame implements MainScreenListener {
     private final CardLayout cardLayout;
     private final JPanel cardPanel;
 
-    private static final int FRAME_WIDTH = 900;
-    private static final int FRAME_HEIGHT = 600;
+    private static final int MIN_FRAME_WIDTH = 900;
+    private static final int MIN_FRAME_HEIGHT = 600;
 
     private final Configuration config = new Configuration();
-    private final HighScores highScores = new HighScores("data/scores.txt");
 
     private PlayScreen playScreen;
 
@@ -43,14 +41,22 @@ public class Tetris extends JFrame implements MainScreenListener {
         if (config.getMusicOn()) {
             Music.toggleMusic(true);
         }
+
+        // Create and add different cards
+        MainScreen mainScreen = new MainScreen(this);
+        cardPanel.add(mainScreen, "MainScreen");
+        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, config);
+        cardPanel.add(configurationScreen, "ConfigurationScreen");
+        HighScoreScreen highScoreScreen = new HighScoreScreen(this);
+        cardPanel.add(highScoreScreen, "HighScoreScreen");
     }
 
 
 
     private void initWindow() {
         setTitle("Tetris");
-        setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        setResizable(false);
+        setSize(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT);
+        setMinimumSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -59,8 +65,6 @@ public class Tetris extends JFrame implements MainScreenListener {
     @Override
     public void showMainScreen() {
         stopGame();
-        MainScreen mainScreen = new MainScreen(this);
-        cardPanel.add(mainScreen, "MainScreen");
         cardLayout.show(cardPanel, "MainScreen");
     }
 
@@ -81,18 +85,12 @@ public class Tetris extends JFrame implements MainScreenListener {
 
     @Override
     public void showConfigurationScreen() {
-        ConfigurationScreen configurationScreen = new ConfigurationScreen(this, config);
-        cardPanel.add(configurationScreen, "ConfigurationScreen");
         cardLayout.show(cardPanel, "ConfigurationScreen");
     }
 
     @Override
     public void showHighScoresScreen() {
-        SwingUtilities.invokeLater(() -> {
-            HighScoreScreen highScoreScreen = new HighScoreScreen(this, highScores);
-            cardPanel.add(highScoreScreen, "HighScoreScreen");
-            cardLayout.show(cardPanel, "HighScoreScreen");
-        });
+        cardLayout.show(cardPanel, "HighScoreScreen");
     }
 
     public static void main(String[] args) {

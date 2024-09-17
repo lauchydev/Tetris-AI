@@ -6,12 +6,19 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class HighScores {
+    private static final HighScores instance = new HighScores("data/scores.txt");
+
     private final String filename;
     private final static String EMPTY_TEXT = "Empty : 0";
 
-    public HighScores(String filename) {
+    private HighScores(String filename) {
         this.filename = filename;
     }
+
+    public static HighScores getInstance() {
+        return instance;
+    }
+
     public String[] getScores() {
         String [] scoresText = new String[10];
         try{
@@ -42,6 +49,7 @@ public class HighScores {
                 System.out.println("Couldn't create scores file.");
             }
         } catch (IOException e){
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
