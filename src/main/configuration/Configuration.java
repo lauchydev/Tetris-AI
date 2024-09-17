@@ -4,9 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Configuration {
-
+    private static Configuration instance;
     private final Map<String, Integer> intMap = new HashMap<>();
     private final Map<String, Boolean> booleanMap = new HashMap<>();
+
+    private Configuration() {
+        this.intMap.put("fieldWidth", 10);
+        this.intMap.put("fieldHeight", 20);
+        this.intMap.put("gameLevel", 1);
+
+        this.booleanMap.put("music", getMusicOn());
+        this.booleanMap.put("sound", getSoundOn());
+        this.booleanMap.put("aiPlay", getAIPlayOn());
+        this.booleanMap.put("extendMode", getExtendModeOn());
+    }
+
+    public static Configuration getInstance() {
+        if (instance == null) {
+            instance = new Configuration();
+        }
+        return instance;
+    }
 
     public int getFieldWidth() { return this.getInt("fieldWidth", 10); }
     public int getFieldHeight() { return this.getInt("fieldHeight", 20); }
