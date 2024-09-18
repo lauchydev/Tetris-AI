@@ -5,4 +5,5 @@ public interface MainScreenListener {
     void showPlayScreen();
     void showConfigurationScreen();
     void showHighScoresScreen();
+    void showExitConfirmation();
 }

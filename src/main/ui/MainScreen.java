@@ -36,7 +36,7 @@ public class MainScreen extends JPanel {
         createButton("Play",          1, e -> listener.showPlayScreen());
         createButton("Configuration", 2, e -> listener.showConfigurationScreen());
         createButton("High Scores",   3, e -> listener.showHighScoresScreen());
-        createButton("Exit",          4, e -> showExitConfirmation());
+        createButton("Exit",          4, e -> listener.showExitConfirmation());
     }
 
     private void createButton(String text, int row, ActionListener action) {
@@ -55,17 +55,4 @@ public class MainScreen extends JPanel {
         add(button, gbc);
     }
 
-    private void showExitConfirmation() {
-        int response = JOptionPane.showConfirmDialog(
-                this,
-                "Are you sure you want to exit?",
-                "Exit Confirmation",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-        if (response == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
-    }
 }
