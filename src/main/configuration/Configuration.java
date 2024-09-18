@@ -1,47 +1,98 @@
 package main.configuration;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Configuration {
     private static Configuration instance;
-    private final Map<String, Integer> intMap = new HashMap<>();
-    private final Map<String, Boolean> booleanMap = new HashMap<>();
+    private static final String filename = "data/TetrisConfig.json";
+    private final ArrayList<ConfigObserver> observers = new ArrayList<>();
+    private final static Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .create();
 
-    private Configuration() {
-        this.intMap.put("fieldWidth", 10);
-        this.intMap.put("fieldHeight", 20);
-        this.intMap.put("gameLevel", 1);
-
-        this.booleanMap.put("music", getMusicOn());
-        this.booleanMap.put("sound", getSoundOn());
-        this.booleanMap.put("aiPlay", getAIPlayOn());
-        this.booleanMap.put("extendMode", getExtendModeOn());
-    }
+    @Expose
+    private int fieldWidth = 10;
+    @Expose
+    private int fieldHeight = 20;
+    @Expose
+    private int gameLevel = 1;
+    @Expose
+    private boolean music = false;
+    @Expose
+    private boolean sound = false;
+    @Expose
+    private boolean aiPlay = false;
+    @Expose
+    private boolean extendMode = false;
 
     public static Configuration getInstance() {
         if (instance == null) {
-            instance = new Configuration();
+            Path filePath = Paths.get(filename);
+            try {
+                String json = Files.readString(filePath);
+                instance = gson.fromJson(json, Configuration.class);
+            } catch (IOException e) {
+                // If anything goes wrong at all, create a default object
+                instance = new Configuration();
+            }
         }
         return instance;
     }
 
-    public int getFieldWidth() { return this.getInt("fieldWidth", 10); }
-    public int getFieldHeight() { return this.getInt("fieldHeight", 20); }
-    public int getGameLevel() { return this.getInt("gameLevel", 1); }
+    public void propertyChanged() {
+        saveConfig();
+        notifyObservers();
+    }
 
-    public boolean getMusicOn() { return this.getBoolean("music", false); }
-    public boolean getSoundOn() { return this.getBoolean("sound", false); }
-    public boolean getAIPlayOn() { return this.getBoolean("aiPlay", false); }
-    public boolean getExtendModeOn() { return this.getBoolean("extendMode", false); }
+    private void saveConfig() {
+        String json = gson.toJson(this);
 
-    public void setMusicOn(Boolean value) { this.setBoolean("music", value); }
-    public void setSoundOn(Boolean value) { this.setBoolean("sound", value); }
-    public void setAIPlayOn(Boolean value) { this.setBoolean("aiPlay", value); }
-    public void setExtendModeOn(Boolean value) { this.setBoolean("extendMode", value); }
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.write(json);
+        } catch (IOException e) {
+            System.out.println("Error while saving config file");
+        }
+    }
 
-    private int getInt(String key, int defaultValue) { return this.intMap.getOrDefault(key, defaultValue); }
-    private void setInt(String key, int value) {  this.intMap.put(key, value);  }
-    private boolean getBoolean(String key, Boolean defaultValue) { return this.booleanMap.getOrDefault(key, defaultValue); }
-    private void setBoolean(String key, Boolean value) {  this.booleanMap.put(key, value);  }
+    private void notifyObservers() {
+        for (ConfigObserver obs : observers) {
+            obs.configChanged();
+        }
+    }
+
+    public void addObserver(ConfigObserver obs) {
+        this.observers.add(obs);
+    }
+
+    public void removeObserver(ConfigObserver obs) {
+        this.observers.remove(obs);
+    }
+
+    public int getFieldWidth() { return fieldWidth; }
+    public int getFieldHeight() { return fieldHeight; }
+    public int getGameLevel() { return gameLevel; }
+
+    public void setFieldWidth(int value) { fieldWidth = value; propertyChanged(); }
+    public void setFieldHeight(int value) { fieldHeight = value; propertyChanged(); }
+    public void setGameLevel(int value) { gameLevel = value; propertyChanged(); }
+
+    public boolean getMusicOn() { return music; }
+    public boolean getSoundOn() { return sound; }
+    public boolean getAIPlayOn() { return aiPlay; }
+    public boolean getExtendModeOn() { return extendMode; }
+
+    public void setMusicOn(Boolean value) { music = value; propertyChanged(); }
+    public void setSoundOn(Boolean value) { sound = value; propertyChanged(); }
+    public void setAIPlayOn(Boolean value) { aiPlay = value; propertyChanged(); }
+    public void setExtendModeOn(Boolean value) { extendMode = value; propertyChanged(); }
+
 }

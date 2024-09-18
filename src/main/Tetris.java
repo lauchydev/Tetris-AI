@@ -1,5 +1,6 @@
 package main;
 
+import main.audio.Music;
 import main.configuration.Configuration;
 import main.game.PlayScreen;
 import main.configuration.ConfigurationScreen;
@@ -43,6 +44,8 @@ public class Tetris extends JFrame implements MainScreenListener {
         cardPanel.add(configurationScreen, "ConfigurationScreen");
         HighScoreScreen highScoreScreen = new HighScoreScreen(this);
         cardPanel.add(highScoreScreen, "HighScoreScreen");
+
+        Music.getInstance(); // so that our Music works
     }
 
 
