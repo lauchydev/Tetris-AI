@@ -1,5 +1,8 @@
 package main.game.core;
 
+import main.audio.Effect;
+import main.audio.SoundEffects;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -44,6 +47,7 @@ public class TetrisBoard {
         return this.rows.get(y).get(x);
     }
 
+
     public ActivePiece getActivePiece() {
         return this.activePiece;
     }
@@ -53,18 +57,30 @@ public class TetrisBoard {
     }
 
     public boolean rotateClockwise() {
+        new Thread(() -> {
+            SoundEffects.playEffect(Effect.MOVE_TURN);
+        }).start();
         return this.rotateActivePiece(true);
     }
 
     public boolean rotateCounterclockwise() {
+        new Thread(() -> {
+            SoundEffects.playEffect(Effect.MOVE_TURN);
+        }).start();
         return this.rotateActivePiece(false);
     }
 
     public boolean shiftLeft() {
+        new Thread(() -> {
+            SoundEffects.playEffect(Effect.MOVE_TURN);
+        }).start();
         return this.shiftActivePiece(-1, 0);
     }
 
     public boolean shiftRight() {
+        new Thread(() -> {
+            SoundEffects.playEffect(Effect.MOVE_TURN);
+        }).start();
         return this.shiftActivePiece(1, 0);
     }
 

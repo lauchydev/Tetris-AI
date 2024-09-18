@@ -1,5 +1,7 @@
 package main.game;
 
+import main.audio.Effect;
+import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.TetrisBoard;
 
@@ -59,6 +61,9 @@ public class Game {
         this.running = false;
         this.gameLoopTimer.stop();
         this.gobs.onGameEnded();
+        new Thread(() -> {
+            SoundEffects.playEffect(Effect.GAMEOVER);
+        }).start();
         System.out.println("Game Stopped");
     }
 
