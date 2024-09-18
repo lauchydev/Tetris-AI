@@ -18,6 +18,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     public int playScreenHeight = 400;
     private final Game game;
     private final JLabel pausedLabel;
+    private final Configuration config = Configuration.getInstance();
 
     public PlayScreen(MainScreenListener listener, Configuration config) {
         super(listener, null);
@@ -94,6 +95,9 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> board.shiftLeft());
         bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> board.shiftRight());
         bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> board.hardDrop());
+
+        bindMovementInput("ToggleMusic", KeyEvent.VK_M, pressed -> config.setMusicOn(!config.getMusicOn()));
+        bindMovementInput("ToggleSound", KeyEvent.VK_S, pressed -> config.setSoundOn(!config.getSoundOn()));
         bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
