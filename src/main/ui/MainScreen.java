@@ -49,6 +49,8 @@ public class MainScreen extends JPanel {
         button.setFont(BUTTON_FONT);
         button.setPreferredSize(BUTTON_DIMENSION);
         button.setBackground(BUTTON_BACKGROUND_COLOUR);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
         button.addActionListener(action);
         add(button, gbc);
     }

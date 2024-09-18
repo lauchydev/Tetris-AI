@@ -31,7 +31,6 @@ public class ConfigurationScreen extends BasicScreen {
         createCheckbox("Sound Effect (On|Off):", 1, config::getSoundOn, config::setSoundOn);
         createCheckbox("AI Play (On|Off):", 2, config::getAIPlayOn, config::setAIPlayOn);
         createCheckbox("Extend Mode (On|Off):", 3, config::getExtendModeOn, config::setExtendModeOn);
-
     }
 
     private void updateCheckboxLabel(boolean val, JLabel valueLabel) {

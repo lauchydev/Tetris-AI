@@ -14,6 +14,7 @@ public class Configuration {
     private static final String filename = "data/TetrisConfig.json";
     private static final ArrayList<ConfigObserver> observers = new ArrayList<>();
 
+    // Configuration properties
     private int fieldWidth = 10;
     private int fieldHeight = 20;
     private int gameLevel = 1;
@@ -24,12 +25,9 @@ public class Configuration {
 
     public static Configuration getInstance() {
         if (instance == null) {
-            Path filePath = Paths.get(filename);
             try {
-                Gson gson = new Gson();
-                String json = Files.readString(filePath);
-                instance = gson.fromJson(json, Configuration.class);
-            } catch (IOException e) {
+                instance = load();
+            } catch (Exception e) {
                 // If anything goes wrong at all, create a default object
                 instance = new Configuration();
             }
@@ -38,11 +36,18 @@ public class Configuration {
     }
 
     public void propertyChanged() {
-        saveConfig();
+        save();
         notifyObservers();
     }
 
-    private void saveConfig() {
+    private static Configuration load() throws IOException {
+        Gson gson = new Gson();
+        Path filePath = Paths.get(filename);
+        String json = Files.readString(filePath);
+        return gson.fromJson(json, Configuration.class);
+    }
+
+    private void save() {
         Gson gson = new Gson();
         String json = gson.toJson(this);
 
@@ -60,11 +65,11 @@ public class Configuration {
     }
 
     public void addObserver(ConfigObserver obs) {
-        this.observers.add(obs);
+        observers.add(obs);
     }
 
     public void removeObserver(ConfigObserver obs) {
-        this.observers.remove(obs);
+        observers.remove(obs);
     }
 
     public int getFieldWidth() { return fieldWidth; }
