@@ -56,7 +56,27 @@ public class Tetris extends JFrame implements MainScreenListener {
         setMinimumSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                showExitConfirmation();
+            }
+        });
+    }
+
+    public void showExitConfirmation() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (response == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 
     @Override
