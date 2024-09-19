@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 public class PlayScreen extends BasicScreen implements GameObserver {
 
     private static final Font PAUSED_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
+    private final GameController controller;
     TetrisBoard board;
     public int playScreenWidth = 200;
     public int playScreenHeight = 400;
@@ -27,6 +28,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         JLayeredPane layeredPane = createLayeredPane();
         board = new TetrisBoard(10, 20);
 
+        controller = new GameController(board);
         setupKeybindings();
 
         var tetrisField = new TetrisFieldComponent(board, playScreenWidth, playScreenHeight);
@@ -90,11 +92,11 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     private void setupKeybindings() {
-        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> board.rotateClockwise());
-        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> board.rotateCounterclockwise());
-        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> board.shiftLeft());
-        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> board.shiftRight());
-        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> board.hardDrop());
+        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> controller.rotateClockwise());
+        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> controller.rotateCounterclockwise());
+        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> controller.shiftLeft());
+        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> controller.shiftRight());
+        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> controller.hardDrop());
 
         bindMovementInput("ToggleMusic", KeyEvent.VK_M, pressed -> config.setMusicOn(!config.getMusicOn()));
         bindMovementInput("ToggleSound", KeyEvent.VK_S, pressed -> config.setSoundOn(!config.getSoundOn()));

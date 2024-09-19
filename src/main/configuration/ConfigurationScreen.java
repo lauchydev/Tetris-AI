@@ -10,7 +10,7 @@ public class ConfigurationScreen extends BasicScreen {
 
     public ConfigurationScreen(Tetris parentFrame) {
         super(parentFrame, "Configuration");
-        ConfigurationPanel  configurationPanel = new ConfigurationPanel();
+        ConfigurationPanel configurationPanel = new ConfigurationPanel();
         setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // Padding
         add(configurationPanel, BorderLayout.CENTER);
     }
