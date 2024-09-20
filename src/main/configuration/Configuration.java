@@ -22,6 +22,8 @@ public class Configuration {
     private boolean sound = false;
     private boolean aiPlay = false;
     private boolean extendMode = false;
+    private PlayerType player1Type = PlayerType.HUMAN;
+    private PlayerType player2Type = PlayerType.HUMAN;
 
     public static Configuration getInstance() {
         if (instance == null) {
@@ -84,10 +86,14 @@ public class Configuration {
     public boolean getSoundOn() { return sound; }
     public boolean getAIPlayOn() { return aiPlay; }
     public boolean getExtendModeOn() { return extendMode; }
+    public PlayerType getPlayerOneType() { return player1Type; }
+    public PlayerType getPlayerTwoType() { return player2Type; }
 
     public void setMusicOn(Boolean value) { music = value; propertyChanged(); }
     public void setSoundOn(Boolean value) { sound = value; propertyChanged(); }
     public void setAIPlayOn(Boolean value) { aiPlay = value; propertyChanged(); }
     public void setExtendModeOn(Boolean value) { extendMode = value; propertyChanged(); }
+    public void setPlayerOneType(PlayerType type) { this.player1Type = type; propertyChanged(); }
+    public void setPlayerTwoType(PlayerType type) { this.player2Type = type; propertyChanged(); }
 
 }

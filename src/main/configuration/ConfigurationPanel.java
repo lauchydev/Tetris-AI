@@ -3,7 +3,23 @@ package main.configuration;
 import javax.swing.*;
 import java.awt.*;
 
-public class ConfigurationPanel extends JPanel {
+public class ConfigurationPanel extends JPanel implements ConfigObserver {
+
+    Configuration config = Configuration.getInstance();
+    JPanel playerTwoPanel;
+
+    @Override
+    public void configChanged() {
+        applyExtendedMode();
+    }
+
+    private void applyExtendedMode() {
+        boolean extOn = config.getExtendModeOn();
+        playerTwoPanel.setEnabled(extOn);
+        for (Component comp : playerTwoPanel.getComponents()) {
+            comp.setEnabled(extOn);
+        }
+    }
 
     @FunctionalInterface
     private interface ValueUpdateAction<T> {
@@ -16,8 +32,8 @@ public class ConfigurationPanel extends JPanel {
     }
 
     ConfigurationPanel() {
-        Configuration config = Configuration.getInstance();
-        setLayout(new GridLayout(8, 2));
+        config.addObserver(this);
+        setLayout(new GridLayout(9, 2));
         setOpaque(false);
 
         // Sliders
@@ -30,6 +46,11 @@ public class ConfigurationPanel extends JPanel {
         createCheckbox("Sound Effect (On|Off):", config::getSoundOn, config::setSoundOn);
         createCheckbox("AI Play (On|Off):", config::getAIPlayOn, config::setAIPlayOn);
         createCheckbox("Extend Mode (On|Off):", config::getExtendModeOn, config::setExtendModeOn);
+
+        // Radio buttons
+        createRadioButton("Player One Type", config::getPlayerOneType, config::setPlayerOneType);
+        playerTwoPanel = createRadioButton("Player Two Type", config::getPlayerTwoType, config::setPlayerTwoType);
+        applyExtendedMode();
     }
 
     private JLabel createTitleLabel(String title) {
@@ -94,6 +115,27 @@ public class ConfigurationPanel extends JPanel {
         add(titleLabel);
         add(slider);
         add(valueLabel);
+    }
+
+    private JPanel createRadioButton(String title, GetConfigValueAction<PlayerType> getFn, ValueUpdateAction<PlayerType> updateAction) {
+        var initValue = getFn.getConfigValue();
+        JLabel titleLabel = createTitleLabel(title);
+        JPanel options = new JPanel();
+        options.setOpaque(false);
+        ButtonGroup group = new ButtonGroup();
+        for (PlayerType type : PlayerType.values()) {
+            JRadioButton radio = new JRadioButton(type.getFriendlyName());
+            radio.setSelected(initValue == type);
+            radio.setOpaque(false);
+            radio.setForeground(Color.WHITE);
+            radio.addActionListener(e -> updateAction.update(type));
+            group.add(radio);
+            options.add(radio);
+        }
+        add(titleLabel);
+        add(options);
+        add(Box.createGlue());
+        return options;
     }
 
 }

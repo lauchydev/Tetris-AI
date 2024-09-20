@@ -19,7 +19,7 @@ public class Tetris extends JFrame implements MainScreenListener {
     private final JPanel cardPanel;
 
     private static final int MIN_FRAME_WIDTH = 900;
-    private static final int MIN_FRAME_HEIGHT = 600;
+    private static final int MIN_FRAME_HEIGHT = 700;
 
     private final Configuration config = Configuration.getInstance();
 
