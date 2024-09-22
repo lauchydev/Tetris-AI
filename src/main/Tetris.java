@@ -6,6 +6,7 @@ import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
 import main.ui.MainScreenListener;
+import main.ui.SplashScreen;
 
 import javax.swing.*;
 import java.awt.*;
