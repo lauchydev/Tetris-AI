@@ -1,7 +1,6 @@
 package main.game;
 
 import main.game.core.CellKind;
-import main.game.core.TetrisBoard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,18 +30,20 @@ public class TetrisFieldComponent extends JComponent {
         var board = this.game.getBoard();
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
-                this.paintCell(g2d, x, y, board.getFieldCell(x, y));
+                this.paintCell(g2d, x, y, board.getFieldCell(x, y), 0);
             }
         }
         if (board.getActivePiece() != null) {
+            var airborne = board.getActivePiece().shifted(board, 0, -1) != null;
+            var yOffset = airborne ? game.gravityProgress() : 0;
             for (var cell : board.getActivePiece().getCells()) {
-                this.paintCell(g2d, cell.x(), cell.y(), board.getActivePiece().kind().color());
+                this.paintCell(g2d, cell.x(), cell.y(), board.getActivePiece().kind().color(), yOffset);
             }
         }
 
     }
 
-    private void paintCell(Graphics2D g2d, int x, int y, CellKind cellKind) {
+    private void paintCell(Graphics2D g2d, int x, int y, CellKind cellKind, float yOffset) {
         var board = this.game.getBoard();
         int cellWidth = this.getWidth() / board.getWidth();
         int cellHeight = this.getHeight() / board.getHeight();
@@ -57,6 +58,11 @@ public class TetrisFieldComponent extends JComponent {
             case PURPLE -> Color.MAGENTA;
             case RED -> Color.RED;
         });
-        g2d.fillRect(x * cellWidth, (board.getHeight() - 1 - y) * cellHeight, cellWidth, cellHeight);
+        g2d.fillRect(
+            x * cellWidth,
+            (int)((board.getHeight() - 1 - y + yOffset) * cellHeight),
+            cellWidth,
+            cellHeight
+        );
     }
 }

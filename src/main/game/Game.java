@@ -96,6 +96,10 @@ public class Game {
         return this.board;
     }
 
+    public float gravityProgress() {
+        return (float)this.gravityTicks / (float)this.gravityDelay();
+    }
+
     public void setComponent(TetrisFieldComponent comp) {
         this.comp = comp;
     }
