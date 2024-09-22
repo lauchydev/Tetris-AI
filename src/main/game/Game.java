@@ -105,6 +105,6 @@ public class Game {
     }
 
     private int gravityDelay() {
-        return this.level * 20;
+        return 22 - this.level * 2;
     }
 }
