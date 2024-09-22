@@ -106,7 +106,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
             @Override
             public void actionPerformed(ActionEvent event) {
                 for (int i = 0; i < playerCount; i++) {
-                    games[i].setSpeedMultiplier(2.0f);
+                    games[i].setSoftDropHeld(true);
                 }
             }
         });
@@ -114,7 +114,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
             @Override
             public void actionPerformed(ActionEvent event) {
                 for (int i = 0; i < playerCount; i++) {
-                    games[i].setSpeedMultiplier(1.0f);
+                    games[i].setSoftDropHeld(false);
                 }
             }
         });

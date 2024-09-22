@@ -11,9 +11,9 @@ import java.awt.event.ActionEvent;
 public class Game {
     private final Configuration config;
     private int level;
-    private boolean running = false;
     private boolean paused = false;
-    private float speedMultiplier;
+    private boolean softDropHeld;
+    private int gravityTicks;
     private final Timer gameLoopTimer;
     private final TetrisBoard board;
     private final GameObserver gobs;
@@ -24,41 +24,47 @@ public class Game {
         this.gobs = gobs;
         this.reset();
 
-        this.gameLoopTimer = new Timer(Math.round(calculateMultiplier()), (ActionEvent e) -> {
-            if (running && !paused) {
-                if (!this.board.softDrop()) {
-
-                    if (this.board.getActivePiece() == null) {
-                        this.stop();
-                    } else {
-                        var result = this.board.hardDrop();
-                        // TODO: do some scoring...
-                        System.out.println("Cleared lines, do scoring...");
-                    }
-                }
-                comp.repaint();
+        this.softDropHeld = false;
+        this.gravityTicks = 0;
+        this.gameLoopTimer = new Timer(20, (ActionEvent e) -> {
+            if (this.board.isGameOver()) {
+                this.stop();
+                return;
             }
+
+            if (paused) {
+                return;
+            }
+
+            this.gravityTicks += this.softDropHeld ? 2 : 1;
+            if (this.gravityTicks >= this.gravityDelay()) {
+                this.gravityTicks = 0;
+                if (!this.board.softDrop()) {
+                    var result = this.board.hardDrop();
+                    // TODO: do some scoring...
+                    System.out.println("Cleared lines, do scoring...");
+                }
+            }
+
+            comp.repaint();
         });
     }
 
     private void reset() {
         this.level = this.config.getGameLevel();
-        this.speedMultiplier = 1.0f;
     }
 
-    public boolean inProgress() { return this.running; }
+    public boolean inProgress() { return this.gameLoopTimer.isRunning(); }
 
     public boolean isPaused() { return this.paused; }
 
     public void start() {
         this.reset();
-        this.running = true;
         this.gameLoopTimer.start();
         System.out.println("Game Started");
     }
 
     public void stop() {
-        this.running = false;
         this.gameLoopTimer.stop();
         this.gobs.onGameEnded();
         new Thread(() -> {
@@ -77,20 +83,11 @@ public class Game {
         if (pausedChanged) { this.gobs.onGamePauseChanged(this.paused); }
     }
 
-    public void setSpeedMultiplier(float multiplier) {
-        this.speedMultiplier = multiplier;
-        this.updateTimerDelay();
+    public void setSoftDropHeld(boolean held) {
+        this.softDropHeld = held;
     }
 
-    private int timerDelay() {
-        return Math.round(calculateMultiplier());
-    }
-
-    private float calculateMultiplier() {
-        return this.level * 400 / this.speedMultiplier;
-    }
-
-    private void updateTimerDelay() {
-        this.gameLoopTimer.setDelay(this.timerDelay());
+    private int gravityDelay() {
+        return this.level * 20;
     }
 }
