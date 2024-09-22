@@ -7,15 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TetrisFieldComponent extends JComponent {
-    TetrisBoard board;
+    Game game;
 
     public int CELL_LENGTH = 20;
 
-    public TetrisFieldComponent(TetrisBoard board) {
+    public TetrisFieldComponent(Game game) {
         super();
-        this.board = board;
+        this.game = game;
 
-        this.setPreferredSize(new Dimension(board.getWidth() * CELL_LENGTH, board.getHeight() * CELL_LENGTH));
+        this.setPreferredSize(new Dimension(
+            game.getBoard().getWidth() * CELL_LENGTH,
+            game.getBoard().getHeight() * CELL_LENGTH
+        ));
         this.setBackground(Color.WHITE);
     }
 
@@ -25,9 +28,10 @@ public class TetrisFieldComponent extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        var board = this.game.getBoard();
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
-                this.paintCell(g2d, x, y, this.board.getFieldCell(x, y));
+                this.paintCell(g2d, x, y, board.getFieldCell(x, y));
             }
         }
         if (board.getActivePiece() != null) {
@@ -39,6 +43,7 @@ public class TetrisFieldComponent extends JComponent {
     }
 
     private void paintCell(Graphics2D g2d, int x, int y, CellKind cellKind) {
+        var board = this.game.getBoard();
         int cellWidth = this.getWidth() / board.getWidth();
         int cellHeight = this.getHeight() / board.getHeight();
         g2d.setColor(switch (cellKind) {
@@ -52,6 +57,6 @@ public class TetrisFieldComponent extends JComponent {
             case PURPLE -> Color.MAGENTA;
             case RED -> Color.RED;
         });
-        g2d.fillRect(x * cellWidth, (this.board.getHeight() - 1 - y) * cellHeight, cellWidth, cellHeight);
+        g2d.fillRect(x * cellWidth, (board.getHeight() - 1 - y) * cellHeight, cellWidth, cellHeight);
     }
 }

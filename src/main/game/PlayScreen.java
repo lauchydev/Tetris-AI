@@ -37,14 +37,17 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         games = new Game[playerCount];
         for (int i = 0; i < playerCount; i++) {
             TetrisBoard board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
-            var tetrisField = new TetrisFieldComponent(board);
-            Game game = new Game(config, tetrisField, board, this);
-            games[i] = game;
-            JPanel gamePanel = new GamePanel(game);
-            gamePanel.add(tetrisField);
+            games[i] = new Game(config, board, this);
             controllers[i] = new GameController(board);
+
+            var tetrisField = new TetrisFieldComponent(games[i]);
+            games[i].setComponent(tetrisField);
+
+            JPanel gamePanel = new GamePanel(games[i]);
+            gamePanel.add(tetrisField);
             centerPanel.add(gamePanel);
-            game.start();
+
+            games[i].start();
         }
 
     }

@@ -17,8 +17,9 @@ public class Game {
     private final Timer gameLoopTimer;
     private final TetrisBoard board;
     private final GameObserver gobs;
+    private TetrisFieldComponent comp;
 
-    public Game(Configuration config, TetrisFieldComponent comp, TetrisBoard board, GameObserver gobs) {
+    public Game(Configuration config, TetrisBoard board, GameObserver gobs) {
         this.config = config;
         this.board = board;
         this.gobs = gobs;
@@ -85,6 +86,18 @@ public class Game {
 
     public void setSoftDropHeld(boolean held) {
         this.softDropHeld = held;
+    }
+
+    /**
+     * Access the underlying TetrisBoard.
+     * @return The underlying TetrisBoard. Do not mutate.
+     */
+    public TetrisBoard getBoard() {
+        return this.board;
+    }
+
+    public void setComponent(TetrisFieldComponent comp) {
+        this.comp = comp;
     }
 
     private int gravityDelay() {
