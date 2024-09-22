@@ -1,5 +1,6 @@
 package main.game;
 
+import main.Tetris;
 import main.configuration.Configuration;
 import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
@@ -13,75 +14,76 @@ import java.util.function.Consumer;
 public class PlayScreen extends BasicScreen implements GameObserver {
 
     private static final Font PAUSED_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
-    private final GameController controller;
-    TetrisBoard board;
-    public int playScreenWidth = 200;
-    public int playScreenHeight = 400;
-    private final Game game;
-    private final JLabel pausedLabel;
+    private GameController[] controllers;
+    private Game[] games;
     private final Configuration config = Configuration.getInstance();
+    private int playerCount;
 
-    public PlayScreen(MainScreenListener listener, Configuration config) {
-        super(listener, null);
+    public PlayScreen(MainScreenListener listener) {
+        super(listener, "Play");
         backButton.setFocusable(false);
-
-        JLayeredPane layeredPane = createLayeredPane();
-        board = new TetrisBoard(10, 20);
-
-        controller = new GameController(board);
         setupKeybindings();
-
-        var tetrisField = new TetrisFieldComponent(board, playScreenWidth, playScreenHeight);
-        pausedLabel = createPauseLabel();
-        SwingUtilities.invokeLater(() -> {
-            tetrisField.setBounds((getSize().width/2)- (playScreenWidth/2), 50, playScreenWidth, playScreenHeight);
-            layeredPane.add(tetrisField, JLayeredPane.DEFAULT_LAYER);
-            add(layeredPane, BorderLayout.CENTER);
-            layeredPane.add(pausedLabel, JLayeredPane.PALETTE_LAYER);
-        });
-
-
-        game = new Game(config, tetrisField, board, this);
-        game.start();
     }
 
-    private JLayeredPane createLayeredPane() {
-        var layeredPane = new JLayeredPane();
-        layeredPane.setLayout(null);
-        layeredPane.setPreferredSize(getSize());
-        layeredPane.setVisible(true);
-        layeredPane.setBackground(Color.blue);
-        return layeredPane;
+    private void setupLayout() {
+        centerPanel.removeAll();
+        centerPanel.setLayout(new GridLayout(1, playerCount));
     }
 
-    private JLabel createPauseLabel() {
-        String text = "Game is paused. Press P to resume.";
-        var pausedLabel = new JLabel(text);
-        pausedLabel.setForeground(Color.RED);
-        pausedLabel.setFont(PAUSED_LABEL_FONT);
-        FontMetrics metrics = pausedLabel.getFontMetrics(PAUSED_LABEL_FONT);
-        int textWidth = metrics.stringWidth(text);
-        int textHeight = metrics.getHeight();
-        SwingUtilities.invokeLater(() -> {
-            pausedLabel.setBounds((getWidth() - textWidth) / 2, 150, textWidth, textHeight);
-            pausedLabel.setVisible(false);
-        });
-        return pausedLabel;
+    private void startGame() {
+        playerCount = config.getNumberOfPlayers();
+        setupLayout();
+        controllers = new GameController[playerCount];
+        games = new Game[playerCount];
+        for (int i = 0; i < playerCount; i++) {
+            TetrisBoard board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
+            var tetrisField = new TetrisFieldComponent(board);
+            Game game = new Game(config, tetrisField, board, this);
+            games[i] = game;
+            JPanel gamePanel = new GamePanel(game);
+            gamePanel.add(tetrisField);
+            controllers[i] = new GameController(board);
+            centerPanel.add(gamePanel);
+            game.start();
+        }
+
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) { this.startGame(); }
+        Tetris.instance.pack();
+    }
+
+    private boolean gameInProgress() {
+        for (int i = 0; i < playerCount; i++) {
+            if (games[i].inProgress()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected void onBackButtonClicked(ActionEvent e) {
-        if (game.inProgress()) {
-            boolean initialPauseState = game.isPaused();
-            game.setPaused(true);
+        Tetris.instance.pack();
+        if (gameInProgress()) {
+            boolean initialPauseState = games[0].isPaused();
+            for (int i = 0; i < playerCount; i++) {
+                games[i].setPaused(true);
+            }
 
             if (!confirmExitDialog()) {
-                game.setPaused(initialPauseState);
+                for (int i = 0; i < playerCount; i++) {
+                    games[i].setPaused(initialPauseState);
+                }
                 return;
             }
+            for (int i = 0; i < playerCount; i++) {
+                games[i].stop();
+            }
         }
-
-        game.stop();
         super.onBackButtonClicked(e);
     }
 
@@ -92,30 +94,36 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     private void setupKeybindings() {
-        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> controller.rotateClockwise());
-        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> controller.rotateCounterclockwise());
-        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> controller.shiftLeft());
-        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> controller.shiftRight());
-        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> controller.hardDrop());
+        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> controllers[0].rotateClockwise());
+        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> controllers[0].rotateCounterclockwise());
+        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> controllers[0].shiftLeft());
+        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> controllers[0].shiftRight());
+        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> controllers[0].hardDrop());
 
         bindMovementInput("ToggleMusic", KeyEvent.VK_M, pressed -> config.setMusicOn(!config.getMusicOn()));
         bindMovementInput("ToggleSound", KeyEvent.VK_S, pressed -> config.setSoundOn(!config.getSoundOn()));
         bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(2.0f);
+                for (int i = 0; i < playerCount; i++) {
+                    games[i].setSpeedMultiplier(2.0f);
+                }
             }
         });
         bindKeyToAction("SoftDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.setSpeedMultiplier(1.0f);
+                for (int i = 0; i < playerCount; i++) {
+                    games[i].setSpeedMultiplier(1.0f);
+                }
             }
         });
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                game.togglePause();
+                for (int i = 0; i < playerCount; i++) {
+                    games[i].togglePause();
+                }
             }
         });
     }
@@ -129,7 +137,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         this.bindKeyToAction(name, KeyStroke.getKeyStroke(keyCode, 0, false), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!game.isPaused()) {
+                if (gameInProgress()) {
                     listener.accept(true);
                     repaint();
                 }
@@ -139,7 +147,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
 
     @Override
     public void onGamePauseChanged(boolean paused) {
-        pausedLabel.setVisible(paused);
+        // TODO: "Game is paused. Press P to resume." label
     }
 
     @Override

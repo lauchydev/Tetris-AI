@@ -1,32 +1,33 @@
 package main;
 
 import main.audio.Music;
-import main.configuration.Configuration;
 import main.game.PlayScreen;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
-import main.ui.SplashScreen;
 import main.ui.MainScreenListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 
 public class Tetris extends JFrame implements MainScreenListener {
 
+    public static Tetris instance;
     private final CardLayout cardLayout;
     private final JPanel cardPanel;
 
-    private static final int MIN_FRAME_WIDTH = 900;
-    private static final int MIN_FRAME_HEIGHT = 700;
-
-    private final Configuration config = Configuration.getInstance();
+    private static final int DEFAULT_FRAME_WIDTH = 900;
+    private static final int DEFAULT_FRAME_HEIGHT = 700;
 
     private PlayScreen playScreen;
 
 
     public Tetris() {
+        super();
+        instance = this;
         File directory = new File("data");
         //noinspection ResultOfMethodCallIgnored
         directory.mkdirs();
@@ -48,13 +49,30 @@ public class Tetris extends JFrame implements MainScreenListener {
         Music.getInstance(); // so that our Music works
     }
 
+    private void centerFrame() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - getWidth()) / 2;
+        int y = (screenSize.height - getHeight()) / 2;
+        setLocation(x, y);
+    }
 
+    private void setupCenterOnResize() {
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                centerFrame();
+            }
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                // Recenter the frame when it's moved manually
+                centerFrame();
+            }
+        });
+    }
 
     private void initWindow() {
         setTitle("Tetris");
-        setSize(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT);
-        setMinimumSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
-        setLocationRelativeTo(null);
+        setDefaultSize();
         setVisible(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -63,6 +81,12 @@ public class Tetris extends JFrame implements MainScreenListener {
                 showExitConfirmation();
             }
         });
+        setupCenterOnResize();
+    }
+
+    public void setDefaultSize() {
+        setSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
+        setLocationRelativeTo(null);
     }
 
     public void showExitConfirmation() {
@@ -88,7 +112,7 @@ public class Tetris extends JFrame implements MainScreenListener {
     @Override
     public void showPlayScreen() {
         stopGame();
-        playScreen = new PlayScreen(this, config);
+        playScreen = new PlayScreen(this);
         cardPanel.add(playScreen, "PlayScreen");
         cardLayout.show(cardPanel, "PlayScreen");
     }

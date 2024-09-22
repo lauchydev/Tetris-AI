@@ -9,11 +9,13 @@ import java.awt.*;
 public class TetrisFieldComponent extends JComponent {
     TetrisBoard board;
 
-    public TetrisFieldComponent(TetrisBoard board, int playScreenWidth, int playScreenHeight) {
+    public int CELL_LENGTH = 20;
+
+    public TetrisFieldComponent(TetrisBoard board) {
         super();
         this.board = board;
 
-        this.setPreferredSize(new Dimension(playScreenWidth, playScreenHeight));
+        this.setPreferredSize(new Dimension(board.getWidth() * CELL_LENGTH, board.getHeight() * CELL_LENGTH));
         this.setBackground(Color.WHITE);
     }
 
@@ -22,7 +24,6 @@ public class TetrisFieldComponent extends JComponent {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
 
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {

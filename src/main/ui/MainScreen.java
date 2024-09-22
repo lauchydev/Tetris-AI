@@ -1,5 +1,6 @@
 package main.ui;
 
+import main.Tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -18,6 +19,12 @@ public class MainScreen extends JPanel {
         setBackground(new Color(20, 20, 20));
         createHeader();
         createButtons();
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) { Tetris.instance.setDefaultSize(); }
     }
 
     private void createHeader() {

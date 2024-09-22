@@ -16,7 +16,7 @@ public class TetrisBoard {
         this.width = width;
         this.height = height;
         this.rows = new ArrayList<>();
-        this.activePiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
+        this.activePiece = getNextActivePiece();
 
         for (int y = 0; y < height; y++) {
             var row = new ArrayList<CellKind>();
@@ -25,6 +25,10 @@ public class TetrisBoard {
             }
             this.rows.add(row);
         }
+    }
+
+    private ActivePiece getNextActivePiece() {
+        return new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, width / 2, height - 1);
     }
 
     public int getWidth() {
@@ -57,30 +61,22 @@ public class TetrisBoard {
     }
 
     public boolean rotateClockwise() {
-        new Thread(() -> {
-            SoundEffects.playEffect(Effect.MOVE_TURN);
-        }).start();
+        new Thread(() -> SoundEffects.playEffect(Effect.MOVE_TURN)).start();
         return this.rotateActivePiece(true);
     }
 
     public boolean rotateCounterclockwise() {
-        new Thread(() -> {
-            SoundEffects.playEffect(Effect.MOVE_TURN);
-        }).start();
+        new Thread(() -> SoundEffects.playEffect(Effect.MOVE_TURN)).start();
         return this.rotateActivePiece(false);
     }
 
     public boolean shiftLeft() {
-        new Thread(() -> {
-            SoundEffects.playEffect(Effect.MOVE_TURN);
-        }).start();
+        new Thread(() -> SoundEffects.playEffect(Effect.MOVE_TURN)).start();
         return this.shiftActivePiece(-1, 0);
     }
 
     public boolean shiftRight() {
-        new Thread(() -> {
-            SoundEffects.playEffect(Effect.MOVE_TURN);
-        }).start();
+        new Thread(() -> SoundEffects.playEffect(Effect.MOVE_TURN)).start();
         return this.shiftActivePiece(1, 0);
     }
 
@@ -112,7 +108,7 @@ public class TetrisBoard {
             this.rows.add(row);
         }
 
-        var nextPiece = new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, 4, 19);
+        var nextPiece = getNextActivePiece();
         this.activePiece = nextPiece.fits(this) ? nextPiece : null;
 
         return new PlacementResult(linesCleared);

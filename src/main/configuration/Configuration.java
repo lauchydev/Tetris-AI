@@ -25,6 +25,8 @@ public class Configuration {
     private PlayerType player1Type = PlayerType.HUMAN;
     private PlayerType player2Type = PlayerType.HUMAN;
 
+    public int getNumberOfPlayers() { return extendMode ? 2 : 1; }
+
     public static Configuration getInstance() {
         if (instance == null) {
             try {

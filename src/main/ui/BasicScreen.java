@@ -11,6 +11,7 @@ public class BasicScreen extends JPanel {
     private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
     protected final JButton backButton;
     private final MainScreenListener listener;
+    protected JPanel centerPanel = new JPanel();
 
     public BasicScreen(MainScreenListener listener, String title) {
         this.listener = listener;
@@ -26,6 +27,7 @@ public class BasicScreen extends JPanel {
         southPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
         southPanel.add(backButton);
         add(southPanel, BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
     }
 
     protected void onBackButtonClicked(ActionEvent e) {
