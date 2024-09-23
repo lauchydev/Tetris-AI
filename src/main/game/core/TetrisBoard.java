@@ -7,16 +7,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class TetrisBoard {
-    int width;
-    int height;
-    ArrayList<ArrayList<CellKind>> rows;
-    ActivePiece activePiece;
+    private final int width;
+    private final int height;
+    private final ArrayList<ArrayList<CellKind>> rows;
+    private ActivePiece activePiece;
+    private final PieceBag pieceBag;
 
-    public TetrisBoard(int width, int height) {
+    public TetrisBoard(int width, int height, long seed) {
         this.width = width;
         this.height = height;
         this.rows = new ArrayList<>();
-        this.activePiece = getNextActivePiece();
+        this.pieceBag = new PieceBag(seed);
+        this.activePiece = popNextActivePiece();
 
         for (int y = 0; y < height; y++) {
             var row = new ArrayList<CellKind>();
@@ -27,8 +29,16 @@ public class TetrisBoard {
         }
     }
 
-    private ActivePiece getNextActivePiece() {
-        return new ActivePiece(TetrisBoard.randomPiece(), Rotation.North, width / 2, height - 1);
+    private ActivePiece popNextActivePiece() {
+        return getActivePieceFromPiece(pieceBag.pop());
+    }
+
+    private ActivePiece peekNextActivePiece() {
+        return getActivePieceFromPiece(pieceBag.peek());
+    }
+
+    private ActivePiece getActivePieceFromPiece(Piece piece) {
+        return new ActivePiece(piece, Rotation.North, width / 2, height - 1);
     }
 
     public int getWidth() {
@@ -108,7 +118,7 @@ public class TetrisBoard {
             this.rows.add(row);
         }
 
-        var nextPiece = getNextActivePiece();
+        var nextPiece = popNextActivePiece();
         this.activePiece = nextPiece.fits(this) ? nextPiece : null;
 
         return new PlacementResult(linesCleared);
@@ -144,16 +154,4 @@ public class TetrisBoard {
         return true;
     }
 
-    private static Piece randomPiece() {
-        return switch ((int)(Math.random() * 7.0)) {
-            case 0 -> Piece.I;
-            case 1 -> Piece.J;
-            case 2 -> Piece.L;
-            case 3 -> Piece.O;
-            case 4 -> Piece.S;
-            case 5 -> Piece.T;
-            case 6 -> Piece.Z;
-            default -> throw new IllegalStateException();
-        };
-    }
 }

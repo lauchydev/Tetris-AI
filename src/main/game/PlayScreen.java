@@ -34,8 +34,9 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         setupLayout();
         controllers = new GameController[playerCount];
         games = new Game[playerCount];
+        long seed = System.currentTimeMillis();
         for (int i = 0; i < playerCount; i++) {
-            games[i] = new Game(this);
+            games[i] = new Game(this, seed);
             controllers[i] = new GameController(games[i]);
 
             var tetrisField = new TetrisFieldComponent(games[i]);

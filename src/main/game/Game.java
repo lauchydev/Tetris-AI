@@ -19,8 +19,8 @@ public class Game {
     private final GameObserver gobs;
     private TetrisFieldComponent comp;
 
-    public Game(GameObserver gobs) {
-        this.board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
+    public Game(GameObserver gobs, long seed) {
+        this.board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight(), seed);
         this.gobs = gobs;
         this.reset();
 
