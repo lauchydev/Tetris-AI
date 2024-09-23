@@ -2,7 +2,6 @@ package main.game;
 
 import main.Tetris;
 import main.configuration.Configuration;
-import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
 import main.ui.MainScreenListener;
 
@@ -36,9 +35,8 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         controllers = new GameController[playerCount];
         games = new Game[playerCount];
         for (int i = 0; i < playerCount; i++) {
-            TetrisBoard board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
-            games[i] = new Game(config, board, this);
-            controllers[i] = new GameController(board);
+            games[i] = new Game(this);
+            controllers[i] = new GameController(games[i]);
 
             var tetrisField = new TetrisFieldComponent(games[i]);
             games[i].setComponent(tetrisField);

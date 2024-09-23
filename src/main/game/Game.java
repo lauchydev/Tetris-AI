@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class Game {
-    private final Configuration config;
+    private final Configuration config = Configuration.getInstance();
     private int level;
     private boolean paused = false;
     private boolean softDropHeld;
@@ -19,9 +19,8 @@ public class Game {
     private final GameObserver gobs;
     private TetrisFieldComponent comp;
 
-    public Game(Configuration config, TetrisBoard board, GameObserver gobs) {
-        this.config = config;
-        this.board = board;
+    public Game(GameObserver gobs) {
+        this.board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
         this.gobs = gobs;
         this.reset();
 
@@ -68,9 +67,7 @@ public class Game {
     public void stop() {
         this.gameLoopTimer.stop();
         this.gobs.onGameEnded();
-        new Thread(() -> {
-            SoundEffects.playEffect(Effect.GAMEOVER);
-        }).start();
+        new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
     }
 

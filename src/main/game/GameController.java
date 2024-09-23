@@ -1,29 +1,27 @@
 package main.game;
 
-import main.game.core.TetrisBoard;
-
 public class GameController {
 
-    private final TetrisBoard board;
+    private final Game game;
 
-    public GameController(TetrisBoard board) {
-        this.board = board;
+    public GameController(Game game) {
+        this.game = game;
     }
 
     public void rotateClockwise() {
-        this.board.rotateClockwise();
+        this.game.getBoard().rotateClockwise();
     }
     public void rotateCounterclockwise() {
-        this.board.rotateCounterclockwise();
+        this.game.getBoard().rotateCounterclockwise();
     }
     public void shiftLeft() {
-        this.board.shiftLeft();
+        this.game.getBoard().shiftLeft();
     }
     public void shiftRight() {
-        this.board.shiftRight();
+        this.game.getBoard().shiftRight();
     }
     public void hardDrop() {
-        this.board.hardDrop();
+        this.game.getBoard().hardDrop();
     }
 
 }

@@ -1,6 +1,7 @@
 package main.game;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class GamePanel extends JPanel {
 
@@ -8,6 +9,7 @@ public class GamePanel extends JPanel {
 
     public GamePanel(Game game) {
         this.game = game;
+        setLayout(new FlowLayout(FlowLayout.CENTER));
         setBorder(BorderFactory.createBevelBorder(1));
     }
 
