@@ -1,6 +1,6 @@
 package main.game;
 
 public interface GameObserver {
-    void onGamePauseChanged(boolean paused);
-    void onGameEnded();
+    void onGamePauseChanged(Game game, boolean paused);
+    void onGameEnded(Game game);
 }

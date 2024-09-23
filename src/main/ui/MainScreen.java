@@ -11,10 +11,8 @@ public class MainScreen extends JPanel {
     private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 12);
     private static final Color BUTTON_BACKGROUND_COLOUR = new Color(144, 238, 144);
     private static final Dimension BUTTON_DIMENSION = new Dimension(200, 30);
-    private final MainScreenListener listener;
 
-    public MainScreen(MainScreenListener listener) {
-        this.listener = listener;
+    public MainScreen() {
         setLayout(new GridBagLayout());
         setBackground(new Color(20, 20, 20));
         createHeader();
@@ -40,10 +38,10 @@ public class MainScreen extends JPanel {
     }
 
     public void createButtons() {
-        createButton("Play",          1, e -> listener.showPlayScreen());
-        createButton("Configuration", 2, e -> listener.showConfigurationScreen());
-        createButton("High Scores",   3, e -> listener.showHighScoresScreen());
-        createButton("Exit",          4, e -> listener.showExitConfirmation());
+        createButton("Play",          1, e -> Tetris.instance.showPlayScreen());
+        createButton("Configuration", 2, e -> Tetris.instance.showConfigurationScreen());
+        createButton("High Scores",   3, e -> Tetris.instance.showHighScoresScreen());
+        createButton("Exit",          4, e -> Tetris.instance.showExitConfirmation());
     }
 
     private void createButton(String text, int row, ActionListener action) {

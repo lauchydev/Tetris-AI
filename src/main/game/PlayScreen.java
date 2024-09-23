@@ -3,7 +3,6 @@ package main.game;
 import main.Tetris;
 import main.configuration.Configuration;
 import main.ui.BasicScreen;
-import main.ui.MainScreenListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +17,8 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     private final Configuration config = Configuration.getInstance();
     private int playerCount;
 
-    public PlayScreen(MainScreenListener listener) {
-        super(listener, "Play");
+    public PlayScreen() {
+        super("Play");
         backButton.setFocusable(false);
         setupKeybindings();
     }
@@ -38,14 +37,8 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         for (int i = 0; i < playerCount; i++) {
             games[i] = new Game(this, seed);
             controllers[i] = new GameController(games[i]);
-
-            var tetrisField = new TetrisFieldComponent(games[i]);
-            games[i].setComponent(tetrisField);
-
             JPanel gamePanel = new GamePanel(games[i]);
-            gamePanel.add(tetrisField);
             centerPanel.add(gamePanel);
-
             games[i].start();
         }
 
@@ -69,7 +62,6 @@ public class PlayScreen extends BasicScreen implements GameObserver {
 
     @Override
     protected void onBackButtonClicked(ActionEvent e) {
-        Tetris.instance.pack();
         if (gameInProgress()) {
             boolean initialPauseState = games[0].isPaused();
             for (int i = 0; i < playerCount; i++) {
@@ -148,12 +140,12 @@ public class PlayScreen extends BasicScreen implements GameObserver {
     }
 
     @Override
-    public void onGamePauseChanged(boolean paused) {
+    public void onGamePauseChanged(Game game, boolean paused) {
         // TODO: "Game is paused. Press P to resume." label
     }
 
     @Override
-    public void onGameEnded() {
+    public void onGameEnded(Game game) {
         // TODO: handle highscores name enter
         //
     }

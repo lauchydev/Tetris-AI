@@ -66,7 +66,7 @@ public class Game {
 
     public void stop() {
         this.gameLoopTimer.stop();
-        this.gobs.onGameEnded();
+        this.gobs.onGameEnded(this);
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
     }
@@ -78,7 +78,7 @@ public class Game {
     public void setPaused(boolean paused) {
         boolean pausedChanged = this.paused != paused;
         this.paused = paused;
-        if (pausedChanged) { this.gobs.onGamePauseChanged(this.paused); }
+        if (pausedChanged) { this.gobs.onGamePauseChanged(this, this.paused); }
     }
 
     public void setSoftDropHeld(boolean held) {

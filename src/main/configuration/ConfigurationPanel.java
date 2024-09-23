@@ -33,7 +33,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
 
     ConfigurationPanel() {
         config.addObserver(this);
-        setLayout(new GridLayout(9, 3));
+        setLayout(new GridLayout(0, 3));
         setOpaque(false);
 
         // Sliders

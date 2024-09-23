@@ -1,5 +1,7 @@
 package main.ui;
 
+import main.Tetris;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -10,11 +12,10 @@ public class BasicScreen extends JPanel {
     private static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 20);
     private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
     protected final JButton backButton;
-    private final MainScreenListener listener;
     protected JPanel centerPanel = new JPanel();
 
-    public BasicScreen(MainScreenListener listener, String title) {
-        this.listener = listener;
+    public BasicScreen(String title) {
+        super();
         setLayout(new BorderLayout());
         setBackground(new Color(20, 20, 20));
         if (title != null) {
@@ -31,7 +32,7 @@ public class BasicScreen extends JPanel {
     }
 
     protected void onBackButtonClicked(ActionEvent e) {
-        listener.showMainScreen();
+        Tetris.instance.showMainScreen();
     }
 
     private JButton createBackButton() {

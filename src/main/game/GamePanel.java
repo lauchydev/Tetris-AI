@@ -5,12 +5,15 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    private final Game game;
-
     public GamePanel(Game game) {
-        this.game = game;
-        setLayout(new FlowLayout(FlowLayout.CENTER));
+        super();
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        setBackground(Color.BLUE);
         setBorder(BorderFactory.createBevelBorder(1));
+        TetrisFieldComponent tetrisField = new TetrisFieldComponent(game);
+        game.setComponent(tetrisField);
+        add(new InfoPanel(game));
+        add(tetrisField);
     }
 
 }
