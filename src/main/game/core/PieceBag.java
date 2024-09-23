@@ -11,16 +11,20 @@ public class PieceBag {
         initList();
     }
 
+    private void ensurePieces() {
+        if (pieces.isEmpty()) {
+            initList();
+        }
+    }
+
     public Piece peek() {
+        ensurePieces();
         return pieces.peek();
     }
 
     public Piece pop() {
-        var popped = pieces.pop();
-        if (pieces.isEmpty()) {
-            initList();
-        }
-        return popped;
+        ensurePieces();
+        return pieces.pop();
     }
 
     private void initList() {
