@@ -21,6 +21,8 @@ public class Game {
     private TetrisFieldComponent comp;
     private final ArrayList<GameObserver> observers = new ArrayList<>();
     private final PieceBag pieceBag;
+    private int score = 0;
+    private int linesSinceLastLevel = 0;
 
     public Game(TetrisBoard board, long seed) {
         this.board = board;
@@ -43,9 +45,7 @@ public class Game {
             if (this.gravityTicks >= this.gravityDelay()) {
                 this.gravityTicks = 0;
                 if (!this.softDrop()) {
-                    var result = this.hardDrop();
-                    // TODO: do some scoring...
-                    System.out.println("Cleared lines, do scoring...");
+                    this.hardDrop();
                 }
             }
 
@@ -94,7 +94,7 @@ public class Game {
 
     public void stop() {
         this.gameLoopTimer.stop();
-        this.observers.forEach(GameObserver::onGameUpdated);
+        notifyObservers();
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
     }
@@ -107,7 +107,7 @@ public class Game {
         boolean pausedChanged = this.paused != paused;
         this.paused = paused;
         if (pausedChanged) {
-            this.observers.forEach(GameObserver::onGameUpdated);
+            notifyObservers();
         }
     }
 
@@ -153,9 +153,9 @@ public class Game {
         return this.board.shiftActivePiece(0, -1);
     }
 
-    public PlacementResult hardDrop() {
+    public void hardDrop() {
         if (this.board.getActivePiece() == null) {
-            return null;
+            return;
         }
 
         // softDrop has a side effect
@@ -180,7 +180,33 @@ public class Game {
 
         this.spawnNextActivePiece();
 
-        return new PlacementResult(linesCleared);
+        handlePlacement(new PlacementResult(linesCleared));
     }
 
+    private void handlePlacement(PlacementResult result) {
+        // Handle level increase
+        linesSinceLastLevel += result.linesCleared();
+        var levelsToIncrease = linesSinceLastLevel / 10;
+        level += levelsToIncrease;
+        linesSinceLastLevel %= 10;
+
+        // Handle scoring
+        score += switch (result.linesCleared()) {
+            case 1 -> 100;
+            case 2 -> 300;
+            case 3 -> 600;
+            case 4 -> 1000;
+            default -> 0;
+        };
+
+        notifyObservers();
+    }
+
+    public int getScore() { return score; }
+
+    private void notifyObservers() {
+        this.observers.forEach(GameObserver::onGameUpdated);
+    }
+
+    public int getLevel() { return this.level; }
 }

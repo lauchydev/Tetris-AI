@@ -16,12 +16,14 @@ public class TetrisFieldComponent extends JComponent {
         super();
         this.board = board;
         this.game = game;
+    }
 
-        this.setPreferredSize(new Dimension(
-            board.getWidth() * CELL_LENGTH,
-            board.getHeight() * CELL_LENGTH
-        ));
-        this.setBackground(Color.WHITE);
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(
+                board.getWidth() * CELL_LENGTH,
+                board.getHeight() * CELL_LENGTH
+        );
     }
 
     @Override
