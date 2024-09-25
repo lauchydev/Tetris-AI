@@ -188,10 +188,17 @@ public class Game {
         linesSinceLastLevel += result.linesCleared();
         var levelsToIncrease = linesSinceLastLevel / 10;
         level += levelsToIncrease;
+        if (levelsToIncrease > 0) {
+            SoundEffects.playEffect(Effect.LEVEL_UP);
+        }
         linesSinceLastLevel %= 10;
 
         // Handle scoring
-        score += switch (result.linesCleared()) {
+        var linesCleared = result.linesCleared();
+        if (linesCleared > 0) {
+            SoundEffects.playEffect(Effect.ERASE_LINE);
+        }
+        score += switch (linesCleared) {
             case 1 -> 100;
             case 2 -> 300;
             case 3 -> 600;
