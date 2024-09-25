@@ -16,7 +16,7 @@ public class InfoPanel extends JPanel implements GameObserver {
         super();
         this.game = game;
         setPreferredSize(new Dimension(200, 500));
-        setBackground(Color.red);
+        setOpaque(false);
         game.addObserver(this);
 
         nextPieceComp = new TetrisFieldComponent(null, nextTetrominoBoard);

@@ -154,17 +154,16 @@ public class Game {
     }
 
     public PlacementResult hardDrop() {
-        var activePiece = this.board.getActivePiece();
-        if (activePiece == null) {
+        if (this.board.getActivePiece() == null) {
             return null;
         }
 
         // softDrop has a side effect
         //noinspection StatementWithEmptyBody
         while (this.softDrop()) {}
-        for (var cell : activePiece.getCells()) {
+        for (var cell : this.board.getActivePiece().getCells()) {
             if (cell.y() < this.board.getHeight()) {
-                this.board.getRows().get(cell.y()).set(cell.x(), activePiece.kind().color());
+                this.board.getRows().get(cell.y()).set(cell.x(), this.board.getActivePiece().kind().color());
             }
         }
 
