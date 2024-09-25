@@ -104,4 +104,53 @@ public class Game {
     private int gravityDelay() {
         return 22 - this.level * 2;
     }
+    public void rotateClockwise() {
+        this.board.rotateClockwise();
+    }
+    public void rotateCounterclockwise() {
+        this.board.rotateCounterclockwise();
+    }
+    public void shiftLeft() {
+        this.board.shiftLeft();
+    }
+    public void shiftRight() {
+        this.board.shiftRight();
+    }
+
+
+    public boolean softDrop() {
+        return this.board.shiftActivePiece(0, -1);
+    }
+
+    public PlacementResult hardDrop() {
+        var activePiece = this.board.getActivePiece();
+        if (activePiece == null) {
+            return null;
+        }
+
+        // softDrop has a side effect
+        //noinspection StatementWithEmptyBody
+        while (this.softDrop()) {}
+        for (var cell : activePiece.getCells()) {
+            if (cell.y() < this.board.getHeight()) {
+                this.board.getRows().get(cell.y()).set(cell.x(), activePiece.kind().color());
+            }
+        }
+
+        var rows = this.board.getRows();
+        rows.removeIf(row -> row.stream().allMatch(Objects::nonNull));
+        int linesCleared = this.board.getHeight() - rows.size();
+        while (rows.size() < this.board.getHeight()) {
+            var row = new ArrayList<CellKind>();
+            for (int x = 0; x < this.board.getWidth(); x++) {
+                row.add(null);
+            }
+            rows.add(row);
+        }
+
+        this.board.spawnNextActivePiece();
+
+        return new PlacementResult(linesCleared);
+    }
+
 }

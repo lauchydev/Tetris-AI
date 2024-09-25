@@ -1,5 +1,8 @@
 package main.game;
 
+import main.audio.Effect;
+import main.audio.SoundEffects;
+
 public class GameController {
 
     private final Game game;
@@ -9,19 +12,23 @@ public class GameController {
     }
 
     public void rotateClockwise() {
-        this.game.getBoard().rotateClockwise();
+       SoundEffects.playEffect(Effect.MOVE_TURN);
+        this.game.rotateClockwise();
     }
     public void rotateCounterclockwise() {
-        this.game.getBoard().rotateCounterclockwise();
+       SoundEffects.playEffect(Effect.MOVE_TURN);
+        this.game.rotateCounterclockwise();
     }
     public void shiftLeft() {
-        this.game.getBoard().shiftLeft();
+       SoundEffects.playEffect(Effect.MOVE_TURN);
+        this.game.shiftLeft();
     }
     public void shiftRight() {
-        this.game.getBoard().shiftRight();
+       SoundEffects.playEffect(Effect.MOVE_TURN);
+        this.game.shiftRight();
     }
     public void hardDrop() {
-        this.game.getBoard().hardDrop();
+        this.game.hardDrop();
     }
 
 }

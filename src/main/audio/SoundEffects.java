@@ -26,7 +26,8 @@ public class SoundEffects {
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundPath);
             clip = AudioSystem.getClip();
             clip.open(audioInput);
-            clip.start();
+            Thread t = new Thread(() -> clip.start());
+            t.start();
         } catch (Exception ex) {
             System.out.println("Cannot load sound effect.");
         }
