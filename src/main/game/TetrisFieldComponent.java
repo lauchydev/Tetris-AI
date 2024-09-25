@@ -1,22 +1,25 @@
 package main.game;
 
 import main.game.core.CellKind;
+import main.game.core.TetrisBoard;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TetrisFieldComponent extends JComponent {
-    Game game;
+    private final TetrisBoard board;
+    private final Game game;
 
     public int CELL_LENGTH = 20;
 
-    public TetrisFieldComponent(Game game) {
+    public TetrisFieldComponent(Game game, TetrisBoard board) {
         super();
+        this.board = board;
         this.game = game;
 
         this.setPreferredSize(new Dimension(
-            game.getBoard().getWidth() * CELL_LENGTH,
-            game.getBoard().getHeight() * CELL_LENGTH
+            board.getWidth() * CELL_LENGTH,
+            board.getHeight() * CELL_LENGTH
         ));
         this.setBackground(Color.WHITE);
     }
@@ -27,7 +30,6 @@ public class TetrisFieldComponent extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        var board = this.game.getBoard();
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
                 this.paintCell(g2d, x, y, board.getFieldCell(x, y), 0);
@@ -35,7 +37,7 @@ public class TetrisFieldComponent extends JComponent {
         }
         if (board.getActivePiece() != null) {
             var airborne = board.getActivePiece().shifted(board, 0, -1) != null;
-            var yOffset = airborne ? game.gravityProgress() : 0;
+            var yOffset = airborne ? (game != null ? game.gravityProgress() : 0) : 0;
             for (var cell : board.getActivePiece().getCells()) {
                 this.paintCell(g2d, cell.x(), cell.y(), board.getActivePiece().kind().color(), yOffset);
             }
@@ -44,7 +46,6 @@ public class TetrisFieldComponent extends JComponent {
     }
 
     private void paintCell(Graphics2D g2d, int x, int y, CellKind cellKind, float yOffset) {
-        var board = this.game.getBoard();
         int cellWidth = this.getWidth() / board.getWidth();
         int cellHeight = this.getHeight() / board.getHeight();
         g2d.setColor(switch (cellKind) {

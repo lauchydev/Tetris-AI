@@ -2,6 +2,7 @@ package main.game;
 
 import main.Tetris;
 import main.configuration.Configuration;
+import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.function.Consumer;
 
-public class PlayScreen extends BasicScreen implements GameObserver {
+public class PlayScreen extends BasicScreen {
 
     private static final Font PAUSED_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
     private GameController[] controllers;
@@ -19,6 +20,7 @@ public class PlayScreen extends BasicScreen implements GameObserver {
 
     public PlayScreen() {
         super("Play");
+        centerPanel.setOpaque(false);
         backButton.setFocusable(false);
         setupKeybindings();
     }
@@ -35,7 +37,8 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         games = new Game[playerCount];
         long seed = System.currentTimeMillis();
         for (int i = 0; i < playerCount; i++) {
-            games[i] = new Game(this, seed);
+            var board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
+            games[i] = new Game(board, seed);
             controllers[i] = new GameController(games[i]);
             JPanel gamePanel = new GamePanel(games[i]);
             centerPanel.add(gamePanel);
@@ -139,14 +142,4 @@ public class PlayScreen extends BasicScreen implements GameObserver {
         });
     }
 
-    @Override
-    public void onGamePauseChanged(Game game, boolean paused) {
-        // TODO: "Game is paused. Press P to resume." label
-    }
-
-    @Override
-    public void onGameEnded(Game game) {
-        // TODO: handle highscores name enter
-        //
-    }
 }

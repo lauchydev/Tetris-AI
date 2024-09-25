@@ -3,10 +3,12 @@ package main.game;
 import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
-import main.game.core.TetrisBoard;
+import main.game.core.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Game {
     private final Configuration config = Configuration.getInstance();
@@ -16,18 +18,19 @@ public class Game {
     private int gravityTicks;
     private final Timer gameLoopTimer;
     private final TetrisBoard board;
-    private final GameObserver gobs;
     private TetrisFieldComponent comp;
+    private final ArrayList<GameObserver> observers = new ArrayList<>();
+    private final PieceBag pieceBag;
 
-    public Game(GameObserver gobs, long seed) {
-        this.board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight(), seed);
-        this.gobs = gobs;
+    public Game(TetrisBoard board, long seed) {
+        this.board = board;
         this.reset();
-
+        this.pieceBag = new PieceBag(seed);
         this.softDropHeld = false;
         this.gravityTicks = 0;
+        this.spawnNextActivePiece();
         this.gameLoopTimer = new Timer(20, (ActionEvent e) -> {
-            if (this.board.isGameOver()) {
+            if (this.board.getActivePiece() == null) {
                 this.stop();
                 return;
             }
@@ -39,8 +42,8 @@ public class Game {
             this.gravityTicks += this.softDropHeld ? 2 : 1;
             if (this.gravityTicks >= this.gravityDelay()) {
                 this.gravityTicks = 0;
-                if (!this.board.softDrop()) {
-                    var result = this.board.hardDrop();
+                if (!this.softDrop()) {
+                    var result = this.hardDrop();
                     // TODO: do some scoring...
                     System.out.println("Cleared lines, do scoring...");
                 }
@@ -48,6 +51,31 @@ public class Game {
 
             comp.repaint();
         });
+    }
+
+    public void spawnNextActivePiece() {
+        var nextPiece = popNextActivePiece();
+        var piece = nextPiece.fits(this.board) ? nextPiece : null;
+        this.board.setActivePiece(piece);
+        observers.forEach(GameObserver::onGameUpdated);
+    }
+
+    private ActivePiece popNextActivePiece() {
+        return getActivePieceFromPiece(pieceBag.pop());
+    }
+
+    public ActivePiece peekNextActivePiece() {
+        return getActivePieceFromPiece(pieceBag.peek());
+    }
+
+    private ActivePiece getActivePieceFromPiece(Piece piece) {
+        var width = this.board.getWidth();
+        var height = this.board.getHeight();
+        return new ActivePiece(piece, Rotation.North, width / 2, height - 1);
+    }
+
+    public void addObserver(GameObserver obs) {
+        observers.add(obs);
     }
 
     private void reset() {
@@ -66,7 +94,7 @@ public class Game {
 
     public void stop() {
         this.gameLoopTimer.stop();
-        this.gobs.onGameEnded(this);
+        this.observers.forEach(GameObserver::onGameUpdated);
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
     }
@@ -78,7 +106,9 @@ public class Game {
     public void setPaused(boolean paused) {
         boolean pausedChanged = this.paused != paused;
         this.paused = paused;
-        if (pausedChanged) { this.gobs.onGamePauseChanged(this, this.paused); }
+        if (pausedChanged) {
+            this.observers.forEach(GameObserver::onGameUpdated);
+        }
     }
 
     public void setSoftDropHeld(boolean held) {
@@ -104,6 +134,7 @@ public class Game {
     private int gravityDelay() {
         return 22 - this.level * 2;
     }
+
     public void rotateClockwise() {
         this.board.rotateClockwise();
     }
@@ -148,7 +179,7 @@ public class Game {
             rows.add(row);
         }
 
-        this.board.spawnNextActivePiece();
+        this.spawnNextActivePiece();
 
         return new PlacementResult(linesCleared);
     }
