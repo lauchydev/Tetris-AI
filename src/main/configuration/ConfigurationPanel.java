@@ -7,6 +7,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
 
     Configuration config = Configuration.getInstance();
     JPanel playerTwoPanel;
+    private int currentRow = 0;
 
     @Override
     public void configChanged() {
@@ -33,8 +34,9 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
 
     ConfigurationPanel() {
         config.addObserver(this);
-        setLayout(new GridLayout(0, 3));
+        setLayout(new GridBagLayout());
         setOpaque(false);
+        setPreferredSize(new Dimension(600, 400));
 
         // Sliders
         createSlider("Field Width (No. of cells):", 5, 15, config::getFieldWidth, config::setFieldWidth);
@@ -82,9 +84,13 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         checkbox.setSelected(isSelected);
         updateCheckboxLabel(isSelected, valueLabel);
 
-        add(titleLabel);
-        add(checkbox);
-        add(valueLabel);
+        GridBagConstraints gbc = getBasicGBC();
+        add(titleLabel, gbc);
+        gbc.gridx = 1;
+        add(checkbox, gbc);
+        gbc.gridx = 2;
+        add(valueLabel, gbc);
+        currentRow++;
         checkbox.addItemListener(e -> {
             boolean selected = checkbox.isSelected();
             updateAction.update(selected);
@@ -112,9 +118,15 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
             updateAction.update(val);
             updateSliderLabel(val, valueLabel);
         });
-        add(titleLabel);
-        add(slider);
-        add(valueLabel);
+        GridBagConstraints gbc = getBasicGBC();
+        add(titleLabel, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 2;
+        add(slider, gbc);
+        gbc.gridx = 2;
+        gbc.weightx = 1;
+        add(valueLabel, gbc);
+        currentRow++;
     }
 
     private JPanel createRadioButton(String title, GetConfigValueAction<PlayerType> getFn, ValueUpdateAction<PlayerType> updateAction) {
@@ -132,10 +144,22 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
             group.add(radio);
             options.add(radio);
         }
-        add(titleLabel);
-        add(options);
-        add(Box.createGlue());
+        GridBagConstraints gbc = getBasicGBC();
+        add(titleLabel, gbc);
+        gbc.gridx = 1;
+        add(options, gbc);
+        currentRow++;
         return options;
+    }
+
+    private GridBagConstraints getBasicGBC() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = currentRow;
+        gbc.weightx = 1.0;
+        gbc.ipady = 10;
+        return gbc;
     }
 
 }
