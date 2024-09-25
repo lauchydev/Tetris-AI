@@ -5,7 +5,6 @@ import main.game.PlayScreen;
 import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
-import main.ui.MainScreenListener;
 import main.ui.SplashScreen;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 
-public class Tetris extends JFrame implements MainScreenListener {
+public class Tetris extends JFrame {
 
     public static Tetris instance;
     private final CardLayout cardLayout;
@@ -40,11 +39,11 @@ public class Tetris extends JFrame implements MainScreenListener {
         add(cardPanel);
 
         // Create and add different cards
-        MainScreen mainScreen = new MainScreen(this);
+        MainScreen mainScreen = new MainScreen();
         cardPanel.add(mainScreen, "MainScreen");
-        ConfigurationScreen configurationScreen = new ConfigurationScreen(this);
+        ConfigurationScreen configurationScreen = new ConfigurationScreen();
         cardPanel.add(configurationScreen, "ConfigurationScreen");
-        HighScoreScreen highScoreScreen = new HighScoreScreen(this);
+        HighScoreScreen highScoreScreen = new HighScoreScreen();
         cardPanel.add(highScoreScreen, "HighScoreScreen");
 
         Music.getInstance(); // so that our Music works
@@ -104,16 +103,14 @@ public class Tetris extends JFrame implements MainScreenListener {
         }
     }
 
-    @Override
     public void showMainScreen() {
         stopGame();
         cardLayout.show(cardPanel, "MainScreen");
     }
 
-    @Override
     public void showPlayScreen() {
         stopGame();
-        playScreen = new PlayScreen(this);
+        playScreen = new PlayScreen();
         cardPanel.add(playScreen, "PlayScreen");
         cardLayout.show(cardPanel, "PlayScreen");
     }
@@ -125,12 +122,10 @@ public class Tetris extends JFrame implements MainScreenListener {
         }
     }
 
-    @Override
     public void showConfigurationScreen() {
         cardLayout.show(cardPanel, "ConfigurationScreen");
     }
 
-    @Override
     public void showHighScoresScreen() {
         cardLayout.show(cardPanel, "HighScoreScreen");
     }
