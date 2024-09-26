@@ -15,6 +15,7 @@ public class InfoPanel extends JPanel implements GameObserver, ConfigObserver {
     private final JLabel score = new JLabel();
     private final JLabel music = new JLabel();
     private final JLabel sound = new JLabel();
+    private final JLabel playerType = new JLabel();
     private final JLabel next = new JLabel("Next");
     private final TetrisBoard nextTetrominoBoard = new TetrisBoard(6, 4);
     private final TetrisFieldComponent nextPieceComp;
@@ -48,6 +49,8 @@ public class InfoPanel extends JPanel implements GameObserver, ConfigObserver {
         music.setFont(HEADER_FONT);
         sound.setForeground(Color.WHITE);
         sound.setFont(HEADER_FONT);
+        playerType.setForeground(Color.WHITE);
+        playerType.setFont(HEADER_FONT);
 
         add(next, gbc);
         add(nextPieceComp, gbc);
@@ -55,13 +58,14 @@ public class InfoPanel extends JPanel implements GameObserver, ConfigObserver {
         // Add a spacer
         JPanel spacer = new JPanel();
         spacer.setOpaque(false);
-        spacer.setPreferredSize(new Dimension(0, 100));
+        spacer.setPreferredSize(new Dimension(0, 90));
         add(spacer, gbc);
 
         add(level, gbc);
         add(score, gbc);
         add(music, gbc);
         add(sound, gbc);
+        add(playerType, gbc);
 
         onGameUpdated();
         configChanged();
@@ -86,5 +90,6 @@ public class InfoPanel extends JPanel implements GameObserver, ConfigObserver {
     public void configChanged() {
         music.setText("Music: " + (config.getMusicOn() ? "ON" : "OFF"));
         sound.setText("Sound: " + (config.getSoundOn() ? "ON" : "OFF"));
+        playerType.setText("Type: " + config.getPlayerOneType());
     }
 }
