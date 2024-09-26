@@ -18,9 +18,9 @@ public class HighScoreScreen extends BasicScreen {
     }
 
     @Override
-    public void addNotify() {
-        super.addNotify();
-        highScoresPanel.updateScores();
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) { highScoresPanel.updateScores(); }
     }
 
 }

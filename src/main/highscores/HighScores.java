@@ -16,15 +16,14 @@ public class HighScores {
 
     private final String filename;
     private final static int MAX_SCORES = 10;
-    private final static String EMPTY_TEXT = "Empty : 0";
+    private final static int MAX_NAME_LENGTH = 20;
+
+    public static HighScores getInstance() { return instance; }
 
     private HighScores(String filename) {
         this.filename = filename;
     }
 
-    public static HighScores getInstance() {
-        return instance;
-    }
 
     // Fetch the high scores from the JSON file
     public List<ScoreEntry> getScores() {
@@ -60,7 +59,7 @@ public class HighScores {
                 scoresList.add(new ScoreEntry("Empty", 0));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // silently fail, nobody needs to know
         }
 
         return scoresList;
@@ -74,7 +73,7 @@ public class HighScores {
             gson.toJson(scoresList, writer);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            // silently fail, nobody needs to know
         }
     }
 
@@ -93,7 +92,7 @@ public class HighScores {
                 System.out.println("Couldn't create scores file.");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // silently fail, nobody needs to know
         }
     }
     // Class to represent each score entry
@@ -125,7 +124,7 @@ public class HighScores {
 
         // Keep only top 10 scores
         if (scoresList.size() > MAX_SCORES) {
-            scoresList.remove(scoresList.size() - 1); // Remove the lowest score
+            scoresList.removeLast(); // Remove the lowest score
         }
 
         // Save the updated list back to the JSON file
@@ -142,11 +141,11 @@ public class HighScores {
                         JOptionPane.PLAIN_MESSAGE
                 );
                 // Some String manipulation to ensure the name doesn't contain weird stuff
-                name = name.strip();
-                name = name.length() > 20 ? name.substring(0, 20) : name;
-                name = name.replaceAll("[^a-zA-Z0-9]", "");
-                name = !name.isEmpty() ? name : null;
-                if (name == null) {
+                name = name.strip()
+                        .substring(0, Math.min(name.length(), MAX_NAME_LENGTH))
+                        .replaceAll("[^a-zA-Z0-9]", "");
+
+                if (name.isEmpty()) {
                     name = "Anonymous";
                 }
                 HighScores.getInstance().addNewHighScore(name, playerScore);
