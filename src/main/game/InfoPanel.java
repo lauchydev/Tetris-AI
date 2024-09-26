@@ -4,14 +4,14 @@ import main.configuration.Configuration;
 import main.game.core.ActivePiece;
 import main.game.core.Rotation;
 import main.game.core.TetrisBoard;
+import main.ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class InfoPanel extends JPanel implements GameObserver {
-    private static final Font HEADER_FONT = new Font("Arial", Font.PLAIN, 22);
-    private final JLabel level = new JLabel();
-    private final JLabel score = new JLabel();
+    private final JLabel level =  UI.createGameInfoHeaderLabel();
+    private final JLabel score =  UI.createGameInfoHeaderLabel();
     private final TetrisBoard nextTetrominoBoard = new TetrisBoard(6, 4);
     private final TetrisFieldComponent nextPieceComp;
     private final Game game;
@@ -23,20 +23,11 @@ public class InfoPanel extends JPanel implements GameObserver {
         setOpaque(false);
         game.addObserver(this);
 
-        JLabel next = new JLabel("Next");
-        next.setForeground(Color.WHITE);
-        next.setFont(HEADER_FONT);
+        JLabel next = UI.createGameInfoHeaderLabel("Next");
         nextPieceComp = new TetrisFieldComponent(null, nextTetrominoBoard);
         nextPieceComp.setMaximumSize(nextPieceComp.getPreferredSize());
 
-        level.setForeground(Color.WHITE);
-        level.setFont(HEADER_FONT);
-        score.setForeground(Color.WHITE);
-        score.setFont(HEADER_FONT);
-
-        JLabel playerType = new JLabel();
-        playerType.setForeground(Color.WHITE);
-        playerType.setFont(HEADER_FONT);
+        JLabel playerType = UI.createGameInfoHeaderLabel();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;

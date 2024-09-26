@@ -7,21 +7,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class BasicScreen extends JPanel {
+public class BasicScreen extends BasePanel {
 
-    private static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 20);
-    private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
     protected final JButton backButton;
-    protected JPanel centerPanel = new JPanel();
+    protected final JPanel centerPanel = new JPanel();
+
 
     public BasicScreen(String title) {
         super();
         setLayout(new BorderLayout());
-        setBackground(new Color(20, 20, 20));
-        if (title != null) {
-            createHeader(title);
-        }
-        
+        createHeader(title);
         backButton = createBackButton();
         JPanel southPanel = new JPanel();
         southPanel.setOpaque(false);
@@ -36,18 +31,14 @@ public class BasicScreen extends JPanel {
     }
 
     private JButton createBackButton() {
-        JButton backButton = new JButton("Back");
-        backButton.setFont(BUTTON_FONT);
+        JButton backButton = UI.createButton("Back");
         backButton.setPreferredSize(new Dimension(200, 30));
-        backButton.setBackground(new Color(144, 238, 144));
         backButton.addActionListener(this::onBackButtonClicked);
         return backButton;
     }
 
     private void createHeader(String title) {
-        JLabel headerLabel = new JLabel(title, JLabel.CENTER);
-        headerLabel.setFont(HEADER_FONT);
-        headerLabel.setForeground(Color.WHITE);
+        JLabel headerLabel = UI.createHeaderLabel(title);
         headerLabel.setBorder(new EmptyBorder(30, 0, 30, 0));
         add(headerLabel, BorderLayout.NORTH);
     }

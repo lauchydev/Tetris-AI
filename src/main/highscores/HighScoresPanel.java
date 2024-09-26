@@ -1,5 +1,7 @@
 package main.highscores;
 
+import main.ui.UI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -13,28 +15,25 @@ class HighScoresPanel extends JPanel {
     public void updateScores() {
         removeAll();
         List<HighScores.ScoreEntry> scoresList = HighScores.getInstance().getScores();
-        Font scoresFont = new Font("Arial", Font.PLAIN, 16);
 
         // Create header labels for the table
-        createLabel(scoresFont, "#", 0, 0); // Rank column header
-        createLabel(scoresFont, "Name", 1, 0); // Name column header
-        createLabel(scoresFont, "Score", 2, 0); // Score column header
+        createLabel("#", 0, 0); // Rank column header
+        createLabel("Name", 1, 0); // Name column header
+        createLabel("Score", 2, 0); // Score column header
 
         // Loop through the scoresList and display rank, name, and score
         for (int i = 0; i < scoresList.size(); i++) {
             HighScores.ScoreEntry entry = scoresList.get(i);
-            createLabel(scoresFont, String.valueOf(i + 1), 0, i + 1); // Rank (1-based index)
-            createLabel(scoresFont, entry.getName(), 1, i + 1); // Player name
-            createLabel(scoresFont, String.valueOf(entry.getScore()), 2, i + 1); // Player score
+            createLabel(String.valueOf(i + 1), 0, i + 1); // Rank (1-based index)
+            createLabel(entry.getName(), 1, i + 1); // Player name
+            createLabel(String.valueOf(entry.getScore()), 2, i + 1); // Player score
         }
         revalidate();
         repaint();
     }
 
-    private void createLabel(Font scoresFont, String text, int x, int y) {
-        JLabel label = new JLabel(text);
-        label.setFont(scoresFont);
-        label.setForeground(Color.WHITE);
+    private void createLabel(String text, int x, int y) {
+        JLabel label = UI.createHighScoresLabel(text);
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Add more space between the columns by increasing the horizontal padding

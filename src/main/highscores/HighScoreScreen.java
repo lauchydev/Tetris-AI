@@ -1,6 +1,7 @@
 package main.highscores;
 
 import main.ui.BasicScreen;
+import main.ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class HighScoreScreen extends BasicScreen {
     private Component createClearButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        JButton clearButton = new JButton("Clear High Scores");
+        JButton clearButton = UI.createSecondaryButton("Clear High Scores");
         clearButton.addActionListener((event) -> showClearConfirmationDialog());
         buttonPanel.add(clearButton);
         return buttonPanel;
@@ -33,10 +34,10 @@ public class HighScoreScreen extends BasicScreen {
     private void showClearConfirmationDialog() {
         int response = JOptionPane.showConfirmDialog(
                 this,
-                "Are you sure you want to clear the high scores?",
+                "You are about to clear all high scores! Are you sure?",
                 "Clear High Scores Confirmation",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (response == JOptionPane.YES_OPTION) {
