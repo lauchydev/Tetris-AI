@@ -82,12 +82,7 @@ public class HighScores {
         try {
             File scoresFile = new File(this.filename);
             if (scoresFile.createNewFile()) {
-                // Initialize with empty scores
-                List<ScoreEntry> emptyScores = new ArrayList<>();
-                for (int i = 0; i < MAX_SCORES; i++) {
-                    emptyScores.add(new ScoreEntry("Empty", 0));
-                }
-                saveScores(emptyScores);
+                clear();
             } else {
                 System.out.println("Couldn't create scores file.");
             }
@@ -95,6 +90,16 @@ public class HighScores {
             // silently fail, nobody needs to know
         }
     }
+
+    public void clear() {
+        // Initialize with empty scores
+        List<ScoreEntry> emptyScores = new ArrayList<>();
+        for (int i = 0; i < MAX_SCORES; i++) {
+            emptyScores.add(new ScoreEntry("Empty", 0));
+        }
+        saveScores(emptyScores);
+    }
+
     // Class to represent each score entry
     public static class ScoreEntry {
         String name;
