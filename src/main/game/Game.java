@@ -4,6 +4,7 @@ import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.*;
+import main.highscores.HighScores;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -97,6 +98,31 @@ public class Game {
         notifyObservers();
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
+        checkScore();
+    }
+
+    public void checkScore() {
+        int playerScore = this.getScore();
+        for (var entry : HighScores.getInstance().getScores()) {
+            if (playerScore > entry.getScore()) {
+                String name = JOptionPane.showInputDialog(
+                        this.comp,
+                        "You made it to the high scores list! Enter your name (Only Alphanumeric Characters):",
+                        "High Score!",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+                // Some String manipulation to ensure the name doesn't contain weird stuff
+                name = name.strip();
+                name = name.length() > 20 ? name.substring(0, 20) : name;
+                name = name.replaceAll("[^a-zA-Z0-9]", "");
+                name = !name.isEmpty() ? name : null;
+                if (name == null) {
+                    name = "Anonymous";
+            }
+                HighScores.getInstance().addNewHighScore(name, playerScore);
+                break;
+            }
+        }
     }
 
     public void togglePause() {
