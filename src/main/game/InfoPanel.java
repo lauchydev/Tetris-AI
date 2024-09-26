@@ -10,31 +10,59 @@ import javax.swing.*;
 import java.awt.*;
 
 public class InfoPanel extends JPanel implements GameObserver, ConfigObserver {
+    private static final Font HEADER_FONT = new Font("Arial", Font.PLAIN, 22);
     private final JLabel level = new JLabel();
     private final JLabel score = new JLabel();
     private final JLabel music = new JLabel();
     private final JLabel sound = new JLabel();
+    private final JLabel next = new JLabel("Next");
     private final TetrisBoard nextTetrominoBoard = new TetrisBoard(6, 4);
     private final TetrisFieldComponent nextPieceComp;
     private final Game game;
     private final Configuration config = Configuration.getInstance();
 
     public InfoPanel(Game game) {
-        super();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new GridBagLayout());
         this.game = game;
         setPreferredSize(new Dimension(200, 500));
         setOpaque(false);
         game.addObserver(this);
         config.addObserver(this);
 
-        add(level);
-        add(score);
-        add(music);
-        add(sound);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        next.setForeground(Color.WHITE);
+        next.setFont(HEADER_FONT);
         nextPieceComp = new TetrisFieldComponent(null, nextTetrominoBoard);
-        nextPieceComp.setMaximumSize(nextPieceComp.getPreferredSize()); // TODO: an issue here
-        add(nextPieceComp);
+        nextPieceComp.setMaximumSize(nextPieceComp.getPreferredSize());
+
+        level.setForeground(Color.WHITE);
+        level.setFont(HEADER_FONT);
+        score.setForeground(Color.WHITE);
+        score.setFont(HEADER_FONT);
+        music.setForeground(Color.WHITE);
+        music.setFont(HEADER_FONT);
+        sound.setForeground(Color.WHITE);
+        sound.setFont(HEADER_FONT);
+
+        add(next, gbc);
+        add(nextPieceComp, gbc);
+
+        // Add a spacer
+        JPanel spacer = new JPanel();
+        spacer.setOpaque(false);
+        spacer.setPreferredSize(new Dimension(0, 100));
+        add(spacer, gbc);
+
+        add(level, gbc);
+        add(score, gbc);
+        add(music, gbc);
+        add(sound, gbc);
+
         onGameUpdated();
         configChanged();
     }
