@@ -11,23 +11,27 @@ import java.awt.event.*;
 import java.util.function.Consumer;
 
 public class PlayScreen extends BasicScreen {
-
+    // TODO: create paused label
     private static final Font PAUSED_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
     private GameController[] controllers;
     private Game[] games;
     private final Configuration config = Configuration.getInstance();
     private int playerCount;
+    private final JPanel gamesPanel = new JPanel();
 
     public PlayScreen() {
         super("Play");
         centerPanel.setOpaque(false);
         backButton.setFocusable(false);
+        gamesPanel.setOpaque(false);
         setupKeybindings();
     }
 
     private void setupLayout() {
-        centerPanel.removeAll();
-        centerPanel.setLayout(new GridLayout(1, playerCount));
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.add(new StatusPanel(), BorderLayout.NORTH);
+        gamesPanel.setLayout(new GridLayout(1, playerCount));
+        centerPanel.add(gamesPanel, BorderLayout.CENTER);
     }
 
     private void startGame() {
@@ -41,7 +45,7 @@ public class PlayScreen extends BasicScreen {
             games[i] = new Game(board, seed);
             controllers[i] = new GameController(games[i]);
             JPanel gamePanel = new GamePanel(games[i]);
-            centerPanel.add(gamePanel);
+            gamesPanel.add(gamePanel);
             games[i].start();
         }
 

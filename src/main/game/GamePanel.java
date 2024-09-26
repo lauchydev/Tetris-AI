@@ -15,9 +15,6 @@ public class GamePanel extends JPanel {
         game.setComponent(tetrisField);
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
-        // needed a blank panel because trying to center tetris with 2 panels was being stupid
-        JPanel blankPanel = new JPanel();
-        blankPanel.setOpaque(false);
         centerPanel.setOpaque(false);
         // Using gridbag now to center the tetris game panel
         GridBagConstraints gbc = new GridBagConstraints();
@@ -27,9 +24,7 @@ public class GamePanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         centerPanel.add(tetrisField, gbc);
-        blankPanel.setPreferredSize(new Dimension(200, 500));
-        add(blankPanel, BorderLayout.WEST);
         add(centerPanel, BorderLayout.CENTER);
-        add(new InfoPanel(game), BorderLayout.EAST);
+        centerPanel.add(new InfoPanel(game));
     }
 }
