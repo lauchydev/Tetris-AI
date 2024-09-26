@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -129,5 +130,28 @@ public class HighScores {
 
         // Save the updated list back to the JSON file
         saveScores(scoresList);
+    }
+
+    public static void checkScore(int playerScore) {
+        for (var entry : HighScores.getInstance().getScores()) {
+            if (playerScore > entry.getScore()) {
+                String name = JOptionPane.showInputDialog(
+                        null,
+                        "You made it to the high scores list! Enter your name (Only Alphanumeric Characters):",
+                        "High Score!",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+                // Some String manipulation to ensure the name doesn't contain weird stuff
+                name = name.strip();
+                name = name.length() > 20 ? name.substring(0, 20) : name;
+                name = name.replaceAll("[^a-zA-Z0-9]", "");
+                name = !name.isEmpty() ? name : null;
+                if (name == null) {
+                    name = "Anonymous";
+                }
+                HighScores.getInstance().addNewHighScore(name, playerScore);
+                break;
+            }
+        }
     }
 }

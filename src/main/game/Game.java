@@ -35,6 +35,8 @@ public class Game {
         this.gameLoopTimer = new Timer(20, (ActionEvent e) -> {
             if (this.board.getActivePiece() == null) {
                 this.stop();
+                System.out.println("You lose!");
+                HighScores.checkScore(this.getScore());
                 return;
             }
 
@@ -98,32 +100,8 @@ public class Game {
         notifyObservers();
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
-        checkScore();
     }
 
-    public void checkScore() {
-        int playerScore = this.getScore();
-        for (var entry : HighScores.getInstance().getScores()) {
-            if (playerScore > entry.getScore()) {
-                String name = JOptionPane.showInputDialog(
-                        this.comp,
-                        "You made it to the high scores list! Enter your name (Only Alphanumeric Characters):",
-                        "High Score!",
-                        JOptionPane.PLAIN_MESSAGE
-                );
-                // Some String manipulation to ensure the name doesn't contain weird stuff
-                name = name.strip();
-                name = name.length() > 20 ? name.substring(0, 20) : name;
-                name = name.replaceAll("[^a-zA-Z0-9]", "");
-                name = !name.isEmpty() ? name : null;
-                if (name == null) {
-                    name = "Anonymous";
-            }
-                HighScores.getInstance().addNewHighScore(name, playerScore);
-                break;
-            }
-        }
-    }
 
     public void togglePause() {
         this.setPaused(!this.paused);
