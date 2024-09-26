@@ -27,14 +27,14 @@ public class Game {
 
     public Game(TetrisBoard board, long seed) {
         this.board = board;
-        this.reset();
-        this.pieceBag = new PieceBag(seed);
-        this.softDropHeld = false;
-        this.gravityTicks = 0;
-        this.spawnNextActivePiece();
-        this.gameLoopTimer = new Timer(20, (ActionEvent e) -> {
-            if (this.board.getActivePiece() == null) {
-                this.stop();
+        reset();
+        pieceBag = new PieceBag(seed);
+        softDropHeld = false;
+        gravityTicks = 0;
+        spawnNextActivePiece();
+        gameLoopTimer = new Timer(20, (ActionEvent e) -> {
+            if (board.getActivePiece() == null) {
+                stop();
                 return;
             }
 
@@ -42,11 +42,11 @@ public class Game {
                 return;
             }
 
-            this.gravityTicks += this.softDropHeld ? 2 : 1;
-            if (this.gravityTicks >= this.gravityDelay()) {
-                this.gravityTicks = 0;
-                if (!this.softDrop()) {
-                    this.hardDrop();
+            gravityTicks += softDropHeld ? 2 : 1;
+            if (gravityTicks >= gravityDelay()) {
+                gravityTicks = 0;
+                if (!softDrop()) {
+                    hardDrop();
                 }
             }
 
@@ -56,8 +56,8 @@ public class Game {
 
     public void spawnNextActivePiece() {
         var nextPiece = popNextActivePiece();
-        var piece = nextPiece.fits(this.board) ? nextPiece : null;
-        this.board.setActivePiece(piece);
+        var piece = nextPiece.fits(board) ? nextPiece : null;
+        board.setActivePiece(piece);
         observers.forEach(GameObserver::onGameUpdated);
     }
 
@@ -70,8 +70,8 @@ public class Game {
     }
 
     private ActivePiece getActivePieceFromPiece(Piece piece) {
-        var width = this.board.getWidth();
-        var height = this.board.getHeight();
+        var width = board.getWidth();
+        var height = board.getHeight();
         return new ActivePiece(piece, Rotation.North, width / 2, height - 1);
     }
 
@@ -80,31 +80,32 @@ public class Game {
     }
 
     private void reset() {
-        this.level = this.config.getGameLevel();
+        level = config.getGameLevel();
+        score = 0;
     }
 
-    public boolean inProgress() { return this.gameLoopTimer.isRunning(); }
+    public boolean inProgress() { return gameLoopTimer.isRunning(); }
 
-    public boolean isPaused() { return this.paused; }
+    public boolean isPaused() { return paused; }
 
     public void start() {
-        this.reset();
-        this.gameLoopTimer.start();
+        reset();
+        gameLoopTimer.start();
         System.out.println("Game Started");
     }
 
     public void stop() {
-        this.gameLoopTimer.stop();
+        gameLoopTimer.stop();
         notifyObservers();
         SoundEffects.playEffect(Effect.GAMEOVER);
         System.out.println("Game Stopped");
-        HighScores.checkScore(this.getScore());
+        HighScores.checkScore(getScore());
     }
 
 
 
     public void togglePause() {
-        this.setPaused(!this.paused);
+        setPaused(!paused);
     }
 
     public void setPaused(boolean paused) {
@@ -116,7 +117,7 @@ public class Game {
     }
 
     public void setSoftDropHeld(boolean held) {
-        this.softDropHeld = held;
+        softDropHeld = held;
     }
 
     /**
@@ -124,11 +125,11 @@ public class Game {
      * @return The underlying TetrisBoard. Do not mutate.
      */
     public TetrisBoard getBoard() {
-        return this.board;
+        return board;
     }
 
     public float gravityProgress() {
-        return (float)this.gravityTicks / (float)this.gravityDelay();
+        return (float)gravityTicks / (float)gravityDelay();
     }
 
     public void setComponent(TetrisFieldComponent comp) {
@@ -136,53 +137,53 @@ public class Game {
     }
 
     private int gravityDelay() {
-        return 22 - this.level * 2;
+        return 22 - level * 2;
     }
 
     public void rotateClockwise() {
-        this.board.rotateClockwise();
+        board.rotateClockwise();
     }
     public void rotateCounterclockwise() {
-        this.board.rotateCounterclockwise();
+        board.rotateCounterclockwise();
     }
     public void shiftLeft() {
-        this.board.shiftLeft();
+        board.shiftLeft();
     }
     public void shiftRight() {
-        this.board.shiftRight();
+        board.shiftRight();
     }
 
 
     public boolean softDrop() {
-        return this.board.shiftActivePiece(0, -1);
+        return board.shiftActivePiece(0, -1);
     }
 
     public void hardDrop() {
-        if (this.board.getActivePiece() == null) {
+        if (board.getActivePiece() == null) {
             return;
         }
 
         // softDrop has a side effect
         //noinspection StatementWithEmptyBody
-        while (this.softDrop()) {}
-        for (var cell : this.board.getActivePiece().getCells()) {
-            if (cell.y() < this.board.getHeight()) {
-                this.board.getRows().get(cell.y()).set(cell.x(), this.board.getActivePiece().kind().color());
+        while (softDrop()) {}
+        for (var cell : board.getActivePiece().getCells()) {
+            if (cell.y() < board.getHeight()) {
+                board.getRows().get(cell.y()).set(cell.x(), board.getActivePiece().kind().color());
             }
         }
 
-        var rows = this.board.getRows();
+        var rows = board.getRows();
         rows.removeIf(row -> row.stream().allMatch(Objects::nonNull));
-        int linesCleared = this.board.getHeight() - rows.size();
-        while (rows.size() < this.board.getHeight()) {
+        int linesCleared = board.getHeight() - rows.size();
+        while (rows.size() < board.getHeight()) {
             var row = new ArrayList<CellKind>();
-            for (int x = 0; x < this.board.getWidth(); x++) {
+            for (int x = 0; x < board.getWidth(); x++) {
                 row.add(null);
             }
             rows.add(row);
         }
 
-        this.spawnNextActivePiece();
+        spawnNextActivePiece();
 
         handlePlacement(new PlacementResult(linesCleared));
     }
@@ -216,8 +217,8 @@ public class Game {
     public int getScore() { return score; }
 
     private void notifyObservers() {
-        this.observers.forEach(GameObserver::onGameUpdated);
+        observers.forEach(GameObserver::onGameUpdated);
     }
 
-    public int getLevel() { return this.level; }
+    public int getLevel() { return level; }
 }
