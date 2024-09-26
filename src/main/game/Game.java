@@ -35,8 +35,7 @@ public class Game {
         this.gameLoopTimer = new Timer(20, (ActionEvent e) -> {
             if (this.board.getActivePiece() == null) {
                 this.stop();
-                System.out.println("You lose!");
-                HighScores.checkScore(this.getScore());
+                gameOver();
                 return;
             }
 
@@ -101,6 +100,12 @@ public class Game {
         new Thread(() -> SoundEffects.playEffect(Effect.GAMEOVER)).start();
         System.out.println("Game Stopped");
     }
+
+    public void gameOver() {
+        System.out.println("You lose!"); // debug message to find where each player loses the game
+        HighScores.checkScore(this.getScore());
+    }
+
 
 
     public void togglePause() {
