@@ -27,7 +27,7 @@ public class ExternalPlayer implements Runnable {
         this.controller = controller;
     }
 
-    private void askServer() throws IOException {
+    private synchronized void askServer() throws IOException {
         Gson gson = new Gson();
         try (
                 Socket socket = new Socket(HOST, PORT);
@@ -50,7 +50,7 @@ public class ExternalPlayer implements Runnable {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             System.out.println(game.getState());
             while (!this.game.isFinished()) {
@@ -73,7 +73,7 @@ public class ExternalPlayer implements Runnable {
         }
     }
 
-    private void applyMove() {
+    private synchronized void applyMove() {
         if (dest != null) {
             var ap = game.getBoard().getActivePiece();
             int x = ap.x();

@@ -1,7 +1,7 @@
 package main.game.state;
 
 public class StateMachine {
-    private State state;
+    private volatile State state;
 
     private StateMachineObserver observer = null;
 
@@ -11,7 +11,7 @@ public class StateMachine {
 
     public void setObserver(StateMachineObserver observer) { this.observer = observer; }
 
-    public void handleEvent(Event event) {
+    public synchronized void handleEvent(Event event) {
         if (state != State.FINISHED && (event == Event.LOSE || event == Event.STOP)) {
             transitionTo(State.FINISHED, event);
             return;
@@ -38,7 +38,7 @@ public class StateMachine {
         }
     }
 
-    private void transitionTo(State newState, Event triggerEvent) {
+    private synchronized void transitionTo(State newState, Event triggerEvent) {
         state = newState;
         if (observer != null) {
             observer.onStateChanged(newState, triggerEvent);
