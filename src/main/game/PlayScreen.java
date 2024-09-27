@@ -4,6 +4,7 @@ import main.Tetris;
 import main.configuration.Configuration;
 import main.configuration.PlayerType;
 import main.game.core.TetrisBoard;
+import main.game.external.ExternalPlayer;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
@@ -45,9 +46,18 @@ public class PlayScreen extends BasicScreen {
             games[i] = new Game(board, seed);
             controllers[i] = new GameController(games[i]);
 
-            if (config.getPlayerType(i + 1) == PlayerType.HUMAN) {
-                PlayerKeyMap keyMap = PlayerKeyMap.getPlayerMap(humanPlayerNo++);
-                setupPlayerKeybindings(keyMap, controllers[i], Integer.toString(i));
+            switch(config.getPlayerType(i + 1)) {
+                case PlayerType.HUMAN:
+                    PlayerKeyMap keyMap = PlayerKeyMap.getPlayerMap(humanPlayerNo++);
+                    setupPlayerKeybindings(keyMap, controllers[i], Integer.toString(i));
+                    break;
+
+                case PlayerType.EXTERNAL:
+                    ExternalPlayer externalPlayer = new ExternalPlayer(games[i], controllers[i]);
+                    Thread externalThread = new Thread(externalPlayer);
+                    games[i].start();
+                    externalThread.start();
+                    break;
             }
 
             JPanel gamePanel = new GamePanel(games[i], config.getPlayerType(i + 1));

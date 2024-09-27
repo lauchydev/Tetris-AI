@@ -4,6 +4,7 @@ import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.*;
+import main.game.external.PureGame;
 import main.game.state.Event;
 import main.game.state.State;
 import main.game.state.StateMachine;
@@ -29,6 +30,7 @@ public class Game implements StateMachineObserver {
     private int score = 0;
     private int linesSinceLastLevel = 0;
     private int totalLinesCleared = 0;
+    private int piecesSpawned = 0;
 
     public Game(TetrisBoard board, long seed) {
         this.board = board;
@@ -86,8 +88,11 @@ public class Game implements StateMachineObserver {
         var nextPiece = popNextActivePiece();
         var piece = nextPiece.fits(board) ? nextPiece : null;
         board.setActivePiece(piece);
+        piecesSpawned++;
         observers.forEach(GameObserver::onGameUpdated);
     }
+
+    public int getPiecesSpawned() { return piecesSpawned; }
 
     private ActivePiece popNextActivePiece() {
         return getActivePieceFromPiece(pieceBag.pop());
@@ -178,11 +183,11 @@ public class Game implements StateMachineObserver {
     }
 
 
-    public boolean softDrop() {
+    public synchronized boolean softDrop() {
         return board.shiftActivePiece(0, -1);
     }
 
-    public void hardDrop() {
+    public synchronized void hardDrop() {
         if (board.getActivePiece() == null) {
             return;
         }
@@ -211,6 +216,16 @@ public class Game implements StateMachineObserver {
 
         handlePlacement(new PlacementResult(linesCleared));
     }
+
+    public PureGame serialize() throws PieceNotSpawnedException {
+        var ap = this.board.getActivePiece();
+        if (ap != null) {
+            return new PureGame(this.board.getWidth(), this.board.getHeight(), this.board.getPureCells(), ap.kind().serialize(), this.peekNextActivePiece().kind().serialize());
+        }
+        throw new PieceNotSpawnedException();
+    }
+
+    public State getState() { return this.stateMachine.getState(); }
 
     private void handlePlacement(PlacementResult result) {
         totalLinesCleared += result.linesCleared();
@@ -246,4 +261,8 @@ public class Game implements StateMachineObserver {
     }
 
     public int getLevel() { return level; }
+
+    public boolean isFinished() {
+        return this.stateMachine.getState() == State.FINISHED;
+    }
 }

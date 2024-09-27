@@ -63,4 +63,27 @@ public record Piece(ArrayList<Cell> cells, OffsetTable offsetTable, CellKind col
         new Cell( 0,  0),
         new Cell( 1,  0)
     )), OffsetTable.JLSTZ, CellKind.RED);
+
+
+    public int[][] serialize() {
+        // Find the minimum and maximum x, y values
+        int minX = cells.stream().mapToInt(Cell::x).min().orElseThrow();
+        int minY = cells.stream().mapToInt(Cell::y).min().orElseThrow();
+        int maxX = cells.stream().mapToInt(Cell::x).max().orElseThrow();
+        int maxY = cells.stream().mapToInt(Cell::y).max().orElseThrow();
+
+        // Calculate width and height of the grid
+        int width = maxX - minX + 1;
+        int height = maxY - minY + 1;
+
+        // Initialize the grid with 0s
+        int[][] grid = new int[height][width];
+
+        // Populate the grid with 1s where the cells exist
+        for (Cell cell : cells) {
+            grid[maxY - cell.y()][cell.x() - minX] = 1;
+        }
+
+        return grid;
+    }
 }

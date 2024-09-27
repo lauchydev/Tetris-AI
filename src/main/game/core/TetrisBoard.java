@@ -46,6 +46,16 @@ public class TetrisBoard {
         return this.rows.get(y).get(x);
     }
 
+    public int[][] getPureCells() {
+        int[][] cells = new int[height][width];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                var cell = getFieldCell(x, y);
+                cells[height - y - 1][x] = cell != null ? 1 : 0;
+            }
+        }
+        return cells;
+    }
 
     public ActivePiece getActivePiece() {
         return this.activePiece;
