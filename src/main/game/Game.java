@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class Game implements StateMachineObserver {
     private int level;
+    private final int startingLevel;
     private final StateMachine stateMachine = new StateMachine();
     private boolean softDropHeld;
     private int gravityTicks;
@@ -27,11 +28,12 @@ public class Game implements StateMachineObserver {
     private final PieceBag pieceBag;
     private int score = 0;
     private int linesSinceLastLevel = 0;
+    private int totalLinesCleared = 0;
 
     public Game(TetrisBoard board, long seed) {
         this.board = board;
         stateMachine.setObserver(this);
-        level = Configuration.getInstance().getGameLevel();
+        startingLevel = level = Configuration.getInstance().getGameLevel();
         score = 0;
         pieceBag = new PieceBag(seed);
         softDropHeld = false;
@@ -54,6 +56,10 @@ public class Game implements StateMachineObserver {
             comp.repaint();
         });
     }
+
+    public int getTotalLinesCleared() { return totalLinesCleared; }
+
+    public int getStartingLevel() { return startingLevel; }
 
     @Override
     public void onStateChanged(State state, Event triggerEvent) {
@@ -207,6 +213,7 @@ public class Game implements StateMachineObserver {
     }
 
     private void handlePlacement(PlacementResult result) {
+        totalLinesCleared += result.linesCleared();
         // Handle level increase
         linesSinceLastLevel += result.linesCleared();
         var levelsToIncrease = linesSinceLastLevel / 10;

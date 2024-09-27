@@ -10,7 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class InfoPanel extends JPanel implements GameObserver {
+    private final JLabel initialLevel =  UI.createGameInfoHeaderLabel();
     private final JLabel level =  UI.createGameInfoHeaderLabel();
+    private final JLabel linesCleared =  UI.createGameInfoHeaderLabel();
     private final JLabel score =  UI.createGameInfoHeaderLabel();
     private final TetrisBoard nextTetrominoBoard = new TetrisBoard(6, 4);
     private final TetrisFieldComponent nextPieceComp;
@@ -44,6 +46,8 @@ public class InfoPanel extends JPanel implements GameObserver {
         add(spacer, gbc);
 
         add(level, gbc);
+        add(initialLevel, gbc);
+        add(linesCleared, gbc);
         add(score, gbc);
         add(playerType, gbc);
         playerType.setText("Type: " + Configuration.getInstance().getPlayerOneType());
@@ -62,7 +66,9 @@ public class InfoPanel extends JPanel implements GameObserver {
                 nextTetrominoBoard.getHeight() - 3
         ));
         nextPieceComp.repaint();
+        initialLevel.setText("Start Level: " + game.getStartingLevel());
         level.setText("Level: " + game.getLevel());
+        linesCleared.setText("Lines cleared: " + game.getTotalLinesCleared());
         score.setText("Score: " + game.getScore());
     }
 }

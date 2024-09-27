@@ -136,7 +136,7 @@ public class HighScores {
         saveScores(scoresList);
     }
 
-    public static void checkScore(int playerScore) {
+    public static synchronized void checkScore(int playerScore) {
         for (var entry : HighScores.getInstance().getScores()) {
             if (playerScore > entry.getScore()) {
                 String name = JOptionPane.showInputDialog(
