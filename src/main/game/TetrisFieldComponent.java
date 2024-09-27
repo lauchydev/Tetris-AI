@@ -6,7 +6,7 @@ import main.game.core.TetrisBoard;
 import javax.swing.*;
 import java.awt.*;
 
-public class TetrisFieldComponent extends JComponent {
+public class TetrisFieldComponent extends JComponent implements GameObserver {
     private final TetrisBoard board;
     private final Game game;
 
@@ -16,6 +16,7 @@ public class TetrisFieldComponent extends JComponent {
         super();
         this.board = board;
         this.game = game;
+        if (this.game != null) { this.game.addObserver(this); }
     }
 
     @Override
@@ -45,6 +46,43 @@ public class TetrisFieldComponent extends JComponent {
             }
         }
 
+        if (game != null && game.isPaused()) {
+            g2d.setColor(Color.RED);
+            final String[] msgLines = {"Game is Paused.", "Press P to continue."};
+            int offset = 40;
+            for (String msgLine : msgLines) {
+                int panelWidth = getWidth();
+                g2d.setFont(findSuitableFont(g2d, msgLine));
+                FontMetrics fm = g2d.getFontMetrics();
+                int textWidth = fm.stringWidth(msgLine);
+                int textHeight = fm.getAscent();
+                offset += textHeight + 5;
+                int x = (panelWidth - textWidth) / 2;
+                int y = 0;
+                g2d.drawString(msgLine, x, y + offset);
+            }
+        }
+    }
+
+    Font findSuitableFont(Graphics2D g2d, String text) {
+        int fontSize = 24;
+        int panelWidth = getWidth();
+        Font font;
+        FontMetrics fm;
+        do {
+            font = new Font("Arial", Font.BOLD, fontSize);
+            if (fontSize <= 6) { break; }
+            g2d.setFont(font);
+            fm = g2d.getFontMetrics();
+            fontSize -= 2;
+        } while (fm.stringWidth(text) > panelWidth);
+        return font;
+    }
+
+
+    @Override
+    public void onGameUpdated() {
+        repaint();
     }
 
     private void paintCell(Graphics2D g2d, int x, int y, CellKind cellKind, float yOffset) {
@@ -68,4 +106,5 @@ public class TetrisFieldComponent extends JComponent {
             cellHeight
         );
     }
+
 }

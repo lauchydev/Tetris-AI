@@ -11,8 +11,6 @@ import java.awt.event.*;
 import java.util.function.Consumer;
 
 public class PlayScreen extends BasicScreen {
-    // TODO: create paused label
-    private static final Font PAUSED_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
     private GameController[] controllers;
     private Game[] games;
     private final Configuration config = Configuration.getInstance();
