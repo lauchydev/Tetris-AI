@@ -1,6 +1,7 @@
 package main.game.core;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TetrisBoard {
     private final int width;
@@ -107,4 +108,35 @@ public class TetrisBoard {
         return true;
     }
 
+    public boolean softDrop() {
+        return this.shiftActivePiece(0, -1);
+    }
+
+    public PlacementResult hardDrop() {
+        if (this.getActivePiece() == null) {
+            return null;
+        }
+
+        // softDrop has a side effect
+        //noinspection StatementWithEmptyBody
+        while (softDrop()) {}
+        for (var cell : this.getActivePiece().getCells()) {
+            if (cell.y() < this.getHeight()) {
+                this.getRows().get(cell.y()).set(cell.x(), this.getActivePiece().kind().color());
+            }
+        }
+
+        var rows = this.getRows();
+        rows.removeIf(row -> row.stream().allMatch(Objects::nonNull));
+        int linesCleared = this.getHeight() - rows.size();
+        while (rows.size() < this.getHeight()) {
+            var row = new ArrayList<CellKind>();
+            for (int x = 0; x < this.getWidth(); x++) {
+                row.add(null);
+            }
+            rows.add(row);
+        }
+
+        return new PlacementResult(linesCleared);
+    }
 }

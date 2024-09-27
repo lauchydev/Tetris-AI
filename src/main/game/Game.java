@@ -184,37 +184,15 @@ public class Game implements StateMachineObserver {
 
 
     public synchronized boolean softDrop() {
-        return board.shiftActivePiece(0, -1);
+        return board.softDrop();
     }
 
     public synchronized void hardDrop() {
-        if (board.getActivePiece() == null) {
-            return;
+        var result = this.board.hardDrop();
+        if (result != null) {
+            spawnNextActivePiece();
+            handlePlacement(result);
         }
-
-        // softDrop has a side effect
-        //noinspection StatementWithEmptyBody
-        while (softDrop()) {}
-        for (var cell : board.getActivePiece().getCells()) {
-            if (cell.y() < board.getHeight()) {
-                board.getRows().get(cell.y()).set(cell.x(), board.getActivePiece().kind().color());
-            }
-        }
-
-        var rows = board.getRows();
-        rows.removeIf(row -> row.stream().allMatch(Objects::nonNull));
-        int linesCleared = board.getHeight() - rows.size();
-        while (rows.size() < board.getHeight()) {
-            var row = new ArrayList<CellKind>();
-            for (int x = 0; x < board.getWidth(); x++) {
-                row.add(null);
-            }
-            rows.add(row);
-        }
-
-        spawnNextActivePiece();
-
-        handlePlacement(new PlacementResult(linesCleared));
     }
 
     public PureGame serialize() throws PieceNotSpawnedException {
