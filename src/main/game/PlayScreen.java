@@ -2,6 +2,7 @@ package main.game;
 
 import main.Tetris;
 import main.configuration.Configuration;
+import main.configuration.PlayerType;
 import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
 
@@ -22,7 +23,7 @@ public class PlayScreen extends BasicScreen {
         centerPanel.setOpaque(false);
         backButton.setFocusable(false);
         gamesPanel.setOpaque(false);
-        setupKeybindings();
+        setupGeneralKeybindings();
     }
 
     private void setupLayout() {
@@ -38,11 +39,18 @@ public class PlayScreen extends BasicScreen {
         controllers = new GameController[playerCount];
         games = new Game[playerCount];
         long seed = System.currentTimeMillis();
+        int humanPlayerNo = 1;
         for (int i = 0; i < playerCount; i++) {
             var board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
             games[i] = new Game(board, seed);
             controllers[i] = new GameController(games[i]);
-            JPanel gamePanel = new GamePanel(games[i]);
+
+            if (config.getPlayerType(i + 1) == PlayerType.HUMAN) {
+                PlayerKeyMap keyMap = PlayerKeyMap.getPlayerMap(humanPlayerNo++);
+                setupPlayerKeybindings(keyMap, controllers[i], Integer.toString(i));
+            }
+
+            JPanel gamePanel = new GamePanel(games[i], config.getPlayerType(i + 1));
             gamesPanel.add(gamePanel);
             games[i].start();
         }
@@ -92,31 +100,28 @@ public class PlayScreen extends BasicScreen {
         return result == JOptionPane.YES_OPTION;
     }
 
-    private void setupKeybindings() {
-        bindMovementInput("RotateClockwise", KeyEvent.VK_UP, pressed -> controllers[0].rotateClockwise());
-        bindMovementInput("RotateCounterclockwise", KeyEvent.VK_Z, pressed -> controllers[0].rotateCounterclockwise());
-        bindMovementInput("ShiftLeft", KeyEvent.VK_LEFT, pressed -> controllers[0].shiftLeft());
-        bindMovementInput("ShiftRight", KeyEvent.VK_RIGHT, pressed -> controllers[0].shiftRight());
-        bindMovementInput("HardDrop", KeyEvent.VK_SPACE, pressed -> controllers[0].hardDrop());
+    private void setupPlayerKeybindings(PlayerKeyMap map, GameController controller, String suffix) {
+        // Player specific
+        bindMovementInput("RotateClockwise" + suffix, map.getKeyCode(GameAction.ROTATE_CLOCKWISE), pressed -> controller.rotateClockwise());
+        bindMovementInput("RotateCounterclockwise" + suffix, map.getKeyCode(GameAction.ROTATE_COUNTERCLOCKWISE), pressed -> controller.rotateCounterclockwise());
+        bindMovementInput("ShiftLeft" + suffix, map.getKeyCode(GameAction.LEFT), pressed -> controller.shiftLeft());
+        bindMovementInput("ShiftRight" + suffix, map.getKeyCode(GameAction.RIGHT), pressed -> controller.shiftRight());
+        bindMovementInput("HardDrop" + suffix, map.getKeyCode(GameAction.HARD_DROP), pressed -> controller.hardDrop());
+        bindKeyToAction("SoftDrop" + suffix, KeyStroke.getKeyStroke(map.getKeyCode(GameAction.SOFT_DROP), 0, false), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                controller.setSoftDropHeld(true);
+            }
+        });
+        bindKeyToAction("SoftDropStop" + suffix, KeyStroke.getKeyStroke(map.getKeyCode(GameAction.SOFT_DROP), 0, true), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                controller.setSoftDropHeld(false);
+            }
+        });
+    }
 
-        bindMovementInput("ToggleMusic", KeyEvent.VK_M, pressed -> config.setMusicOn(!config.getMusicOn()));
-        bindMovementInput("ToggleSound", KeyEvent.VK_S, pressed -> config.setSoundOn(!config.getSoundOn()));
-        bindKeyToAction("SoftDrop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                for (int i = 0; i < playerCount; i++) {
-                    games[i].setSoftDropHeld(true);
-                }
-            }
-        });
-        bindKeyToAction("SoftDropStop", KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                for (int i = 0; i < playerCount; i++) {
-                    games[i].setSoftDropHeld(false);
-                }
-            }
-        });
+    private void setupGeneralKeybindings() {
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -125,6 +130,8 @@ public class PlayScreen extends BasicScreen {
                 }
             }
         });
+        bindMovementInput("ToggleMusic", KeyEvent.VK_M, pressed -> config.setMusicOn(!config.getMusicOn()));
+        bindMovementInput("ToggleSound", KeyEvent.VK_S, pressed -> config.setSoundOn(!config.getSoundOn()));
     }
 
     private void bindKeyToAction(String name, KeyStroke keyStroke, Action action) {

@@ -5,7 +5,8 @@ public enum PlayerType {
     AI,
     EXTERNAL;
 
-    public String getFriendlyName() {
+    @Override
+    public String toString() {
         return switch (this)
         {
             case HUMAN -> "Human";

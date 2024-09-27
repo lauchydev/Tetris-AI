@@ -31,5 +31,5 @@ public class GameController {
         this.game.hardDrop();
     }
     public void togglePaused() { this.game.togglePause(); }
-
+    public void setSoftDropHeld(boolean held) { this.game.setSoftDropHeld(held); }
 }

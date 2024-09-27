@@ -72,10 +72,6 @@ public class Configuration {
         observers.add(obs);
     }
 
-    public void removeObserver(ConfigObserver obs) {
-        observers.remove(obs);
-    }
-
     public int getFieldWidth() { return fieldWidth; }
     public int getFieldHeight() { return fieldHeight; }
     public int getGameLevel() { return gameLevel; }
@@ -88,14 +84,26 @@ public class Configuration {
     public boolean getSoundOn() { return sound; }
     public boolean getAIPlayOn() { return aiPlay; }
     public boolean getExtendModeOn() { return extendMode; }
-    public PlayerType getPlayerOneType() { return player1Type; }
-    public PlayerType getPlayerTwoType() { return player2Type; }
 
     public void setMusicOn(Boolean value) { music = value; propertyChanged(); }
     public void setSoundOn(Boolean value) { sound = value; propertyChanged(); }
     public void setAIPlayOn(Boolean value) { aiPlay = value; propertyChanged(); }
     public void setExtendModeOn(Boolean value) { extendMode = value; propertyChanged(); }
-    public void setPlayerOneType(PlayerType type) { this.player1Type = type; propertyChanged(); }
-    public void setPlayerTwoType(PlayerType type) { this.player2Type = type; propertyChanged(); }
 
+    public void setPlayerType(int player, PlayerType type) {
+        if (player == 1) {
+            this.player1Type = type;
+        } else {
+            this.player2Type = type;
+        }
+        propertyChanged();
+    }
+
+    public PlayerType getPlayerType(int player) {
+        if (player == 1) {
+            return this.player1Type;
+        } else {
+            return this.player2Type;
+        }
+    }
 }

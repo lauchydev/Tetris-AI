@@ -50,8 +50,8 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         createCheckbox("Extend Mode (On|Off):", config::getExtendModeOn, config::setExtendModeOn);
 
         // Radio buttons
-        createRadioButton("Player One Type", config::getPlayerOneType, config::setPlayerOneType);
-        playerTwoPanel = createRadioButton("Player Two Type", config::getPlayerTwoType, config::setPlayerTwoType);
+        createRadioButton("Player One Type", () -> config.getPlayerType(1), type -> config.setPlayerType(1, type));
+        playerTwoPanel = createRadioButton("Player Two Type", () -> config.getPlayerType(2), type -> config.setPlayerType(2, type));
         applyExtendedMode();
     }
 
@@ -136,7 +136,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         options.setOpaque(false);
         ButtonGroup group = new ButtonGroup();
         for (PlayerType type : PlayerType.values()) {
-            JRadioButton radio = new JRadioButton(type.getFriendlyName());
+            JRadioButton radio = new JRadioButton(type.toString());
             radio.setSelected(initValue == type);
             radio.setOpaque(false);
             radio.setForeground(Color.WHITE);

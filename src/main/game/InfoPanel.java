@@ -1,6 +1,6 @@
 package main.game;
 
-import main.configuration.Configuration;
+import main.configuration.PlayerType;
 import main.game.core.ActivePiece;
 import main.game.core.Rotation;
 import main.game.core.TetrisBoard;
@@ -18,7 +18,7 @@ public class InfoPanel extends JPanel implements GameObserver {
     private final TetrisFieldComponent nextPieceComp;
     private final Game game;
 
-    public InfoPanel(Game game) {
+    public InfoPanel(Game game, PlayerType playerTypeValue) {
         super(new GridBagLayout());
         this.game = game;
         setPreferredSize(new Dimension(200, 500));
@@ -28,8 +28,6 @@ public class InfoPanel extends JPanel implements GameObserver {
         JLabel next = UI.createGameInfoHeaderLabel("Next");
         nextPieceComp = new TetrisFieldComponent(null, nextTetrominoBoard);
         nextPieceComp.setMaximumSize(nextPieceComp.getPreferredSize());
-
-        JLabel playerType = UI.createGameInfoHeaderLabel();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -49,8 +47,9 @@ public class InfoPanel extends JPanel implements GameObserver {
         add(initialLevel, gbc);
         add(linesCleared, gbc);
         add(score, gbc);
+        JLabel playerType = UI.createGameInfoHeaderLabel();
         add(playerType, gbc);
-        playerType.setText("Type: " + Configuration.getInstance().getPlayerOneType());
+        playerType.setText("Type: " + playerTypeValue);
 
         onGameUpdated();
     }

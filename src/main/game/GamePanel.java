@@ -1,11 +1,13 @@
 package main.game;
 
+import main.configuration.PlayerType;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    public GamePanel(Game game) {
+    public GamePanel(Game game, PlayerType playerType) {
         super();
         setLayout(new BorderLayout());
         setOpaque(false);
@@ -25,6 +27,6 @@ public class GamePanel extends JPanel {
 
         centerPanel.add(tetrisField, gbc);
         add(centerPanel, BorderLayout.CENTER);
-        centerPanel.add(new InfoPanel(game));
+        centerPanel.add(new InfoPanel(game, playerType));
     }
 }
