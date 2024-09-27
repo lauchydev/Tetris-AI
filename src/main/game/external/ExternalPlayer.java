@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import main.game.Game;
 import main.game.GameController;
 import main.game.PieceNotSpawnedException;
+import main.game.core.Cell;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,24 +75,28 @@ public class ExternalPlayer implements Runnable {
     }
 
     private synchronized void applyMove() {
-        if (dest != null) {
-            var ap = game.getBoard().getActivePiece();
-            int x = ap.x();
-            if (dest.opX() >= 0) {
-                if (x > dest.opX()) {
-                    controller.shiftLeft();
-                } else if (x < dest.opX()) {
-                    controller.shiftRight();
-                } else {
-                    controller.hardDrop();
-                }
-            }
-
-            if (rotationsDone < dest.opRotate()) {
-                controller.rotateClockwise();
-                rotationsDone++;
-            }
+        if (dest == null) {
+            return;
         }
+
+        if (rotationsDone < dest.opRotate()) {
+            controller.rotateClockwise();
+            rotationsDone++;
+            return;
+        }
+
+        var active = game.getBoard().getActivePiece();
+        int minX = active.getCells().stream().mapToInt(Cell::x).min().orElseThrow();;
+        if (minX > dest.opX()) {
+            controller.shiftLeft();
+            return;
+        }
+        if (minX < dest.opX()) {
+            controller.shiftRight();
+            return;
+        }
+
+        controller.hardDrop();
     }
 
 }
