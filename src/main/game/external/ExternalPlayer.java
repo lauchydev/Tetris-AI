@@ -63,7 +63,7 @@ public class ExternalPlayer implements Runnable {
 
                 try {
                     //noinspection BusyWait
-                    Thread.sleep(100L);
+                    Thread.sleep(50L);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
