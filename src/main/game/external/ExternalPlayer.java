@@ -37,13 +37,9 @@ public class ExternalPlayer implements Runnable {
         ) {
             String pureGameJson = gson.toJson(this.game.serialize());
             out.println(pureGameJson);
-            System.out.println(pureGameJson);
 
             String response = in.readLine();
-            OpMove move = gson.fromJson(response, OpMove.class);
-            System.out.println(response);
-
-            dest = move;
+            dest = gson.fromJson(response, OpMove.class);
         } catch (PieceNotSpawnedException e) {
             dest = null;
         }
@@ -52,7 +48,6 @@ public class ExternalPlayer implements Runnable {
     @Override
     public synchronized void run() {
         try {
-            System.out.println(game.getState());
             while (!this.game.isFinished()) {
                 if (game.getPiecesSpawned() > this.pieceNo) {
                     askServer();
@@ -88,7 +83,7 @@ public class ExternalPlayer implements Runnable {
             return;
         }
 
-        int minX = active.getCells().stream().mapToInt(Cell::x).min().orElseThrow();;
+        int minX = active.getCells().stream().mapToInt(Cell::x).min().orElseThrow();
         if (minX > dest.opX()) {
             controller.shiftLeft();
             return;

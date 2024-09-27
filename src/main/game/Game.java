@@ -166,7 +166,7 @@ public class Game implements StateMachineObserver {
     }
 
     private int gravityDelay() {
-        return 22 - level * 2;
+        return 22 - Math.clamp(level, 1, 10) * 2;
     }
 
     public void rotateClockwise() {
@@ -224,8 +224,6 @@ public class Game implements StateMachineObserver {
         }
         throw new PieceNotSpawnedException();
     }
-
-    public State getState() { return this.stateMachine.getState(); }
 
     private void handlePlacement(PlacementResult result) {
         totalLinesCleared += result.linesCleared();
