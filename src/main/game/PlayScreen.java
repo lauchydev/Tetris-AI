@@ -122,8 +122,8 @@ public class PlayScreen extends BasicScreen {
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                for (int i = 0; i < playerCount; i++) {
-                    games[i].togglePause();
+                for (var c : controllers) {
+                    c.togglePaused();
                 }
             }
         });

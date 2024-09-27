@@ -4,6 +4,10 @@ import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.*;
+import main.game.state.Event;
+import main.game.state.State;
+import main.game.state.StateMachine;
+import main.game.state.StateMachineObserver;
 import main.highscores.HighScores;
 
 import javax.swing.*;
@@ -11,10 +15,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Game {
-    private final Configuration config = Configuration.getInstance();
+public class Game implements StateMachineObserver {
     private int level;
-    private boolean paused = false;
+    private final StateMachine stateMachine = new StateMachine();
     private boolean softDropHeld;
     private int gravityTicks;
     private final Timer gameLoopTimer;
@@ -27,18 +30,16 @@ public class Game {
 
     public Game(TetrisBoard board, long seed) {
         this.board = board;
-        reset();
+        stateMachine.setObserver(this);
+        level = Configuration.getInstance().getGameLevel();
+        score = 0;
         pieceBag = new PieceBag(seed);
         softDropHeld = false;
         gravityTicks = 0;
         spawnNextActivePiece();
         gameLoopTimer = new Timer(20, (ActionEvent e) -> {
             if (board.getActivePiece() == null) {
-                stop();
-                return;
-            }
-
-            if (paused) {
+                lose();
                 return;
             }
 
@@ -52,6 +53,27 @@ public class Game {
 
             comp.repaint();
         });
+    }
+
+    @Override
+    public void onStateChanged(State state, Event triggerEvent) {
+        switch (state) {
+            case PAUSED:
+                gameLoopTimer.stop();
+                break;
+            case RUNNING:
+                gameLoopTimer.start();
+                break;
+            case FINISHED:
+                if (triggerEvent == Event.LOSE) {
+                    SoundEffects.playEffect(Effect.GAMEOVER);
+                }
+                gameLoopTimer.stop();
+                notifyObservers();
+                HighScores.checkScore(getScore());
+                break;
+        }
+        notifyObservers();
     }
 
     public void spawnNextActivePiece() {
@@ -79,40 +101,36 @@ public class Game {
         observers.add(obs);
     }
 
-    private void reset() {
-        level = config.getGameLevel();
-        score = 0;
-    }
+    public boolean inProgress() { return stateMachine.getState() == State.RUNNING; }
 
-    public boolean inProgress() { return gameLoopTimer.isRunning(); }
-
-    public boolean isPaused() { return paused; }
+    public boolean isPaused() { return stateMachine.getState() == State.PAUSED; }
 
     public void start() {
-        reset();
-        gameLoopTimer.start();
-        System.out.println("Game Started");
+        stateMachine.handleEvent(Event.START);
+    }
+
+    public void lose() {
+        stateMachine.handleEvent(Event.LOSE);
     }
 
     public void stop() {
-        gameLoopTimer.stop();
-        notifyObservers();
-        SoundEffects.playEffect(Effect.GAMEOVER);
-        System.out.println("Game Stopped");
-        HighScores.checkScore(getScore());
+        stateMachine.handleEvent(Event.STOP);
     }
 
-
-
     public void togglePause() {
-        setPaused(!paused);
+        switch (stateMachine.getState()) {
+            case State.RUNNING -> stateMachine.handleEvent(Event.PAUSE);
+            case State.PAUSED -> stateMachine.handleEvent(Event.UNPAUSE);
+        }
     }
 
     public void setPaused(boolean paused) {
-        boolean pausedChanged = this.paused != paused;
-        this.paused = paused;
-        if (pausedChanged) {
-            notifyObservers();
+        if (paused && stateMachine.getState() == State.RUNNING) {
+            stateMachine.handleEvent(Event.PAUSE);
+        }
+
+        if (!paused && stateMachine.getState() == State.PAUSED) {
+            stateMachine.handleEvent(Event.UNPAUSE);
         }
     }
 

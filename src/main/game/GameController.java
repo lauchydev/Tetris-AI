@@ -30,5 +30,6 @@ public class GameController {
     public void hardDrop() {
         this.game.hardDrop();
     }
+    public void togglePaused() { this.game.togglePause(); }
 
 }
