@@ -22,6 +22,16 @@ public class TetrisBoard {
         }
     }
 
+    public TetrisBoard(TetrisBoard board) {
+        this.width = board.getWidth();
+        this.height = board.getHeight();
+        this.rows = new ArrayList<>();
+        for (var row : board.getRows()) {
+            this.rows.add(new ArrayList<>(row));
+        }
+        this.activePiece = board.getActivePiece();
+    }
+
     public void setActivePiece(ActivePiece piece) { this.activePiece = piece; }
 
 

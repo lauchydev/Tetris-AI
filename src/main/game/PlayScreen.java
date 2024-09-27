@@ -3,6 +3,7 @@ package main.game;
 import main.Tetris;
 import main.configuration.Configuration;
 import main.configuration.PlayerType;
+import main.game.ai.AIPlayer;
 import main.game.core.TetrisBoard;
 import main.game.external.ExternalPlayer;
 import main.ui.BasicScreen;
@@ -57,6 +58,13 @@ public class PlayScreen extends BasicScreen {
                     Thread externalThread = new Thread(externalPlayer);
                     games[i].start();
                     externalThread.start();
+                    break;
+
+                case PlayerType.AI:
+                    AIPlayer aiPlayer = new AIPlayer(games[i], controllers[i]);
+                    Thread aiThread = new Thread(aiPlayer);
+                    games[i].start();
+                    aiThread.start();
                     break;
             }
 
