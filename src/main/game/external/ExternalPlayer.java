@@ -5,6 +5,7 @@ import main.game.Game;
 import main.game.GameController;
 import main.game.PieceNotSpawnedException;
 import main.game.core.Cell;
+import main.game.core.Rotation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +22,6 @@ public class ExternalPlayer implements Runnable {
 
     private int pieceNo = 0;
     private OpMove dest;
-    private int rotationsDone = 0;
 
     public ExternalPlayer(Game game, GameController controller) {
         this.game = game;
@@ -44,7 +44,6 @@ public class ExternalPlayer implements Runnable {
             System.out.println(response);
 
             dest = move;
-            rotationsDone = 0;
         } catch (PieceNotSpawnedException e) {
             dest = null;
         }
@@ -79,13 +78,16 @@ public class ExternalPlayer implements Runnable {
             return;
         }
 
-        if (rotationsDone < dest.opRotate()) {
+        var active = game.getBoard().getActivePiece();
+        if (active.rotation().equals(Rotation.North) && dest.opRotate() == 3) {
+            controller.rotateCounterclockwise();
+            return;
+        }
+        if (active.rotation().ordinal() < dest.opRotate()) {
             controller.rotateClockwise();
-            rotationsDone++;
             return;
         }
 
-        var active = game.getBoard().getActivePiece();
         int minX = active.getCells().stream().mapToInt(Cell::x).min().orElseThrow();;
         if (minX > dest.opX()) {
             controller.shiftLeft();
