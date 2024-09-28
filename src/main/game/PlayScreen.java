@@ -80,6 +80,7 @@ public class PlayScreen extends BasicScreen {
         super.setVisible(visible);
         if (visible) { this.startGame(); }
         Tetris.instance.pack();
+        Tetris.instance.centerFrame();
     }
 
     private boolean gameInProgress() {

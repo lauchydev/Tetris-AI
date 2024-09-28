@@ -9,8 +9,6 @@ import main.ui.SplashScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.File;
 
 public class Tetris extends JFrame {
@@ -49,25 +47,11 @@ public class Tetris extends JFrame {
         Music.getInstance(); // so that our Music works
     }
 
-    private void centerFrame() {
+    public void centerFrame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screenSize.width - getWidth()) / 2;
         int y = (screenSize.height - getHeight()) / 2;
         setLocation(x, y);
-    }
-
-    private void setupCenterOnResize() {
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                centerFrame();
-            }
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                // Recenter the frame when it's moved manually
-                centerFrame();
-            }
-        });
     }
 
     private void initWindow() {
@@ -81,7 +65,6 @@ public class Tetris extends JFrame {
                 showExitConfirmation();
             }
         });
-        setupCenterOnResize();
     }
 
     public void setDefaultSize() {
