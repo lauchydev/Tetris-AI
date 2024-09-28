@@ -1,5 +1,6 @@
 package main.game;
 
+import main.configuration.Configuration;
 import main.configuration.PlayerType;
 import main.game.core.ActivePiece;
 import main.game.core.Rotation;
@@ -18,7 +19,7 @@ public class InfoPanel extends JPanel implements GameObserver {
     private final TetrisFieldComponent nextPieceComp;
     private final Game game;
 
-    public InfoPanel(Game game, PlayerType playerTypeValue) {
+    public InfoPanel(Game game, int playerNo) {
         super(new GridBagLayout());
         this.game = game;
         setPreferredSize(new Dimension(200, 500));
@@ -49,6 +50,7 @@ public class InfoPanel extends JPanel implements GameObserver {
         add(score, gbc);
         JLabel playerType = UI.createGameInfoHeaderLabel();
         add(playerType, gbc);
+        PlayerType playerTypeValue = Configuration.getInstance().getPlayerType(playerNo);
         playerType.setText("Type: " + playerTypeValue);
 
         onGameUpdated();

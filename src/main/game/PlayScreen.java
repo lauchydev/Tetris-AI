@@ -68,7 +68,7 @@ public class PlayScreen extends BasicScreen {
                     break;
             }
 
-            JPanel gamePanel = new GamePanel(games[i], config.getPlayerType(i + 1));
+            JPanel gamePanel = new GamePanel(games[i], i + 1);
             gamesPanel.add(gamePanel);
             games[i].start();
         }
