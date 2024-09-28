@@ -16,7 +16,7 @@ public class Music implements ConfigObserver {
 
     private Music() {
         try {
-            File musicPath = new File("src/sound/theme.wav");
+            File musicPath = new File("src/resources/sound/theme.wav");
             if (!musicPath.exists()) {
                 System.out.println("Music file not found");
             }

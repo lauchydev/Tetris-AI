@@ -1,5 +1,6 @@
 package main.configuration;
 
+import main.utils.TextUtils;
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,39 +37,43 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         config.addObserver(this);
         setLayout(new GridBagLayout());
         setOpaque(false);
-        setPreferredSize(new Dimension(600, 400));
+        setPreferredSize(new Dimension(700, 400));
 
         // Sliders
-        createSlider("Field Width (No. of cells):", 5, 15, config::getFieldWidth, config::setFieldWidth);
-        createSlider("Field Height (No. of cells):", 15, 30, config::getFieldHeight, config::setFieldHeight);
+        createSlider("Field Width:", 5, 15, config::getFieldWidth, config::setFieldWidth);
+        createSlider("Field Height:", 15, 30, config::getFieldHeight, config::setFieldHeight);
         createSlider("Game Level:", 1, 10, config::getGameLevel, config::setGameLevel);
 
         // Check Boxes
-        createCheckbox("Music (On|Off):", config::getMusicOn, config::setMusicOn);
-        createCheckbox("Sound Effect (On|Off):", config::getSoundOn, config::setSoundOn);
-        createCheckbox("Extend Mode (On|Off):", config::getExtendModeOn, config::setExtendModeOn);
+        createCheckbox("Music:", config::getMusicOn, config::setMusicOn);
+        createCheckbox("Sound Effect:", config::getSoundOn, config::setSoundOn);
+        createCheckbox("Extend Mode:", config::getExtendModeOn, config::setExtendModeOn);
 
         // Radio buttons
-        createRadioButton("Player One Type", () -> config.getPlayerType(1), type -> config.setPlayerType(1, type));
-        playerTwoPanel = createRadioButton("Player Two Type", () -> config.getPlayerType(2), type -> config.setPlayerType(2, type));
+        createRadioButton("Player One Type:", () -> config.getPlayerType(1), type -> config.setPlayerType(1, type));
+        playerTwoPanel = createRadioButton("Player Two Type:", () -> config.getPlayerType(2), type -> config.setPlayerType(2, type));
         applyExtendedMode();
     }
 
     private JLabel createTitleLabel(String title) {
-        JLabel titleLabel = new JLabel(title);
+        JLabel titleLabel = new JLabel(title.toUpperCase());
+        titleLabel.setFont(TextUtils.getFont(12));
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 40));
         return titleLabel;
     }
 
     private JLabel createValueLabel() {
-        JLabel titleLabel = new JLabel();
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        return titleLabel;
+        JLabel valueLabel = new JLabel();
+        valueLabel.setFont(TextUtils.getFont(12));
+        valueLabel.setForeground(Color.WHITE);
+        valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        return valueLabel;
     }
 
     private void updateCheckboxLabel(boolean val, JLabel valueLabel) {
-        valueLabel.setText(val ? "On" : "Off");
+        valueLabel.setText(val ? "ON" : "OFF");
     }
 
     // Modify the createCheckbox method in the ConfigurationScreen class
@@ -104,6 +109,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
     private void createSlider(String title, int min, int max, GetConfigValueAction<Integer> getFn, ValueUpdateAction<Integer> updateAction) {
         var initValue = getFn.getConfigValue();
         JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, initValue);
+        slider.setFont(TextUtils.getFont(7));
         slider.setForeground(Color.WHITE);
         slider.setOpaque(false);
         JLabel titleLabel = createTitleLabel(title);
@@ -136,6 +142,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         ButtonGroup group = new ButtonGroup();
         for (PlayerType type : PlayerType.values()) {
             JRadioButton radio = new JRadioButton(type.toString());
+            radio.setFont(TextUtils.getFont(12));
             radio.setSelected(initValue == type);
             radio.setOpaque(false);
             radio.setForeground(Color.WHITE);

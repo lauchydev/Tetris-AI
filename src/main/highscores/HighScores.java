@@ -48,7 +48,7 @@ public class HighScores {
             if (scoresList == null) {
                 scoresList = new ArrayList<>();
                 for (int i = 0; i < MAX_SCORES; i++) {
-                    scoresList.add(new ScoreEntry("Empty", 0));
+                    scoresList.add(new ScoreEntry("EMPTY", 0));
                 }
             }
 
@@ -56,7 +56,7 @@ public class HighScores {
         } catch (FileNotFoundException e) {
             createScoresFile(); // Create the file with empty scores if not found
             for (int i = 0; i < MAX_SCORES; i++) {
-                scoresList.add(new ScoreEntry("Empty", 0));
+                scoresList.add(new ScoreEntry("EMPTY", 0));
             }
         } catch (IOException e) {
             // silently fail, nobody needs to know
@@ -95,7 +95,7 @@ public class HighScores {
         // Initialize with empty scores
         List<ScoreEntry> emptyScores = new ArrayList<>();
         for (int i = 0; i < MAX_SCORES; i++) {
-            emptyScores.add(new ScoreEntry("Empty", 0));
+            emptyScores.add(new ScoreEntry("EMPTY", 0));
         }
         saveScores(emptyScores);
     }

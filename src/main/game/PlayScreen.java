@@ -21,7 +21,7 @@ public class PlayScreen extends BasicScreen {
     private final PlayerFactory playerFactory;
 
     public PlayScreen() {
-        super("Play");
+        super("PLAY");
         playerFactory = new PlayerFactory(this);
         centerPanel.setOpaque(false);
         backButton.setFocusable(false);

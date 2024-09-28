@@ -1,21 +1,23 @@
 package main.ui;
 
+import main.utils.TextUtils;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class UI {
-    private static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 25);
-    private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
-    private static final Color BUTTON_BACKGROUND_COLOUR = new Color(144, 238, 144);
-    private static final Font SECONDARY_BUTTON_FONT = new Font("Arial", Font.BOLD, 12);
+    private static final Font HEADER_FONT = TextUtils.getFont(25);
+    private static final Font BUTTON_FONT = TextUtils.getFont(20);
+    private static final Color BUTTON_BACKGROUND_COLOUR = new Color(25, 103, 165);
+    private static final Font SECONDARY_BUTTON_FONT = TextUtils.getFont(12);
     private static final Color SECONDARY_BUTTON_BACKGROUND_COLOUR = new Color(238, 144, 144);
 
-    private static final Font MENU_BUTTON_FONT = new Font("Arial", Font.BOLD, 12);
-    private static final Dimension MENU_BUTTON_DIMENSION = new Dimension(200, 30);
+    private static final Font MENU_BUTTON_FONT = TextUtils.getFont(13);
+    private static final Dimension MENU_BUTTON_DIMENSION = new Dimension(213, 30);
 
-    private static final Font GAME_INFO_HEADER_FONT = new Font("Arial", Font.PLAIN, 22);
+    private static final Font GAME_INFO_HEADER_FONT = TextUtils.getFont(12);
 
-    private static final Font SCORES_FONT = new Font("Arial", Font.PLAIN, 16);
+    private static final Font SCORES_FONT = TextUtils.getFont(16);
 
     public static JButton createSecondaryButton(String text) {
         JButton button = createButton(text, SECONDARY_BUTTON_FONT);
@@ -37,6 +39,7 @@ public class UI {
 
     public static JButton createMenuButton(String text) {
         JButton button = createButton(text, MENU_BUTTON_FONT);
+        button.setForeground(Color.WHITE);
         button.setPreferredSize(MENU_BUTTON_DIMENSION);
         return button;
     }

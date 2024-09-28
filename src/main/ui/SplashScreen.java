@@ -20,7 +20,7 @@ public class SplashScreen extends JWindow {
         int y = (screen.height - height) / 2;
         setBounds(x, y, width, height);
         // Build the splash screen
-        ImageIcon imageIcon = new ImageIcon("src/Images/Splash_Screen.jpg");
+        ImageIcon imageIcon = new ImageIcon("src/resources/images/Splash_Screen.jpg");
         Image image = imageIcon.getImage();
         Image newimg = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         imageIcon = new ImageIcon(newimg);
@@ -32,7 +32,7 @@ public class SplashScreen extends JWindow {
         try {
             Thread.sleep(duration);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldnt load splash screen");
         }
         setVisible(false);
     }

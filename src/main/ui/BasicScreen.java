@@ -31,7 +31,8 @@ public class BasicScreen extends BasePanel {
     }
 
     private JButton createBackButton() {
-        JButton backButton = UI.createButton("Back");
+        JButton backButton = UI.createButton("BACK");
+        backButton.setForeground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(200, 30));
         backButton.addActionListener(this::onBackButtonClicked);
         return backButton;

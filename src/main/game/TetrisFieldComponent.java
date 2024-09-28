@@ -2,6 +2,7 @@ package main.game;
 
 import main.game.core.CellKind;
 import main.game.core.TetrisBoard;
+import main.utils.TextUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +49,7 @@ public class TetrisFieldComponent extends JComponent implements GameObserver {
 
         if (game != null && game.isPaused()) {
             g2d.setColor(Color.RED);
-            final String[] msgLines = {"Game is Paused.", "Press P to continue."};
+            final String[] msgLines = {"GAME IS PAUSED", "PRESS P TO CONTINUE"};
             int offset = 40;
             for (String msgLine : msgLines) {
                 int panelWidth = getWidth();
@@ -70,7 +71,7 @@ public class TetrisFieldComponent extends JComponent implements GameObserver {
         Font font;
         FontMetrics fm;
         do {
-            font = new Font("Arial", Font.BOLD, fontSize);
+            font = TextUtils.getFont(fontSize);
             if (fontSize <= 6) { break; }
             g2d.setFont(font);
             fm = g2d.getFontMetrics();

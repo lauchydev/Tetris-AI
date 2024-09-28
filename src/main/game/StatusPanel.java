@@ -15,6 +15,7 @@ public class StatusPanel extends JPanel implements ConfigObserver {
         super();
         setOpaque(false);
         add(music);
+        add(Box.createHorizontalStrut(30));
         add(sound);
         config.addObserver(this);
         configChanged();
@@ -23,7 +24,7 @@ public class StatusPanel extends JPanel implements ConfigObserver {
 
     @Override
     public void configChanged() {
-        music.setText("Music: " + (config.getMusicOn() ? "ON" : "OFF"));
-        sound.setText("Sound: " + (config.getSoundOn() ? "ON" : "OFF"));
+        music.setText("MUSIC: " + (config.getMusicOn() ? "ON" : "OFF"));
+        sound.setText("SOUND: " + (config.getSoundOn() ? "ON" : "OFF"));
     }
 }

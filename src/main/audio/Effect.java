@@ -1,10 +1,10 @@
 package main.audio;
 
 public enum Effect {
-    LEVEL_UP("src/sound/level-up.wav"),
-    GAMEOVER("src/sound/game-finish.wav"),
-    ERASE_LINE("src/sound/erase-line.wav"),
-    MOVE_TURN("src/sound/move-turn.wav");
+    LEVEL_UP("src/resources/sound/level-up.wav"),
+    GAMEOVER("src/resources/sound/game-finish.wav"),
+    ERASE_LINE("src/resources/sound/erase-line.wav"),
+    MOVE_TURN("src/resources/sound/move-turn.wav");
 
     private final String path;
 

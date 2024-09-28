@@ -22,11 +22,11 @@ public class InfoPanel extends JPanel implements GameObserver {
     public InfoPanel(Game game, int playerNo) {
         super(new GridBagLayout());
         this.game = game;
-        setPreferredSize(new Dimension(200, 500));
+        setPreferredSize(new Dimension(230, 500));
         setOpaque(false);
         game.addObserver(this);
 
-        JLabel next = UI.createGameInfoHeaderLabel("Next");
+        JLabel next = UI.createGameInfoHeaderLabel("NEXT PIECE:");
         nextPieceComp = new TetrisFieldComponent(null, nextTetrominoBoard);
         nextPieceComp.setMaximumSize(nextPieceComp.getPreferredSize());
 
@@ -51,7 +51,7 @@ public class InfoPanel extends JPanel implements GameObserver {
         JLabel playerType = UI.createGameInfoHeaderLabel();
         add(playerType, gbc);
         PlayerType playerTypeValue = Configuration.getInstance().getPlayerType(playerNo);
-        playerType.setText("Type: " + playerTypeValue);
+        playerType.setText("TYPE: " + playerTypeValue);
 
         onGameUpdated();
     }
@@ -67,9 +67,9 @@ public class InfoPanel extends JPanel implements GameObserver {
                 nextTetrominoBoard.getHeight() - 3
         ));
         nextPieceComp.repaint();
-        initialLevel.setText("Start Level: " + game.getStartingLevel());
-        level.setText("Level: " + game.getLevel());
-        linesCleared.setText("Lines cleared: " + game.getTotalLinesCleared());
-        score.setText("Score: " + game.getScore());
+        initialLevel.setText("START LEVEL: " + game.getStartingLevel());
+        level.setText("LEVEL: " + game.getLevel());
+        linesCleared.setText("LINES CLEARED: " + game.getTotalLinesCleared());
+        score.setText("SCORE: " + game.getScore());
     }
 }

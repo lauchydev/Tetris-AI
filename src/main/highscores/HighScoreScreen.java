@@ -12,7 +12,7 @@ public class HighScoreScreen extends BasicScreen {
     private final HighScoresPanel highScoresPanel;
 
     public HighScoreScreen() {
-        super("High Scores");
+        super("HIGH SCORES");
         highScoresPanel = new HighScoresPanel();
         setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // Padding
         JPanel midPanel = new JPanel(new BorderLayout());
@@ -25,7 +25,7 @@ public class HighScoreScreen extends BasicScreen {
     private Component createClearButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        JButton clearButton = UI.createSecondaryButton("Clear High Scores");
+        JButton clearButton = UI.createSecondaryButton("CLEAR HIGH SCORES");
         clearButton.addActionListener((event) -> showClearConfirmationDialog());
         buttonPanel.add(clearButton);
         return buttonPanel;

@@ -33,7 +33,7 @@ class HighScoresPanel extends JPanel {
     }
 
     private void createLabel(String text, int x, int y) {
-        JLabel label = UI.createHighScoresLabel(text);
+        JLabel label = UI.createHighScoresLabel(text.toUpperCase());
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Add more space between the columns by increasing the horizontal padding
