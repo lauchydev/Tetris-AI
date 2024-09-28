@@ -46,7 +46,6 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         // Check Boxes
         createCheckbox("Music (On|Off):", config::getMusicOn, config::setMusicOn);
         createCheckbox("Sound Effect (On|Off):", config::getSoundOn, config::setSoundOn);
-        createCheckbox("AI Play (On|Off):", config::getAIPlayOn, config::setAIPlayOn);
         createCheckbox("Extend Mode (On|Off):", config::getExtendModeOn, config::setExtendModeOn);
 
         // Radio buttons
