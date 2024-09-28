@@ -30,9 +30,11 @@ public class Game implements StateMachineObserver {
     private int linesSinceLastLevel = 0;
     private int totalLinesCleared = 0;
     private int piecesSpawned = 0;
+    private final int playerNo;
 
-    public Game(TetrisBoard board, long seed) {
+    public Game(TetrisBoard board, long seed, int playerNo) {
         this.board = board;
+        this.playerNo = playerNo;
         stateMachine.setObserver(this);
         startingLevel = level = Configuration.getInstance().getGameLevel();
         score = 0;
@@ -77,10 +79,16 @@ public class Game implements StateMachineObserver {
                 }
                 gameLoopTimer.stop();
                 notifyObservers();
-                HighScores.checkScore(getScore());
+                HighScores.checkScore(getScore(), getConfig());
                 break;
         }
         notifyObservers();
+    }
+
+    public String getConfig() {
+        var config = Configuration.getInstance();
+        int fieldWidth = config.getFieldWidth(), fieldHeight = config.getFieldHeight();
+        return String.format("%dx%d(%d) %s %s",  fieldWidth, fieldHeight, this.startingLevel, config.getPlayerType(playerNo), config.getExtendModeOn() ? "Double" : "Single");
     }
 
     public void spawnNextActivePiece() {

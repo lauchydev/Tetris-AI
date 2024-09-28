@@ -46,22 +46,25 @@ public class HighScores {
 
             // If the file is empty (null list), initialize with empty scores
             if (scoresList == null) {
-                scoresList = new ArrayList<>();
-                for (int i = 0; i < MAX_SCORES; i++) {
-                    scoresList.add(new ScoreEntry("EMPTY", 0));
-                }
+                scoresList = getDefaultList();
             }
 
             reader.close();
         } catch (FileNotFoundException e) {
             createScoresFile(); // Create the file with empty scores if not found
-            for (int i = 0; i < MAX_SCORES; i++) {
-                scoresList.add(new ScoreEntry("EMPTY", 0));
-            }
+            scoresList = getDefaultList();
         } catch (IOException e) {
             // silently fail, nobody needs to know
         }
 
+        return scoresList;
+    }
+
+    private List<ScoreEntry> getDefaultList() {
+        List<ScoreEntry> scoresList = new ArrayList<>();
+        for (int i = 0; i < MAX_SCORES; i++) {
+            scoresList.add(new ScoreEntry("----", 0, "----"));
+        }
         return scoresList;
     }
 
@@ -93,39 +96,19 @@ public class HighScores {
 
     public void clear() {
         // Initialize with empty scores
-        List<ScoreEntry> emptyScores = new ArrayList<>();
-        for (int i = 0; i < MAX_SCORES; i++) {
-            emptyScores.add(new ScoreEntry("EMPTY", 0));
-        }
-        saveScores(emptyScores);
+        saveScores(getDefaultList());
     }
 
     // Class to represent each score entry
-    public static class ScoreEntry {
-        String name;
-        int score;
-
-        public ScoreEntry(String name, int score) {
-            this.name = name;
-            this.score = score;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
+    public record ScoreEntry(String name, int score, String config) { }
 
     // Method to add a new high score
-    public void addNewHighScore(String playerName, int score) {
+    public void addNewHighScore(String playerName, int score, String config) {
         List<ScoreEntry> scoresList = getScores();
-        scoresList.add(new ScoreEntry(playerName, score));
+        scoresList.add(new ScoreEntry(playerName, score, config));
 
         // Sort using Comparator (descending order by score)
-        scoresList.sort(Comparator.comparingInt(ScoreEntry::getScore).reversed());
+        scoresList.sort(Comparator.comparingInt(ScoreEntry::score).reversed());
 
         // Keep only top 10 scores
         if (scoresList.size() > MAX_SCORES) {
@@ -136,9 +119,9 @@ public class HighScores {
         saveScores(scoresList);
     }
 
-    public static synchronized void checkScore(int playerScore) {
+    public static synchronized void checkScore(int playerScore, String config) {
         for (var entry : HighScores.getInstance().getScores()) {
-            if (playerScore > entry.getScore()) {
+            if (playerScore > entry.score()) {
                 String name = JOptionPane.showInputDialog(
                         null,
                         "You made it to the high scores list! Enter your name (Only Alphanumeric Characters):",
@@ -153,7 +136,7 @@ public class HighScores {
                 if (name.isEmpty()) {
                     name = "Anonymous";
                 }
-                HighScores.getInstance().addNewHighScore(name, playerScore);
+                HighScores.getInstance().addNewHighScore(name, playerScore, config);
                 break;
             }
         }

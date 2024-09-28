@@ -2,10 +2,8 @@ package main.game;
 
 import main.Tetris;
 import main.configuration.Configuration;
-import main.game.player.Player;
 import main.game.player.PlayerFactory;
 import main.game.player.human.PlayerKeyMap;
-import main.game.core.TetrisBoard;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
@@ -14,7 +12,7 @@ import java.awt.event.*;
 import java.util.function.Consumer;
 
 public class PlayScreen extends BasicScreen {
-    private Game[] games;
+    private GamePanel[] panels;
     private final Configuration config = Configuration.getInstance();
     private int playerCount;
     private final JPanel gamesPanel = new JPanel();
@@ -39,15 +37,12 @@ public class PlayScreen extends BasicScreen {
     private void startGame() {
         playerCount = config.getNumberOfPlayers();
         setupLayout();
-        games = new Game[playerCount];
+        panels = new GamePanel[playerCount];
         long seed = System.currentTimeMillis();
         for (int i = 0; i < playerCount; i++) {
-            var board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
-            games[i] = new Game(board, seed);
-            Player player = playerFactory.getPlayer(games[i], i + 1);
-            JPanel gamePanel = new GamePanel(games[i], i + 1);
-            gamesPanel.add(gamePanel);
-            player.start();
+            panels[i] = new GamePanel(playerFactory, i + 1, seed);
+            gamesPanel.add(panels[i]);
+            panels[i].start();
         }
         Tetris.instance.pack();
         Tetris.instance.centerFrame();
@@ -61,7 +56,7 @@ public class PlayScreen extends BasicScreen {
 
     private boolean gameInProgress() {
         for (int i = 0; i < playerCount; i++) {
-            if (games[i].inProgress()) {
+            if (panels[i].getGame().inProgress()) {
                 return true;
             }
         }
@@ -71,19 +66,19 @@ public class PlayScreen extends BasicScreen {
     @Override
     protected void onBackButtonClicked(ActionEvent e) {
         if (gameInProgress()) {
-            boolean initialPauseState = games[0].isPaused();
+            boolean initialPauseState = panels[0].getGame().isPaused();
             for (int i = 0; i < playerCount; i++) {
-                games[i].setPaused(true);
+                panels[i].getGame().setPaused(true);
             }
 
             if (!confirmExitDialog()) {
                 for (int i = 0; i < playerCount; i++) {
-                    games[i].setPaused(initialPauseState);
+                    panels[i].getGame().setPaused(initialPauseState);
                 }
                 return;
             }
             for (int i = 0; i < playerCount; i++) {
-                games[i].stop();
+                panels[i].getGame().stop();
             }
         }
         super.onBackButtonClicked(e);
@@ -120,8 +115,8 @@ public class PlayScreen extends BasicScreen {
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                for (var g : games) {
-                    g.togglePause();
+                for (var g : panels) {
+                    g.getGame().togglePause();
                 }
             }
         });

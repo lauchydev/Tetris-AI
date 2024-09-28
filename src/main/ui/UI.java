@@ -18,7 +18,7 @@ public class UI {
 
     private static final Font GAME_INFO_HEADER_FONT = getFont(12);
 
-    private static final Font SCORES_FONT = getFont(16);
+    private static final Font SCORES_FONT = getFont(14);
 
     public static Image BACKGROUND_IMG;
 

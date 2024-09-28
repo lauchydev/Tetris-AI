@@ -20,13 +20,14 @@ class HighScoresPanel extends JPanel {
         createLabel("#", 0, 0); // Rank column header
         createLabel("Name", 1, 0); // Name column header
         createLabel("Score", 2, 0); // Score column header
+        createLabel("Config", 3, 0); // Score column header
 
-        // Loop through the scoresList and display rank, name, and score
         for (int i = 0; i < scoresList.size(); i++) {
             HighScores.ScoreEntry entry = scoresList.get(i);
             createLabel(String.valueOf(i + 1), 0, i + 1); // Rank (1-based index)
-            createLabel(entry.getName(), 1, i + 1); // Player name
-            createLabel(String.valueOf(entry.getScore()), 2, i + 1); // Player score
+            createLabel(entry.name(), 1, i + 1); // Player name
+            createLabel(String.valueOf(entry.score()), 2, i + 1); // Player score
+            createLabel(entry.config(), 3, i + 1);
         }
         revalidate();
         repaint();
@@ -35,9 +36,7 @@ class HighScoresPanel extends JPanel {
     private void createLabel(String text, int x, int y) {
         JLabel label = UI.createHighScoresLabel(text.toUpperCase());
         GridBagConstraints gbc = new GridBagConstraints();
-
-        // Add more space between the columns by increasing the horizontal padding
-        gbc.insets = new Insets(10, x == 0 ? 10 : 120, 5, x == 2 ? 10 : 20); // Adjust insets based on column position
+        gbc.insets = new Insets(10, 10, 5, 10);
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.fill = GridBagConstraints.HORIZONTAL;

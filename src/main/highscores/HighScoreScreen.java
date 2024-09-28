@@ -14,7 +14,6 @@ public class HighScoreScreen extends BasicScreen {
     public HighScoreScreen() {
         super("HIGH SCORES");
         highScoresPanel = new HighScoresPanel();
-        setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100)); // Padding
         JPanel midPanel = new JPanel(new BorderLayout());
         midPanel.setOpaque(false);
         midPanel.add(highScoresPanel, BorderLayout.CENTER);
