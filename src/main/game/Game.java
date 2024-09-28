@@ -4,7 +4,7 @@ import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.*;
-import main.game.external.PureGame;
+import main.game.player.external.external.PureGame;
 import main.game.state.Event;
 import main.game.state.State;
 import main.game.state.StateMachine;
@@ -14,7 +14,6 @@ import main.highscores.HighScores;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Game implements StateMachineObserver {
     private int level;

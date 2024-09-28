@@ -1,4 +1,4 @@
-package main.game.ai;
+package main.game.player.ai.ai;
 
 import main.game.Game;
 import main.game.GameController;

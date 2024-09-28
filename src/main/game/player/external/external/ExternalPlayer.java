@@ -1,4 +1,4 @@
-package main.game.external;
+package main.game.player.external.external;
 
 import com.google.gson.Gson;
 import main.game.Game;

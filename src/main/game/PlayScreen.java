@@ -3,9 +3,10 @@ package main.game;
 import main.Tetris;
 import main.configuration.Configuration;
 import main.configuration.PlayerType;
-import main.game.ai.AIPlayer;
+import main.game.player.human.PlayerKeyMap;
+import main.game.player.ai.ai.AIPlayer;
 import main.game.core.TetrisBoard;
-import main.game.external.ExternalPlayer;
+import main.game.player.external.external.ExternalPlayer;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
