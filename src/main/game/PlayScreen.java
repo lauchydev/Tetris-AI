@@ -49,15 +49,14 @@ public class PlayScreen extends BasicScreen {
             gamesPanel.add(gamePanel);
             player.start();
         }
-
+        Tetris.instance.pack();
+        Tetris.instance.centerFrame();
     }
 
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) { this.startGame(); }
-        Tetris.instance.pack();
-        Tetris.instance.centerFrame();
     }
 
     private boolean gameInProgress() {
