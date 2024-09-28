@@ -4,8 +4,6 @@ import main.game.Game;
 import main.game.GameController;
 import main.game.core.*;
 
-import java.util.ArrayList;
-
 public class AIPlayer implements Runnable {
     private final Game game;
     private final GameController controller;
@@ -21,7 +19,7 @@ public class AIPlayer implements Runnable {
     @Override
     public synchronized void run() {
         while (!this.game.isFinished()) {
-            tick();
+            if (this.game.inProgress()) { tick(); }
             try {
                 //noinspection BusyWait
                 Thread.sleep(50L);

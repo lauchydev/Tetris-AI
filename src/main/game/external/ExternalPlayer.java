@@ -54,7 +54,7 @@ public class ExternalPlayer implements Runnable {
                     pieceNo = game.getPiecesSpawned();
                 }
 
-                applyMove();
+                if (this.game.inProgress()) { applyMove(); }
 
                 try {
                     //noinspection BusyWait
