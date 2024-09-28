@@ -42,6 +42,20 @@ public class ActivePieceTest {
 
     @Test
     public void clockwise() {
+        var piece = new ActivePiece(Piece.I, Rotation.North, 1, 9);
+        var newPiece = piece.clockwise(board);
+        assertNotNull(newPiece);
+        board.setActivePiece(newPiece);
+        board.hardDrop();
+        board.getRows().reversed().forEach(r -> {
+            r.forEach(c -> System.out.print(c != null ? "1" : "0"));
+            System.out.println();
+        });
+        assertNotNull(board.getFieldCell(2, 0));
+        assertNotNull(board.getFieldCell(2, 1));
+        assertNotNull(board.getFieldCell(2, 2));
+        assertNotNull(board.getFieldCell(2, 3));
+//        assertNotNull(board.getFieldCell(4, 0));
     }
 
     @Test
