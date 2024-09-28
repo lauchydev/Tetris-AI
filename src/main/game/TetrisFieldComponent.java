@@ -2,7 +2,7 @@ package main.game;
 
 import main.game.core.CellKind;
 import main.game.core.TetrisBoard;
-import main.utils.TextUtils;
+import main.ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,7 +71,7 @@ public class TetrisFieldComponent extends JComponent implements GameObserver {
         Font font;
         FontMetrics fm;
         do {
-            font = TextUtils.getFont(fontSize);
+            font = UI.getFont(fontSize);
             if (fontSize <= 6) { break; }
             g2d.setFont(font);
             fm = g2d.getFontMetrics();

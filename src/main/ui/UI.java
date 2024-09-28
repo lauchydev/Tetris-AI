@@ -1,23 +1,39 @@
 package main.ui;
 
-import main.utils.TextUtils;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class UI {
-    private static final Font HEADER_FONT = TextUtils.getFont(25);
-    private static final Font BUTTON_FONT = TextUtils.getFont(20);
+    private static final Font HEADER_FONT = getFont(25);
+    private static final Font BUTTON_FONT = getFont(20);
     private static final Color BUTTON_BACKGROUND_COLOUR = new Color(25, 103, 165);
-    private static final Font SECONDARY_BUTTON_FONT = TextUtils.getFont(12);
+    private static final Font SECONDARY_BUTTON_FONT = getFont(12);
     private static final Color SECONDARY_BUTTON_BACKGROUND_COLOUR = new Color(238, 144, 144);
 
-    private static final Font MENU_BUTTON_FONT = TextUtils.getFont(13);
+    private static final Font MENU_BUTTON_FONT = getFont(13);
     private static final Dimension MENU_BUTTON_DIMENSION = new Dimension(213, 30);
 
-    private static final Font GAME_INFO_HEADER_FONT = TextUtils.getFont(12);
+    private static final Font GAME_INFO_HEADER_FONT = getFont(12);
 
-    private static final Font SCORES_FONT = TextUtils.getFont(16);
+    private static final Font SCORES_FONT = getFont(16);
+
+    public static Image BACKGROUND_IMG;
+
+    public static Thread loadImages() {
+        Thread thread = new Thread(() -> {
+            try {
+                BACKGROUND_IMG = ImageIO.read(new File("src/resources/images/main_menu.png"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+        thread.start();
+        return thread;
+    }
 
     public static JButton createSecondaryButton(String text) {
         JButton button = createButton(text, SECONDARY_BUTTON_FONT);
@@ -67,5 +83,17 @@ public class UI {
         label.setFont(SCORES_FONT);
         label.setForeground(Color.WHITE);
         return label;
+    }
+
+    public static Font getFont(int size) {
+        try {
+            Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/fonts/FONT.ttf")).deriveFont((float) size);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+            return customFont;
+        } catch (IOException | FontFormatException e) {
+            System.err.println("Error loading font: " + e.getMessage());
+            return new Font("Arial", Font.PLAIN, size);
+        }
     }
 }

@@ -1,24 +1,15 @@
 package main.ui;
 
 import main.Tetris;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 public class MainScreen extends BasePanel {
-    private Image backgroundImage;
+    private final Image backgroundImage = UI.BACKGROUND_IMG;
 
     public MainScreen() {
         super();
-        try {
-            // Load the background image
-            backgroundImage = ImageIO.read(new File("src/resources/images/main_menu.png"));
-        } catch (IOException e) {
-            System.out.println("Could not load background image");
-        }
         setLayout(new GridBagLayout());
         createButtons();
     }

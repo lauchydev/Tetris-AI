@@ -1,6 +1,7 @@
 package main.configuration;
 
-import main.utils.TextUtils;
+import main.ui.UI;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -57,7 +58,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
 
     private JLabel createTitleLabel(String title) {
         JLabel titleLabel = new JLabel(title.toUpperCase());
-        titleLabel.setFont(TextUtils.getFont(12));
+        titleLabel.setFont(UI.getFont(12));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 40));
@@ -66,7 +67,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
 
     private JLabel createValueLabel() {
         JLabel valueLabel = new JLabel();
-        valueLabel.setFont(TextUtils.getFont(12));
+        valueLabel.setFont(UI.getFont(12));
         valueLabel.setForeground(Color.WHITE);
         valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         return valueLabel;
@@ -109,7 +110,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
     private void createSlider(String title, int min, int max, GetConfigValueAction<Integer> getFn, ValueUpdateAction<Integer> updateAction) {
         var initValue = getFn.getConfigValue();
         JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, initValue);
-        slider.setFont(TextUtils.getFont(7));
+        slider.setFont(UI.getFont(7));
         slider.setForeground(Color.WHITE);
         slider.setOpaque(false);
         JLabel titleLabel = createTitleLabel(title);
@@ -142,7 +143,7 @@ public class ConfigurationPanel extends JPanel implements ConfigObserver {
         ButtonGroup group = new ButtonGroup();
         for (PlayerType type : PlayerType.values()) {
             JRadioButton radio = new JRadioButton(type.toString());
-            radio.setFont(TextUtils.getFont(12));
+            radio.setFont(UI.getFont(12));
             radio.setSelected(initValue == type);
             radio.setOpaque(false);
             radio.setForeground(Color.WHITE);

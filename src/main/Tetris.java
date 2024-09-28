@@ -6,6 +6,7 @@ import main.configuration.ConfigurationScreen;
 import main.highscores.HighScoreScreen;
 import main.ui.MainScreen;
 import main.ui.SplashScreen;
+import main.ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -114,8 +115,14 @@ public class Tetris extends JFrame {
     }
 
     public static void main(String[] args) {
+        var loadThread = UI.loadImages();
         SplashScreen splash = new SplashScreen(3000);
         splash.showSplashAndWait();
+        try {
+            loadThread.join();
+        } catch (InterruptedException e) {
+            // it failed. Oh well, we don't care too much
+        }
         SwingUtilities.invokeLater(() -> {
             Tetris tetris = new Tetris();
             tetris.showMainScreen();
