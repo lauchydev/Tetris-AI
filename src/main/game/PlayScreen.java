@@ -2,11 +2,10 @@ package main.game;
 
 import main.Tetris;
 import main.configuration.Configuration;
-import main.configuration.PlayerType;
+import main.game.player.Player;
+import main.game.player.PlayerFactory;
 import main.game.player.human.PlayerKeyMap;
-import main.game.player.ai.ai.AIPlayer;
 import main.game.core.TetrisBoard;
-import main.game.player.external.external.ExternalPlayer;
 import main.ui.BasicScreen;
 
 import javax.swing.*;
@@ -15,14 +14,15 @@ import java.awt.event.*;
 import java.util.function.Consumer;
 
 public class PlayScreen extends BasicScreen {
-    private GameController[] controllers;
     private Game[] games;
     private final Configuration config = Configuration.getInstance();
     private int playerCount;
     private final JPanel gamesPanel = new JPanel();
+    private final PlayerFactory playerFactory;
 
     public PlayScreen() {
         super("Play");
+        playerFactory = new PlayerFactory(this);
         centerPanel.setOpaque(false);
         backButton.setFocusable(false);
         gamesPanel.setOpaque(false);
@@ -39,39 +39,15 @@ public class PlayScreen extends BasicScreen {
     private void startGame() {
         playerCount = config.getNumberOfPlayers();
         setupLayout();
-        controllers = new GameController[playerCount];
         games = new Game[playerCount];
         long seed = System.currentTimeMillis();
-        int humanPlayerNo = 1;
         for (int i = 0; i < playerCount; i++) {
             var board = new TetrisBoard(config.getFieldWidth(), config.getFieldHeight());
             games[i] = new Game(board, seed);
-            controllers[i] = new GameController(games[i]);
-
-            switch(config.getPlayerType(i + 1)) {
-                case PlayerType.HUMAN:
-                    PlayerKeyMap keyMap = PlayerKeyMap.getPlayerMap(humanPlayerNo++);
-                    setupPlayerKeybindings(keyMap, controllers[i], Integer.toString(i));
-                    break;
-
-                case PlayerType.EXTERNAL:
-                    ExternalPlayer externalPlayer = new ExternalPlayer(games[i], controllers[i]);
-                    Thread externalThread = new Thread(externalPlayer);
-                    games[i].start();
-                    externalThread.start();
-                    break;
-
-                case PlayerType.AI:
-                    AIPlayer aiPlayer = new AIPlayer(games[i], controllers[i]);
-                    Thread aiThread = new Thread(aiPlayer);
-                    games[i].start();
-                    aiThread.start();
-                    break;
-            }
-
+            Player player = playerFactory.getPlayer(games[i], i + 1);
             JPanel gamePanel = new GamePanel(games[i], i + 1);
             gamesPanel.add(gamePanel);
-            games[i].start();
+            player.start();
         }
 
     }
@@ -120,7 +96,7 @@ public class PlayScreen extends BasicScreen {
         return result == JOptionPane.YES_OPTION;
     }
 
-    private void setupPlayerKeybindings(PlayerKeyMap map, GameController controller, String suffix) {
+    public void setupPlayerKeybindings(PlayerKeyMap map, GameController controller, String suffix) {
         // Player specific
         bindMovementInput("RotateClockwise" + suffix, map.getKeyCode(GameAction.ROTATE_CLOCKWISE), pressed -> controller.rotateClockwise());
         bindMovementInput("RotateCounterclockwise" + suffix, map.getKeyCode(GameAction.ROTATE_COUNTERCLOCKWISE), pressed -> controller.rotateCounterclockwise());
@@ -145,8 +121,8 @@ public class PlayScreen extends BasicScreen {
         bindKeyToAction("TogglePause", KeyStroke.getKeyStroke("P"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                for (var c : controllers) {
-                    c.togglePaused();
+                for (var g : games) {
+                    g.togglePause();
                 }
             }
         });

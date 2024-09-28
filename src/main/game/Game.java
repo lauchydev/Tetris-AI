@@ -4,7 +4,7 @@ import main.audio.Effect;
 import main.audio.SoundEffects;
 import main.configuration.Configuration;
 import main.game.core.*;
-import main.game.player.external.external.PureGame;
+import main.game.player.external.PureGame;
 import main.game.state.Event;
 import main.game.state.State;
 import main.game.state.StateMachine;
@@ -237,7 +237,7 @@ public class Game implements StateMachineObserver {
 
     public int getLevel() { return level; }
 
-    public boolean isFinished() {
+    public boolean isNotFinished() {
         return this.stateMachine.getState() == State.FINISHED;
     }
 }

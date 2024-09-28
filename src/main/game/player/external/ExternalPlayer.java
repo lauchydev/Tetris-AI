@@ -1,11 +1,11 @@
-package main.game.player.external.external;
+package main.game.player.external;
 
 import com.google.gson.Gson;
 import main.game.Game;
-import main.game.GameController;
 import main.game.PieceNotSpawnedException;
 import main.game.core.Cell;
 import main.game.core.Rotation;
+import main.game.player.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,19 +13,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ExternalPlayer implements Runnable {
+public class ExternalPlayer extends Player implements Runnable {
     private static final String HOST = "localhost";
     private static final int PORT = 3000;
-
-    private final Game game;
-    private final GameController controller;
 
     private int pieceNo = 0;
     private OpMove dest;
 
-    public ExternalPlayer(Game game, GameController controller) {
-        this.game = game;
-        this.controller = controller;
+    public ExternalPlayer(Game game) {
+        super(game);
     }
 
     private synchronized void askServer() throws IOException {
@@ -48,7 +44,7 @@ public class ExternalPlayer implements Runnable {
     @Override
     public synchronized void run() {
         try {
-            while (!this.game.isFinished()) {
+            while (this.game.isNotFinished()) {
                 if (game.getPiecesSpawned() > this.pieceNo) {
                     askServer();
                     pieceNo = game.getPiecesSpawned();
@@ -96,4 +92,10 @@ public class ExternalPlayer implements Runnable {
         controller.hardDrop();
     }
 
+    @Override
+    public void start() {
+        super.start();
+        Thread externalThread = new Thread(this);
+        externalThread.start();
+    }
 }

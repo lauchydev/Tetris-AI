@@ -1,24 +1,27 @@
-package main.game.player.ai.ai;
+package main.game.player.ai;
 
 import main.game.Game;
-import main.game.GameController;
 import main.game.core.*;
+import main.game.player.Player;
 
-public class AIPlayer implements Runnable {
-    private final Game game;
-    private final GameController controller;
-
+public class AIPlayer extends Player implements Runnable {
     private int pieceNumber = 0;
     private ActivePiece target;
 
-    public AIPlayer(Game game, GameController controller) {
-        this.game = game;
-        this.controller = controller;
+    public AIPlayer(Game game) {
+        super(game);
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        Thread aiThread = new Thread(this);
+        aiThread.start();
     }
 
     @Override
     public synchronized void run() {
-        while (!this.game.isFinished()) {
+        while (this.game.isNotFinished()) {
             if (this.game.inProgress()) { tick(); }
             try {
                 //noinspection BusyWait
