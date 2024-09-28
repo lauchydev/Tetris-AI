@@ -1,6 +1,7 @@
 package main.game.player.external;
 
 import com.google.gson.Gson;
+import main.Tetris;
 import main.game.Game;
 import main.game.PieceNotSpawnedException;
 import main.game.core.Cell;
@@ -19,6 +20,7 @@ public class ExternalPlayer extends Player implements Runnable {
 
     private int pieceNo = 0;
     private OpMove dest;
+    private boolean errored = false;
 
     public ExternalPlayer(Game game) {
         super(game);
@@ -38,13 +40,16 @@ public class ExternalPlayer extends Player implements Runnable {
             dest = gson.fromJson(response, OpMove.class);
         } catch (PieceNotSpawnedException e) {
             dest = null;
+        } catch (IOException e) {
+            Tetris.instance.showMessageBox("Error communicating with external server. Make sure it is running before starting.");
+            errored = true;
         }
     }
 
     @Override
     public synchronized void run() {
         try {
-            while (this.game.isNotFinished()) {
+            while (this.game.isNotFinished() && !errored) {
                 if (game.getPiecesSpawned() > this.pieceNo) {
                     askServer();
                     pieceNo = game.getPiecesSpawned();

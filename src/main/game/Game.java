@@ -238,6 +238,6 @@ public class Game implements StateMachineObserver {
     public int getLevel() { return level; }
 
     public boolean isNotFinished() {
-        return this.stateMachine.getState() == State.FINISHED;
+        return this.stateMachine.getState() != State.FINISHED;
     }
 }
