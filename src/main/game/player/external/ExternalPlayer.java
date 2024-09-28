@@ -41,7 +41,7 @@ public class ExternalPlayer extends Player implements Runnable {
         } catch (PieceNotSpawnedException e) {
             dest = null;
         } catch (IOException e) {
-            Tetris.instance.showMessageBox("Error communicating with external server. Make sure it is running before starting.");
+            Tetris.instance.showErrorBox("External Server Error", "Error communicating with external server. Make sure it is running before starting.");
             errored = true;
         }
     }

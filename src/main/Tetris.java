@@ -87,6 +87,10 @@ public class Tetris extends JFrame {
         }
     }
 
+    public void showErrorBox(String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
     public void showMainScreen() {
         stopGame();
         cardLayout.show(cardPanel, "MainScreen");
